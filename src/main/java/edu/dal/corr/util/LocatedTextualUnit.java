@@ -1,0 +1,37 @@
+package edu.dal.corr.util;
+
+import java.io.Serializable;
+
+/**
+ * A located textual unit provides the position of the textual entity. The
+ * position refers to the offset to the beginning of a text string.
+ * 
+ * @since 2016.07.26
+ */
+public abstract class LocatedTextualUnit
+  extends TextualUnit
+  implements Serializable
+{
+  private static final long serialVersionUID = -780573715784587087L;
+
+  private int position;
+  
+  // For serialization purpose.
+  protected LocatedTextualUnit() {}
+
+  protected LocatedTextualUnit(final String name, final int position)
+  {
+    super(name);
+    this.position = position;
+  }
+
+  /**
+   * Get the position of the entity.
+   * 
+   * @return The offset to the beginning of a text string.
+   */
+  public int position()
+  {
+    return position;
+  }
+}
