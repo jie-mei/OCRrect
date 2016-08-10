@@ -4,6 +4,9 @@ import java.util.List;
 
 import edu.dal.corr.word.Word;
 
+/**
+ * @since 2016.08.10
+ */
 abstract class AbstractFeature
   implements Feature
 {

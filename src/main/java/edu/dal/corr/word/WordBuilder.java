@@ -3,6 +3,9 @@ package edu.dal.corr.word;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * @since 2016.08.10
+ */
 class WordBuilder
 {
   private Token[] context;

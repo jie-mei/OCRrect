@@ -15,13 +15,14 @@ import edu.dal.corr.util.ResourceUtils;
 import edu.dal.corr.word.CommonWordFilter;
 import edu.dal.corr.word.GoogleTokenizer;
 
+/**
+ * @since 2016.08.10
+ */
 public class Main
 {
-  public static int GB = 1024*1024*1024;
   public static void main(String[] args)
-      throws IOException
+    throws IOException
   {
-    long strTime = System.currentTimeMillis();
     List<Suggestion> suggestions = new DocumentCorrector().correct(
         new GoogleTokenizer(),
         new CommonWordFilter(),
@@ -31,8 +32,5 @@ public class Main
             new StringSimilarityFeature()
         }),
         IOUtils.read(ResourceUtils.TEST_INPUT_SEGMENT));
-//        IOUtils.read(ResourceUtils.TEST_INPUT));
-    long endTime = System.currentTimeMillis();
-    LogUtils.info(String.format("Total time taken: %4.2f", (endTime - strTime) / 1000f));
   }
 }

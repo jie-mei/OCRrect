@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
 import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.word.Word;
 
+/**
+ * @since 2016.08.10
+ */
 public class Suggestions
 {
   private Suggestions() {}

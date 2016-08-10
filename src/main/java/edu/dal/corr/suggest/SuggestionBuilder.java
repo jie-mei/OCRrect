@@ -8,6 +8,9 @@ import java.util.Map;
 import gnu.trove.list.array.TFloatArrayList;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
+/**
+ * @since 2016.08.10
+ */
 class SuggestionBuilder {
   private String name;
   private int position;
@@ -34,10 +37,6 @@ class SuggestionBuilder {
         cScores.fill(0, types.size() - 1, 0);
         scoreMap.put(fc.text(), cScores);
       }
-      if (cScores.size() > 3) {
-        System.out.println(fc.text());
-        System.out.println(cScores);
-      }
       cScores.add(fc.score());
     }
     return this;
@@ -53,19 +52,12 @@ class SuggestionBuilder {
       try {
       v.fill(v.size(), types.size(), 0);
       } catch (IllegalArgumentException e) {
-        System.out.println(v);
-        types.forEach(t -> System.out.println(t.getName()));
         throw new RuntimeException(e);
       }
       Candidate c = new Candidate(k, typeMap, v.toArray());
       cList.add(c);
     });
     Candidate[] candidates = cList.toArray(new Candidate[cList.size()]);
-    
-//    // Create array of types only known at runtime.
-//    @SuppressWarnings("unchecked")
-//    Class<? extends Feature>[] typeArray = (Class<? extends Feature>[]) new Object[types.size()];
-//    types.toArray(typeArray);
     
     return new Suggestion(name, position, types, candidates);
   }

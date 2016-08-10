@@ -1,5 +1,8 @@
 package edu.dal.corr.util;
 
+/**
+ * @since 2016.08.10
+ */
 public class Timer
 {
   private long str;

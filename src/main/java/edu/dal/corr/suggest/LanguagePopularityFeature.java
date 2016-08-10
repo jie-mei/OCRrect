@@ -3,6 +3,9 @@ package edu.dal.corr.suggest;
 import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.Word;
 
+/**
+ * @since 2016.08.10
+ */
 public class LanguagePopularityFeature
   extends AbstractFeature
   implements Feature, Normalized, ContextInsensitive

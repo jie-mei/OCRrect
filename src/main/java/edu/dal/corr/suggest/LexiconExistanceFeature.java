@@ -6,6 +6,9 @@ import java.util.Set;
 
 import edu.dal.corr.word.Word;
 
+/**
+ * @since 2016.08.10
+ */
 public class LexiconExistanceFeature
   extends AbstractFeature
   implements Feature, ContextInsensitive

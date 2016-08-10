@@ -4,6 +4,9 @@ import edu.dal.corr.util.StringSimilarity;
 import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.Word;
 
+/**
+ * @since 2016.08.10
+ */
 public class StringSimilarityFeature
   extends AbstractFeature
   implements Feature, ContextInsensitive

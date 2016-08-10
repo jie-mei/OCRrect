@@ -6,6 +6,9 @@ import java.util.List;
 
 import edu.dal.corr.util.LocatedTextualUnit;
 
+/**
+ * @since 2016.08.10
+ */
 public class Suggestion
   extends LocatedTextualUnit
   implements Serializable

@@ -8,18 +8,19 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 /**
  * The error candidate.
  *
- * @since 2016.07.24
+ * @since 2016.08.10
  */
 public class Candidate
-	extends TextualUnit
-	implements Serializable
+  extends TextualUnit
+  implements Serializable
 {
   private static final long serialVersionUID = 1741530240536667097L;
 
   private final TObjectIntHashMap<Class<? extends Feature>> typeMap;
   private final float[] scores;
   
-  Candidate(String name, TObjectIntHashMap<Class<? extends Feature>> typeMap, float[] scores)
+  Candidate(String name, TObjectIntHashMap<Class<? extends Feature>> typeMap,
+      float[] scores)
   {
   	super(name);
   	this.typeMap = typeMap;

@@ -5,10 +5,10 @@ import java.io.Serializable;
 /**
  * A textual unit is container for a piece of text.
  * 
- * @since 2016.07.26
+ * @since 2016.08.10
  */
 public abstract class TextualUnit
-    implements Serializable
+  implements Serializable
 {
   private static final long serialVersionUID = 3195392798284827598L;
 

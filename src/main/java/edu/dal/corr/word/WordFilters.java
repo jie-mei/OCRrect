@@ -6,6 +6,9 @@ import org.apache.log4j.Logger;
 
 import edu.dal.corr.util.LogUtils;
 
+/**
+ * @since 2016.08.10
+ */
 class WordFilters
 {
   private static final Logger LOG = Logger.getLogger(WordFilters.class);

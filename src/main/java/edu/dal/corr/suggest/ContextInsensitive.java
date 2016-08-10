@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 import edu.dal.corr.util.Timer;
 import edu.dal.corr.word.Word;
 
+/**
+ * @since 2016.08.10
+ */
 public interface ContextInsensitive
   extends BenchmarkBehavior
 {

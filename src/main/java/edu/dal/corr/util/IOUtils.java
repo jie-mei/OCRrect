@@ -11,6 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 
+/**
+ * @since 2016.08.10
+ */
 public class IOUtils
 {
   private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;

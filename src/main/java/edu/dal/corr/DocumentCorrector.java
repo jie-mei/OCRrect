@@ -18,7 +18,7 @@ import edu.dal.corr.suggest.Feature;
  * The {@code DocumentCorrector} class detect the natural language errors in
  * document and provides a list of candidates for each detected errors.
  * 
- * @since 2016.07.22
+ * @since 2016.08.10
  */
 public class DocumentCorrector
 {

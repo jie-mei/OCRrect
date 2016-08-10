@@ -7,6 +7,9 @@ import edu.dal.corr.word.Word;
 import gnu.trove.function.TFloatFunction;
 import gnu.trove.list.array.TFloatArrayList;
 
+/**
+ * @since 2016.08.10
+ */
 class FeatureSuggestionBuilder
 {
   private Class<? extends Feature> type;

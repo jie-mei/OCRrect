@@ -2,6 +2,9 @@ package edu.dal.corr.suggest;
 
 import edu.dal.corr.word.Word;
 
+/**
+ * @since 2016.08.10
+ */
 public class LevenshteinDistanceFeature
   extends AbstractFeature
   implements Feature, ContextInsensitive

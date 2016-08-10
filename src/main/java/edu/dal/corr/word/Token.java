@@ -7,6 +7,8 @@ import edu.dal.corr.util.LocatedTextualUnit;
 /**
 * The token class encapsulate the string representation and the position of a
 * token.
+*
+* @since 2016.08.10
 */
 public class Token
   extends LocatedTextualUnit

@@ -8,6 +8,9 @@ import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.ResourceUtils;
 import gnu.trove.map.hash.TObjectByteHashMap;
 
+/**
+ * @since 2016.08.10
+ */
 public class CommonWordFilter
   implements WordFilter
 {

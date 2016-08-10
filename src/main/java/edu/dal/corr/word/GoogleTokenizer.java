@@ -5,6 +5,9 @@ import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @since 2016.08.10
+ */
 public class GoogleTokenizer
   extends PennTreebankTokenizer
 {

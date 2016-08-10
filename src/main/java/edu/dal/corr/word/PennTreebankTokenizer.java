@@ -6,6 +6,9 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.process.CoreLabelTokenFactory;
 import edu.stanford.nlp.process.PTBTokenizer;
 
+/**
+ * @since 2016.08.10
+ */
 public class PennTreebankTokenizer
   implements Tokenizer
 {

@@ -13,6 +13,9 @@ import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.util.Timer;
 import edu.dal.corr.word.Word;
 
+/**
+ * @since 2016.08.10
+ */
 class Features
 {
   static final Logger LOG = Logger.getLogger(Features.class);

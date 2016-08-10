@@ -4,6 +4,9 @@ import java.util.regex.Pattern;
 
 import edu.dal.corr.util.Unigram;
 
+/**
+ * @since 2016.08.10
+ */
 public class HuristicWordFilter
   implements WordFilter
 {

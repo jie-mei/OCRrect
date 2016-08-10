@@ -5,13 +5,13 @@ import org.junit.Before;
 import edu.dal.corr.word.PennTreebankTokenizer;
 
 public class PennTreebankTokenizerTest
-	extends TokenizerTest
+  extends TokenizerTest
 {
-	@Before
-	@Override
-	public void setUp()
-		throws Exception
-	{
-		tokenizer = new PennTreebankTokenizer();
-	}
+  @Before
+  @Override
+  public void setUp()
+    throws Exception
+  {
+    tokenizer = new PennTreebankTokenizer();
+  }
 }

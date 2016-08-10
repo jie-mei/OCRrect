@@ -4,8 +4,11 @@ import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 
-public class LogUtils {
-  
+/**
+ * @since 2016.08.10
+ */
+public class LogUtils
+{
   public static final Logger RUNTIME = Logger.getLogger("system.runtime");
 
 	private static Logger getCallerLogger()
