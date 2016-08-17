@@ -3,6 +3,9 @@ package edu.dal.corr.word;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
+
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import edu.dal.corr.util.LocatedTextualUnit;
 
@@ -27,7 +30,7 @@ public class Word
    * @param  context   A series of eight words. Four words before the occurring
    *    word and three after.
    */
-  Word(int position, String... context)
+  public Word(int position, String... context)
   {
     super(context[4], position);
     if (context.length != 8)
@@ -35,7 +38,7 @@ public class Word
     this.context = context;
   }
   
-  public Word(String word)
+  Word(String word)
   {
     super(word, -1);
   }
@@ -61,8 +64,23 @@ public class Word
     }
   }
   
+  public Word mapTo(Function<String, String> mapper)
+  {
+    String[] mapped = new String[8];
+    for (int i = 0; i < context.length; i++) {
+      mapped[i] = mapper.apply(context[i]);;
+    }
+    return new Word(position(), mapped);
+  }
+  
   String info()
   {
     return " <\"" + String.join("\",\"", context) + "\">";
+  }
+  
+  @Override
+  protected HashCodeBuilder buildHash()
+  {
+    return super.buildHash().append(context);
   }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import edu.dal.corr.suggest.Feature;
 import edu.dal.corr.suggest.Suggestion;
 import edu.dal.corr.suggest.Suggestions;
 import edu.dal.corr.util.Timer;
@@ -12,7 +13,6 @@ import edu.dal.corr.word.Tokenizer;
 import edu.dal.corr.word.Word;
 import edu.dal.corr.word.WordFilter;
 import edu.dal.corr.word.Words;
-import edu.dal.corr.suggest.Feature;
 
 /**
  * The {@code DocumentCorrector} class detect the natural language errors in

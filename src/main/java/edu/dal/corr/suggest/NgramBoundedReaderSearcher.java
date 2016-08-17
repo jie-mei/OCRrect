@@ -1,0 +1,236 @@
+package edu.dal.corr.suggest;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.RandomAccessFile;
+import java.io.Serializable;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.commons.io.input.BoundedInputStream;
+
+import edu.dal.corr.util.LogUtils;
+import edu.dal.corr.util.ResourceUtils;
+import edu.dal.corr.util.Timer;
+import gnu.trove.list.array.TLongArrayList;
+
+/**
+ * @since 2016.08.10
+ */
+public class NgramBoundedReaderSearcher
+  implements Serializable
+{
+  private static final long serialVersionUID = -2835908801171656852L;
+
+  /**
+   * The path of ngram corpus.
+   */
+  private String[] ngramPaths;
+
+  /**
+   * Offset before each file.
+   */
+  private long[] fileOffsets;
+
+  /**
+   * The mapping from words to their according offset. The offset indicate the
+   * starting position for reading ngram records in files.
+   */
+  private HashMap<String, CorpusSubset> offsetMap;
+
+  NgramBoundedReaderSearcher(List<Path> ngrams)
+      throws FileNotFoundException, IOException
+  {
+    ngramPaths = ngrams.stream()
+        .map(p -> p.toAbsolutePath().toString())
+        .collect(Collectors.toList())
+        .toArray(new String[ngrams.size()]);
+
+    offsetMap = new HashMap<>();
+    TLongArrayList offsets = new TLongArrayList();
+    offsets.add(0);
+    long prevFileOffset = 0;
+    for (Path p : ngrams) {
+      System.out.println("loading " + p.toString());
+      try (RandomAccessFile raf = new RandomAccessFile(p.toFile(), "r")){
+
+        String line = null;
+        String prevWord = null;
+        long prevLineEnd = 0;
+        long lastRecWordEnd = 0;
+        while ((line = raf.readLine()) != null) {
+          long lineEndPos = raf.getFilePointer();
+
+          String currWord = extractFirstWord(line);
+
+          // Check and record the new word.
+          if (! currWord.equals(prevWord)) {
+            if (prevWord != null) {
+              addToOffsetMap(prevWord, prevFileOffset, prevLineEnd,
+                  lastRecWordEnd);
+              lastRecWordEnd = prevLineEnd;
+            }
+          }
+          prevLineEnd = lineEndPos;
+          prevWord = currWord;
+        }
+        // Record the last word in file.
+        addToOffsetMap(prevWord, prevFileOffset, prevLineEnd,
+            lastRecWordEnd);
+        
+        // Record the size of the current reading file.
+        prevFileOffset += raf.length();
+        offsets.add(prevFileOffset);
+      }
+    }
+    fileOffsets = offsets.toArray();
+  }
+  
+  private void addToOffsetMap(String prevWord, long prevFileOffset,
+      long prevLineEndPos, long lastRecWordEnd)
+  {
+    offsetMap.put(prevWord, new CorpusSubset(
+        prevFileOffset + lastRecWordEnd,
+        Math.toIntExact(prevLineEndPos - lastRecWordEnd)));
+  }
+  
+  private String extractFirstWord(String line)
+  {
+    String word = "";
+    for (int i = 0; i < line.length(); i++) {
+      if (line.charAt(i) == ' ') {
+        word = line.substring(0, i);
+        break;
+      }
+    }
+    if (word.length() == 0) {
+      throw new RuntimeException();
+    }
+    return word;
+  }
+  
+  /**
+   * Get a {@link BufferedReader} feed with a subset of ngram corpus. The
+   * records in this subset have the same first word as the given word.
+   * 
+   * @param  word  A word
+   * @return A bufferedReader which underlying stream contains all the records
+   *    in the ngram corpus which first word is the same as the given word, or
+   *    {@code null} if there is no such records in the corpus.
+   * @throws IOException  If I/O error occurs.
+   */
+  public BufferedReader openBufferedRecordsWithFirstWord(String word)
+      throws IOException
+  {
+    CorpusSubset subset = offsetMap.get(word);
+    if (subset == null) {
+      return null;
+    }
+
+    // TODO: use binary search.
+    int pIdx = 0;
+    for (int i = 1; i <= ngramPaths.length; i++) {
+      if (subset.offset < fileOffsets[i]) {
+        pIdx = i - 1;
+        break;
+      }
+    }
+    FileInputStream fis = new FileInputStream(ngramPaths[pIdx]);
+    fis.skip(subset.offset - fileOffsets[pIdx]);
+    return new BufferedReader(new InputStreamReader(
+        new BoundedInputStream(fis, subset.size)));
+  }
+  
+  private class CorpusSubset
+    implements Serializable
+  {
+    private static final long serialVersionUID = 5288864428787553815L;
+
+    private final long offset;
+    private final int size;
+
+    private CorpusSubset(long offset, int size)
+    {
+      this.offset = offset;
+      this.size = size;
+    }
+  }
+
+  public static NgramBoundedReaderSearcher read(Path in)
+      throws IOException
+  {
+    Timer t = new Timer();
+
+    try (ObjectInputStream ois = new ObjectInputStream(
+        Channels.newInputStream(FileChannel.open(in)))) {
+      NgramBoundedReaderSearcher searcher =
+          (NgramBoundedReaderSearcher) ois.readObject();
+      LogUtils.logMethodTime(t, 2);
+      return searcher;
+    } catch (ClassNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+  }
+  
+  public void write(Path out)
+      throws IOException
+  {
+    Timer t = new Timer();
+
+    Files.createDirectories(out.getParent());
+    try (ObjectOutputStream oos = new ObjectOutputStream(
+        Channels.newOutputStream(FileChannel.open(out,
+            StandardOpenOption.CREATE, StandardOpenOption.WRITE)))) {
+      oos.writeObject(this);
+    }
+    LogUtils.logMethodTime(t, 2);
+  }
+  
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (obj instanceof NgramBoundedReaderSearcher) {
+      NgramBoundedReaderSearcher another = (NgramBoundedReaderSearcher) obj;
+
+      for (int i = 0; i < ngramPaths.length; i++) {
+        if (! ngramPaths[i].equals((another.ngramPaths[i]))) {
+          return false;
+        }
+      }
+      for (int i = 0; i < fileOffsets.length; i++) {
+        if (fileOffsets[i] != another.fileOffsets[i]) {
+          return false;
+        }
+      }
+      for (String word :offsetMap.keySet()) {
+        CorpusSubset cs1 = offsetMap.get(word);
+        CorpusSubset cs2 = another.offsetMap.get(word);
+        if (cs1.offset != cs2.offset || cs1.size != cs2.size) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  
+  public static void main(String[] args)
+      throws FileNotFoundException, IOException
+  {
+    // Preprocess the ngram and write the object in file.
+    List<Path> ngrams = ResourceUtils.FIVEGRAM;
+    NgramBoundedReaderSearcher searcher = new NgramBoundedReaderSearcher(ngrams);
+    searcher.write(Paths.get("tmp/5gm.search"));
+  }
+}

@@ -11,6 +11,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.word.Word;
@@ -26,10 +27,22 @@ public class Suggestions
   {
     return LogUtils.logMethodTime(1, () ->
     {
-      return Features.suggest(words, features).stream()
-          .map(fsList -> {
-            SuggestionBuilder sb = new SuggestionBuilder(fsList.get(0).text(), fsList.get(0).position());
-            fsList.stream().forEach(fs -> sb.add(fs));
+      // Detection.
+      List<Boolean> detects = Features.detect(words, features);
+      
+      // Filtering undetected words.
+      List<Word> detectedWords = IntStream.range(0, words.size())
+          .mapToObj(i -> (detects.get(i) ? words.get(i) : null))
+          .filter(w -> w != null)
+          .collect(Collectors.toList());
+
+      // Suggesting.
+      return Features.suggest(detectedWords, features)
+          .stream()
+          .map(fsListForWord -> {
+            FeatureSuggestion fs = fsListForWord.get(0);  // anyone in the list.
+            SuggestionBuilder sb = new SuggestionBuilder(fs.text(), fs.position());
+            fsListForWord.stream().forEach(s -> sb.add(s));
             return sb.build();
           })
           .collect(Collectors.toList());
@@ -44,7 +57,7 @@ public class Suggestions
         Files.createDirectories(out.getParent());
         try (ObjectOutputStream oos = new ObjectOutputStream(
             Channels.newOutputStream(FileChannel.open(out,
-                StandardOpenOption.WRITE)))) {
+                StandardOpenOption.CREATE, StandardOpenOption.WRITE)))) {
           oos.writeInt(suggestions.size());
           for (Suggestion s : suggestions) {
             oos.writeObject(s);

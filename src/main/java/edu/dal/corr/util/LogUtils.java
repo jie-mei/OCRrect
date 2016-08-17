@@ -1,8 +1,12 @@
 package edu.dal.corr.util;
 
+import java.io.IOException;
 import java.util.stream.Stream;
 
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Layout;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 
 /**
  * @since 2016.08.10
@@ -26,6 +30,10 @@ public class LogUtils
             .map(String::valueOf)
             .reduce("", (a, b) -> a + b));
 	}
+
+	public static boolean isInfoEnabled()  { return getCallerLogger().isInfoEnabled();  }
+	public static boolean isDebugEnabled() { return getCallerLogger().isDebugEnabled(); }
+	public static boolean isTraceEnabled() { return getCallerLogger().isTraceEnabled(); }
 	
 	public static void trace(Object... messages) 
 	{ 
@@ -69,7 +77,7 @@ public class LogUtils
 	
 	public static void logTime(Timer timer, int level, String... info)
 	{
-	  if (level <= 0 || level >= MAX_LEVEL) {
+	  if (level <= 0 || level > MAX_LEVEL) {
 	    throw new RuntimeException();
 	  }
 	  if (LogUtils.RUNTIME.isInfoEnabled()) {
@@ -93,28 +101,58 @@ public class LogUtils
 	  logMethodTime(timer, level, 3);
 	}
 	
-	public static <T> T logMethodTime(int level, MethodReturnRunner<T> mt)
+	public static <T> T logMethodTime(int level, CodeReturnRunner<T> mt)
 	{
     Timer t = new Timer();
     T result = mt.run();
 	  logMethodTime(t, level, 3);
     return result;
 	}
+
+	public static <T> T logTime(int level, CodeReturnRunner<T> mt, String... info)
+	{
+    Timer t = new Timer();
+    T result = mt.run();
+	  logTime(t, level, info);
+    return result;
+	}
 	
-	public interface MethodReturnRunner<T>
+	
+	public interface CodeReturnRunner<T>
 	{
 	   T run();
 	}
 	
-	public static void logMethodTime(int level, MethodRunner mt)
+	public static void logMethodTime(int level, CodeRunner mt)
 	{
     Timer t = new Timer();
     mt.run();
 	  logMethodTime(t, level, 3);
 	}
 	
-	public interface MethodRunner
+	public static void logTime(int level, CodeRunner mt, String... info)
+	{
+    Timer t = new Timer();
+    mt.run();
+	  logTime(t, level, info);
+	}
+	
+	public interface CodeRunner
 	{
 	   void run();
 	}
+
+  public static FileAppender newFileAppender(String pathname, Layout layout)
+  {
+    try {
+      return new FileAppender(layout, pathname, false);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static FileAppender newFileAppender(String pathname)
+  {
+    return newFileAppender(pathname, new PatternLayout("%m%n"));
+  }
 }

@@ -1,26 +1,31 @@
 package edu.dal.corr.suggest;
 
+import edu.dal.corr.suggest.banchmark.ContextInsensitiveBenchmarkDetectMixin;
 import edu.dal.corr.word.Word;
 
 /**
  * @since 2016.08.10
  */
 public class LevenshteinDistanceFeature
-  extends AbstractFeature
-  implements Feature, ContextInsensitive
+  extends AbstractScoreableFeature
+  implements Feature, ContextInsensitiveBenchmarkDetectMixin
 {
+  private LevenshteinDistanceScorer levDistance;
+
   public LevenshteinDistanceFeature()
   {
-    super();
+    levDistance = new LevenshteinDistanceScorer();
   }
 
   @Override
-  public boolean detect(Word word) {
+  public boolean detect(Word word)
+  {
     return true;
   }
 
   @Override
-  public float score(Word word, String candidate) {
-    return 1f / levenshtein().distance(word.text(), candidate);
+  public float score(Word word, String candidate)
+  {
+    return 1f / levDistance.score(word, candidate);
   }
 }

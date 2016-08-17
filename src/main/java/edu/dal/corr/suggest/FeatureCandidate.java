@@ -7,7 +7,7 @@ import edu.dal.corr.util.TextualUnit;
  *
  * @since 2016.07.27
  */
-class FeatureCandidate
+public class FeatureCandidate
   extends TextualUnit
 {
   private static final long serialVersionUID = 5951851015043707671L;
@@ -22,12 +22,12 @@ class FeatureCandidate
     this.score = score;
   }
   
-  Class<? extends Feature> type()
+  public Class<? extends Feature> type()
   {
     return type;
   }
 
-  float score()
+  public float score()
   {
     return score;
   }

@@ -1,11 +1,21 @@
-package edu.dal.corr.util;
+package edu.dal.corr.suggest;
+
+import edu.dal.corr.word.Word;
 
 /**
  * @since 2016.07.24
  */
-public class StringSimilarity
+class StringSimilarityScorer
+  implements Scoreable
 {
-	public static double lcs(String word1,String word2)
+  StringSimilarityScorer() {}
+
+  @Override
+  public float score(Word word, String candidate) {
+    return (float) lcs(word.text(), candidate);
+  }
+
+	public static double lcs(String word1, String word2)
 	{	
 		int ret_value = lcsImpl(word1, word2);
 		double value_NLCS= (ret_value*1.0)/Math.max(word1.length(),word2.length());	

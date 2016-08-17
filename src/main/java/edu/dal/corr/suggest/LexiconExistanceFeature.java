@@ -4,14 +4,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import edu.dal.corr.suggest.banchmark.ContextInsensitiveBenchmarkDetectMixin;
 import edu.dal.corr.word.Word;
 
 /**
  * @since 2016.08.10
  */
 public class LexiconExistanceFeature
-  extends AbstractFeature
-  implements Feature, ContextInsensitive
+  extends AbstractScoreableFeature
+  implements Feature, ContextInsensitiveBenchmarkDetectMixin
 {
   private Set<String> lexicon;
   

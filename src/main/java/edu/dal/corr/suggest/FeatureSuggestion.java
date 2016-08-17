@@ -11,7 +11,7 @@ import edu.dal.corr.word.Word;
  * 
  * @since 2016.07.27
  */
-class FeatureSuggestion
+public class FeatureSuggestion
   extends LocatedTextualUnit
 {
   private static final long serialVersionUID = 4325848663691958974L;
@@ -29,7 +29,7 @@ class FeatureSuggestion
     this.scores = scores;
   }
   
-  Class<? extends Feature> type()
+  public Class<? extends Feature> type()
   {
     return type;
   }

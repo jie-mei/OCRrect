@@ -6,6 +6,7 @@ import java.util.List;
 import edu.dal.corr.word.Word;
 import gnu.trove.function.TFloatFunction;
 import gnu.trove.list.array.TFloatArrayList;
+import gnu.trove.map.TObjectFloatMap;
 
 /**
  * @since 2016.08.10
@@ -17,14 +18,21 @@ class FeatureSuggestionBuilder
   private int position;
   private List<String> candidates;
   private TFloatArrayList scores;
- 
-  FeatureSuggestionBuilder(Class<? extends Feature> type, Word word)
+  private NormalizationOption opt;
+
+  FeatureSuggestionBuilder(Class<? extends Feature> type, Word word, NormalizationOption opt)
   {
     this.type = type;
     name = word.text();
     position = word.position();
     candidates = new ArrayList<>();
     scores = new TFloatArrayList();
+    this.opt = opt;
+  }
+ 
+  FeatureSuggestionBuilder(Feature feature, Word word)
+  {
+    this(feature.getClass(), word, feature.normalize());
   }
   
   FeatureSuggestionBuilder add(String name, float score)
@@ -44,14 +52,20 @@ class FeatureSuggestionBuilder
     return add(fc.text(), fc.score());
   }
   
-  FeatureSuggestionBuilder normalize(Normalization opt)
+  FeatureSuggestionBuilder add(TObjectFloatMap<String> map)
+  {
+    map.keySet().forEach(k -> add(k, map.get(k)));
+    return this;
+  }
+  
+  private void normalize()
   {
     float factor = 0;
     switch (opt) {
-      case NONE:  factor = 1;
-      case MAX:   factor = scores.max();
-      case MIN:   factor = scores.min();
-      case TOTAL: factor = scores.sum();
+      case NONE:  return;
+      case MAX:   factor = scores.max(); break;
+      case MIN:   factor = scores.min(); break;
+      case TOTAL: factor = scores.sum(); break;
     }
     final float denorm = factor;
     scores.transformValues(new TFloatFunction() {
@@ -60,11 +74,11 @@ class FeatureSuggestionBuilder
         return score / denorm;
       }
     });
-    return this;
   }
   
   FeatureSuggestion build()
   {
+    normalize();
     return new FeatureSuggestion(type, name, position,
         candidates.toArray(new String[candidates.size()]),
         scores.toArray());

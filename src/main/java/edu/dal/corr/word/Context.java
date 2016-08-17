@@ -2,6 +2,8 @@ package edu.dal.corr.word;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import edu.dal.corr.util.LocatedTextualUnit;
 
 /**
@@ -18,7 +20,7 @@ public class Context
   private int index;
   private String[] words;
 
-  Context(int position, int idx, String... words)
+  public Context(int position, int idx, String... words)
   {
     super(words[idx], position);
     this.index = idx;
@@ -33,4 +35,41 @@ public class Context
    * @return An integer represents the word index.
    */
   public int index() { return index; }
+
+  public String toNgram()
+  {
+    return String.join(" ", words);
+  }
+
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (obj instanceof Context && super.equals(obj)) {
+      Context another = (Context) obj;
+      if (words.length == another.words.length) {
+        for (int i = 0; i < words.length; i++) {
+          if (words[i] != another.words[i]) {
+            return false;
+          }
+        }
+      }
+      return index == another.index;
+    } else {
+      return false;
+    }
+  }
+  
+  @Override
+  public HashCodeBuilder buildHash()
+  {
+    return super.buildHash()
+        .append(index)
+        .append(words);
+  }
+  
+  @Override
+  public String toString()
+  {
+    return toNgram();
+  }
 }
