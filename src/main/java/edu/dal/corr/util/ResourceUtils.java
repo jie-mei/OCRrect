@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The util class for declaring resource path.
+ * The utility class for declaring resource path.
  *
  * @since 2016.07.24
  */
@@ -37,9 +37,11 @@ public class ResourceUtils
   public static Path getResource(String pathname)
   {
     try {
-      return Paths.get(ResourceUtils.class.getClassLoader().getResource(pathname).getPath());
+      return Paths.get(ResourceUtils.class.getClassLoader()
+          .getResource(pathname).getPath());
     } catch (NullPointerException e) {
-      throw new RuntimeException("Error: cannot find resource from \"" + pathname + "\".", e);
+      throw new RuntimeException(
+          "Error: cannot find resource from \"" + pathname + "\".", e);
     }
   }
 

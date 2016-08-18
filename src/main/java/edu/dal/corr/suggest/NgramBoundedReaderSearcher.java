@@ -168,7 +168,18 @@ public class NgramBoundedReaderSearcher
     }
   }
 
-  public static NgramBoundedReaderSearcher read(Path in)
+  /**
+   * Construct the object from serialized file. It is optional to overwrite the
+   * ngram data pathnames.
+   * 
+   * @param  in  A serialized file.
+   * @param  ngramData  Ngram data pathnames. It is used to overwrite the ngram
+   *      reading path in the constructed object.
+   * @return An object deserialized from the given file, which ngram
+   *      reading path is overwrited by the provided pathnames.
+   * @throws IOException  If I/O error occurs.
+   */
+  public static NgramBoundedReaderSearcher read(Path in, String... ngramData)
       throws IOException
   {
     Timer t = new Timer();
@@ -178,6 +189,15 @@ public class NgramBoundedReaderSearcher
       NgramBoundedReaderSearcher searcher =
           (NgramBoundedReaderSearcher) ois.readObject();
       LogUtils.logMethodTime(t, 2);
+
+      // Overwrite `ngramPaths` by input pathnames.
+      if (ngramData.length > 0) {
+        if (ngramData.length == searcher.ngramPaths.length) {
+          searcher.ngramPaths = ngramData;
+        } else {
+          throw new IllegalArgumentException();
+        }
+      }
       return searcher;
     } catch (ClassNotFoundException e) {
       throw new RuntimeException(e);

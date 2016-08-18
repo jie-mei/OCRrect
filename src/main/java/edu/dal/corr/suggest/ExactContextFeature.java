@@ -63,7 +63,7 @@ public class ExactContextFeature
         }
       }
     } catch (IOException e) {
-      throw new RuntimeException();
+      throw new RuntimeException(e);
     }
     
     // Update detection results to contextMap.
