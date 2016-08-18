@@ -15,18 +15,23 @@ import java.util.List;
  */
 public class ResourceUtils
 {
-  public static Path INPUT_FOLDER = getResource("ocr");
   public static Path TEST_INPUT_SEGMENT = getResource("test.in.seg.txt");
-  public static Path SPECIAL_LIST = getResource("specialList.txt");
-  public static Path LEXICON_LIST = getResource("lexiconList.txt");
+  public static List<Path> INPUT = getResourceInDir("ocr", "*.txt");
+
+  public static Path SPECIAL_LEXICON = getResource("lexicon/special.txt");
+  public static Path LEXI_LEXICON    = getResource("lexicon/lexicon.txt");
+  public static Path WIKI_LEXICON    = getResource("lexicon/wiki.txt");
 
   // Retrieved from http://www.gutenberg.org/ebooks/29765
   public static Path WEBSTER_DICTIONARY = getResource("webster-dictionary.txt");
 
-  // public static Path WIKI_LIST = getResource("wiki.txt");
-  public static Path UNIGRAM = Paths.get("/raid6/user/jmei/Google_Web_1T_5-gram/1gm/vocab");
+  public static Path UNIGRAM = getPath(
+      "/raid6/user/jmei/Google_Web_1T_5-gram/1gm/vocab");
+//      "/home/default/data/Google_Web_1T_5-gram/1gm/vocab");
   public static List<Path> FIVEGRAM = getPathsInDir(
-      "/raid6/user/jmei/Google_Web_1T_5-gram/5gms", "5gm-[0-9][0-9][0-9][0-9]");
+      "/raid6/user/jmei/Google_Web_1T_5-gram/5gms",
+//      "/home/default/data/Google_Web_1T_5-gram/5gms",
+      "5gm-[0-9][0-9][0-9][0-9]");
 
   /**
    * Get resource file from compiled path.
@@ -41,52 +46,42 @@ public class ResourceUtils
           .getResource(pathname).getPath());
     } catch (NullPointerException e) {
       throw new RuntimeException(
-          "Error: cannot find resource from \"" + pathname + "\".", e);
+          "Error: cannot find resource \"" + pathname + "\".", e);
     }
+  }
+
+  public static Path getPath(String pathname)
+  {
+    Path p = Paths.get(pathname);
+    if (! Files.exists(p)) {
+      throw new RuntimeException(
+          "Error: cannot find resource \"" + pathname + "\".");
+    }
+    return p;
+  }
+
+  private static List<Path> listPaths(Path path, String glob)
+  {
+    List<Path> paths = new ArrayList<>();
+    try (DirectoryStream<Path> ds = Files.newDirectoryStream(path, glob)) {
+      for (Path p : ds) {
+        paths.add(p);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(
+          "Error: cannot find resource from \"" + path + "\".", e);
+    }
+    paths.sort((a, b) -> a.getFileName().compareTo(b.getFileName())); 
+    return paths;
   }
 
   public static List<Path> getPathsInDir(String dir, String glob)
   {
-    List<Path> paths = new ArrayList<>();
-    try (DirectoryStream<Path> ds = Files.newDirectoryStream(
-        Paths.get(dir), glob)
-    ){
-      for (Path p : ds) {
-        paths.add(p);
-      }
-    } catch (IOException e) {
-      throw new RuntimeException(
-          "Error: cannot find resource from \"" + dir + "\".", e);
-    }
-    paths.sort((a, b) -> a.getFileName().compareTo(b.getFileName())); 
-    return paths;
+    return listPaths(Paths.get(dir), glob);
   }
 
   public static List<Path> getResourceInDir(String dir, String glob)
   {
-    List<Path> paths = new ArrayList<>();
-    try (DirectoryStream<Path> ds = Files.newDirectoryStream(
-        getResource(dir), glob)
-    ){
-      for (Path p : ds) {
-        paths.add(p);
-      }
-    } catch (IOException e) {
-      throw new RuntimeException(
-          "Error: cannot find resource from \"" + dir + "\".", e);
-    }
-    paths.sort((a, b) -> a.getFileName().compareTo(b.getFileName())); 
-    return paths;
-  }
-  
-  public static List<Path> getResourceList(String dir, String glob)
-  {
-    Path folder = getResource(dir);
-    try (DirectoryStream<Path> ds = Files.newDirectoryStream(folder, "*.txt")) {
-      
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
+    return listPaths(getResource(dir), glob);
   }
 }

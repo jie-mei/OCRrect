@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * @since 2016.08.10
@@ -31,6 +32,14 @@ public class IOUtils
     return Files.newBufferedReader(path, DEFAULT_CHARSET);
   }
 
+  /**
+   * Create a new {@link java.io.BufferedReader} for path.
+   * 
+   * @param  path     A file path.
+   * @param  options  Open options.
+   * @return A new {@link java.io.BufferedReader} for the given path.
+   * @throws IOException  If I/O error occurs.
+   */
   public static BufferedWriter newBufferedWriter(Path path, OpenOption... options)
       throws IOException
   {
@@ -47,6 +56,16 @@ public class IOUtils
       for (String line; (line = br.readLine()) != null;) {
         sb.append(line).append('\n');
       }
+    }
+    return sb.toString();
+  }
+
+  public static String read(List<Path> paths)
+    throws IOException
+  {
+    StringBuilder sb = new StringBuilder();
+    for (Path p : paths) {
+      sb.append(read(p));
     }
     return sb.toString();
   }

@@ -48,6 +48,6 @@ public class Main
             new ExactContextFeature(ngramSearch),
             new RelaxContextFeature(ngramSearch)
         }),
-        IOUtils.read(ResourceUtils.TEST_INPUT));
+        IOUtils.read(ResourceUtils.INPUT));
   }
 }

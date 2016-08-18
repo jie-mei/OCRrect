@@ -95,22 +95,22 @@ public interface ContextSensitiveBenchmarkSuggestMixin
       }
     });
 
-    System.out.println("Generated:");
-    
-    List<Context> contexts = procWords.stream()
-        .flatMap(w -> w.getContexts().stream())
-        .collect(Collectors.toList());
-    System.out.println(contexts.size());
-
-    System.out.println(suggestMap.keySet().size());
-    
-    suggestMap.keySet().forEach(k -> {
-      System.out.println("\t" + k + " -> " + k.index() + " " + contexts.contains(k));
-
-      TObjectFloatMap<String> map = suggestMap.get(k);
-      map.keySet().forEach(c -> System.out.println("\t\t" + c + ":" + map.get(c) + ", "));
-      System.out.println();
-    });
+//    System.out.println("Generated:");
+//    
+//    List<Context> contexts = procWords.stream()
+//        .flatMap(w -> w.getContexts().stream())
+//        .collect(Collectors.toList());
+//    System.out.println(contexts.size());
+//
+//    System.out.println(suggestMap.keySet().size());
+//    
+//    suggestMap.keySet().forEach(k -> {
+//      System.out.println("\t" + k + " -> " + k.index() + " " + contexts.contains(k));
+//
+//      TObjectFloatMap<String> map = suggestMap.get(k);
+//      map.keySet().forEach(c -> System.out.println("\t\t" + c + ":" + map.get(c) + ", "));
+//      System.out.println();
+//    });
     
     // Collect the results.
     return procWords.stream()
