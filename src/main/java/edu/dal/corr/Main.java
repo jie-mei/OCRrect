@@ -1,9 +1,11 @@
 package edu.dal.corr;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.dal.corr.suggest.ExactContextFeature;
 import edu.dal.corr.suggest.Feature;
@@ -28,7 +30,12 @@ public class Main
     throws IOException
   {
     NgramBoundedReaderSearcher ngramSearch = NgramBoundedReaderSearcher.read(
-        FileUtils.TEMP_DIR.resolve(Paths.get("5gm.search")));
+        FileUtils.TEMP_DIR.resolve(Paths.get("5gm.search")),
+        ResourceUtils.FIVEGRAM.stream()
+            .map(Path::toString)
+            .collect(Collectors.toList())
+            .toArray(new String[ResourceUtils.FIVEGRAM.size()])
+        );
 
     @SuppressWarnings("unused")
     List<Suggestion> suggestions = new DocumentCorrector().correct(
@@ -41,6 +48,6 @@ public class Main
             new ExactContextFeature(ngramSearch),
             new RelaxContextFeature(ngramSearch)
         }),
-        IOUtils.read(ResourceUtils.TEST_INPUT_SEGMENT));
+        IOUtils.read(ResourceUtils.TEST_INPUT));
   }
 }

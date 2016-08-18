@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * The utility class for declaring resource path.
  *
- * @since 2016.07.24
+ * @since 2016.08.18
  */
 public class ResourceUtils
 {
@@ -24,9 +24,9 @@ public class ResourceUtils
   public static Path WEBSTER_DICTIONARY = getResource("webster-dictionary.txt");
 
   // public static Path WIKI_LIST = getResource("wiki.txt");
-  public static Path UNIGRAM = Paths.get("/home/default/data/Google_Web_1T_5-gram/1gm/vocab");
+  public static Path UNIGRAM = Paths.get("/raid6/user/jmei/Google_Web_1T_5-gram/1gm/vocab");
   public static List<Path> FIVEGRAM = getPathsInDir(
-      "/home/default/data/Google_Web_1T_5-gram/5gms", "5gm-[0-9][0-9][0-9][0-9]");
+      "/raid6/user/jmei/Google_Web_1T_5-gram/5gms", "5gm-[0-9][0-9][0-9][0-9]");
 
   /**
    * Get resource file from compiled path.
