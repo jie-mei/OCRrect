@@ -15,12 +15,12 @@ public class Words
   
   private Words() {}
 
-  public static List<Word> get(String content, Tokenizer tokenizer, WordFilter filter)
+  public static List<Word> get(String content, Tokenizer tokenizer, WordFilter... filters)
   {
     return LogUtils.logMethodTime(1, () ->
     {
       List<Word> words = WordTokenizers.tokenize(content, tokenizer);
-      WordFilters.filter(words, filter);
+      WordFilters.filter(words, filters);
 
       if (LOG.isTraceEnabled()) {
         int lenMax = words.stream()

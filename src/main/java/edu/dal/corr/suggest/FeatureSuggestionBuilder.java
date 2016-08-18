@@ -60,6 +60,8 @@ class FeatureSuggestionBuilder
   
   private void normalize()
   {
+    if (scores.size() == 0) return;
+
     float factor = 0;
     switch (opt) {
       case NONE:  return;

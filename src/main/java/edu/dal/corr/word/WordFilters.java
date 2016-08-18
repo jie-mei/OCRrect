@@ -21,7 +21,7 @@ class WordFilters
    * @param  words   A list of words.
    * @param  filter  A word filter.
    */
-  static void filter(List<Word> words, WordFilter filter)
+  static void filter(List<Word> words, WordFilter... filters)
  {
     LogUtils.logMethodTime(2, () ->
     {
@@ -30,14 +30,16 @@ class WordFilters
           .max()
           .getAsInt();
 
-      for (int i = 0; i < words.size();) {
-        Word word = words.get(i);
-        if (filter.filter(word)) {
-          words.remove(word);
-          LOG.debug(String.format("%" + lenMax + "s %s", 
-              word.text(), word.toString()));
-        } else {
-          i++;
+      for (WordFilter filter : filters) {
+        for (int i = 0; i < words.size();) {
+          Word word = words.get(i);
+          if (filter.filter(word)) {
+            words.remove(word);
+            LOG.debug(String.format("%" + lenMax + "s %s", 
+                word.text(), word.info()));
+          } else {
+            i++;
+          }
         }
       }
     });

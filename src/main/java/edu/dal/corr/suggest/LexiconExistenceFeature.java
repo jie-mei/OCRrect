@@ -1,25 +1,38 @@
 package edu.dal.corr.suggest;
 
-import java.util.HashSet;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
-import java.util.Set;
 
 import edu.dal.corr.suggest.banchmark.ContextInsensitiveBenchmarkDetectMixin;
+import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.word.Word;
+import gnu.trove.set.hash.THashSet;
 
 /**
  * @since 2016.08.10
  */
-public class LexiconExistanceFeature
+public class LexiconExistenceFeature
   extends AbstractScoreableFeature
   implements Feature, ContextInsensitiveBenchmarkDetectMixin
 {
-  private Set<String> lexicon;
+  private THashSet<String> lexicon;
   
-  public LexiconExistanceFeature(List<String> lexicon)
+  public LexiconExistenceFeature(Path lexicon)
+    throws IOException
+  {
+    this(IOUtils.readList(lexicon));
+  }
+  
+  public LexiconExistenceFeature(List<String> lexicon)
+  {
+    this(new THashSet<>(lexicon));
+  }
+  
+  public LexiconExistenceFeature(THashSet<String> lexicon)
   {
     super();
-    this.lexicon = new HashSet<>(lexicon);
+    this.lexicon = lexicon;
   }
 
   @Override

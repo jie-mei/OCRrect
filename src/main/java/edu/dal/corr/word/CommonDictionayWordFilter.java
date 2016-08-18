@@ -11,14 +11,14 @@ import gnu.trove.map.hash.TObjectByteHashMap;
 /**
  * @since 2016.08.10
  */
-public class CommonWordFilter
+public class CommonDictionayWordFilter
   implements WordFilter
 {
   private static Pattern NON_ENGLISH = Pattern.compile("[^a-zA-Z]+");
 
   private TObjectByteHashMap<String> dict;
   
-  public CommonWordFilter() 
+  public CommonDictionayWordFilter() 
   {
     PennTreebankTokenizer tkz = new PennTreebankTokenizer();
 

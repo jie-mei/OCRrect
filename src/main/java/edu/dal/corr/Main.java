@@ -11,6 +11,7 @@ import edu.dal.corr.suggest.ExactContextFeature;
 import edu.dal.corr.suggest.Feature;
 import edu.dal.corr.suggest.LanguagePopularityFeature;
 import edu.dal.corr.suggest.LevenshteinDistanceFeature;
+import edu.dal.corr.suggest.LexiconExistenceFeature;
 import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
 import edu.dal.corr.suggest.RelaxContextFeature;
 import edu.dal.corr.suggest.StringSimilarityFeature;
@@ -18,8 +19,10 @@ import edu.dal.corr.suggest.Suggestion;
 import edu.dal.corr.util.FileUtils;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.ResourceUtils;
-import edu.dal.corr.word.CommonWordFilter;
+import edu.dal.corr.word.CommonDictionayWordFilter;
+import edu.dal.corr.word.CommonPatternFilter;
 import edu.dal.corr.word.GoogleTokenizer;
+import edu.dal.corr.word.WordFilter;
 
 /**
  * @since 2016.08.10
@@ -40,8 +43,15 @@ public class Main
     @SuppressWarnings("unused")
     List<Suggestion> suggestions = new DocumentCorrector().correct(
         new GoogleTokenizer(),
-        new CommonWordFilter(),
+        Arrays.asList(new WordFilter[] {
+            new CommonPatternFilter(),
+            new CommonDictionayWordFilter()
+        }),
         Arrays.asList(new Feature[] {
+            new LevenshteinDistanceFeature(),
+            new LexiconExistenceFeature(ResourceUtils.LEXI_LEXICON),
+            new LexiconExistenceFeature(ResourceUtils.SPECIAL_LEXICON),
+            new LexiconExistenceFeature(ResourceUtils.WIKI_LEXICON),
             new LevenshteinDistanceFeature(),
             new LanguagePopularityFeature(),
             new StringSimilarityFeature(),

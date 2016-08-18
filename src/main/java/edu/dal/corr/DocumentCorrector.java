@@ -24,10 +24,11 @@ public class DocumentCorrector
 {
   private static final Logger LOG = Logger.getLogger(DocumentCorrector.class);
 
-  public List<Suggestion> correct(Tokenizer tokenizer, WordFilter filter, List<Feature> features, String content)
+  public List<Suggestion> correct(Tokenizer tokenizer, List<WordFilter> filters, List<Feature> features, String content)
   {
     Timer t = new Timer();
-    List<Word> words = Words.get(content, tokenizer, filter);
+    List<Word> words = Words.get(content, tokenizer,
+        filters.toArray(new WordFilter[filters.size()]));
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
           "Generate words\n" +
