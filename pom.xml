@@ -19,6 +19,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jdk.version>1.8</jdk.version>
     <exec.mainClass>edu.dal.corr.Main</exec.mainClass>
+    <exec.cleanupDaemonThreads>false</exec.cleanupDaemonThreads>
     <jar.mainClass>edu.dal.corr.Main</jar.mainClass>
   </properties>
 

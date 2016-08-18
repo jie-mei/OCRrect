@@ -10,7 +10,7 @@ public class CommonPatternFilter
 {
   private static Pattern NTH_PATTERN = Pattern.compile("[0-9]+(th|rd|nd)");
   private static Pattern SLASH_S_PATTERN = Pattern.compile("'[sS]");
-  private static Pattern ABBR_PATTERN = Pattern.compile("[a-zA-Z]+.");
+  private static Pattern ABBR_PATTERN = Pattern.compile("[a-zA-Z]+\\.");
 
   @Override
   public boolean filter(Word word)
