@@ -18,8 +18,11 @@ public abstract class LocatedTextualUnit
 
   private int position;
   
-  // For serialization purpose.
-  protected LocatedTextualUnit() {}
+  /**
+   * This constructor is used for serialization purpose only. Concrete
+   * subclasses should not call this constructor.
+   */
+  LocatedTextualUnit() {}
 
   protected LocatedTextualUnit(final String name, final int position)
   {

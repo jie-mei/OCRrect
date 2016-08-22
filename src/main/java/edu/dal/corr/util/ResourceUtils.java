@@ -16,21 +16,24 @@ import java.util.List;
 public class ResourceUtils
 {
   public static Path TEST_INPUT_SEGMENT = getResource("test.in.seg.txt");
-  public static List<Path> INPUT = getResourceInDir("ocr", "*.txt");
+  public static List<Path> INPUT = getResourceInDir("input", "*.txt");
+  public static List<Path> GT = getResourceInDir("gt", "*.txt");
 
   public static Path SPECIAL_LEXICON = getResource("lexicon/special.txt");
   public static Path LEXI_LEXICON    = getResource("lexicon/lexicon.txt");
   public static Path WIKI_LEXICON    = getResource("lexicon/wiki.txt");
 
+  public static Path GT_ERROR = getResource("error.gt.txt");
+
   // Retrieved from http://www.gutenberg.org/ebooks/29765
   public static Path WEBSTER_DICTIONARY = getResource("webster-dictionary.txt");
 
   public static Path UNIGRAM = getPath(
-      "/raid6/user/jmei/Google_Web_1T_5-gram/1gm/vocab");
-//      "/home/default/data/Google_Web_1T_5-gram/1gm/vocab");
+//      "/raid6/user/jmei/Google_Web_1T_5-gram/1gm/vocab");
+      "/home/default/data/Google_Web_1T_5-gram/1gm/vocab");
   public static List<Path> FIVEGRAM = getPathsInDir(
-      "/raid6/user/jmei/Google_Web_1T_5-gram/5gms",
-//      "/home/default/data/Google_Web_1T_5-gram/5gms",
+//      "/raid6/user/jmei/Google_Web_1T_5-gram/5gms",
+      "/home/default/data/Google_Web_1T_5-gram/5gms",
       "5gm-[0-9][0-9][0-9][0-9]");
 
   /**
@@ -49,7 +52,7 @@ public class ResourceUtils
           "Error: cannot find resource \"" + pathname + "\".", e);
     }
   }
-
+  
   public static Path getPath(String pathname)
   {
     Path p = Paths.get(pathname);

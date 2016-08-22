@@ -49,6 +49,12 @@ public class Suggestions
     });
   }
   
+  /**
+   * Write suggestions to file.
+   * 
+   * @param  suggestions  A list of suggestions.
+   * @param  out  The folder of the output files.
+   */
   public static void write(List<Suggestion> suggestions, Path out)
   {
     LogUtils.logMethodTime(1, () ->
@@ -68,8 +74,32 @@ public class Suggestions
       }
     });
   }
+
+  public static void write(List<Suggestion> suggestions, Path out, String name)
+  {
+    LogUtils.logMethodTime(1, () ->
+    {
+      int numLen = Integer.toString(suggestions.size()).length();
+
+      try {
+        Files.createDirectories(out);
+        for (int i = 0; i < suggestions.size(); i++) {
+          Path outPath = out.resolve(String.format("%s.%0" + numLen + "d", name, i));
+
+          try (ObjectOutputStream oos = new ObjectOutputStream(
+              Channels.newOutputStream(FileChannel.open(outPath,
+                  StandardOpenOption.CREATE, StandardOpenOption.WRITE)))) {
+            oos.writeObject(suggestions.get(i));
+          }
+        }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    });
+  }
   
-  public static List<Suggestion> read(Path in)
+  
+  public static List<Suggestion> readList(Path in)
   {
     return LogUtils.logMethodTime(1, () ->
     {

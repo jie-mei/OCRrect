@@ -11,11 +11,13 @@ import edu.dal.corr.suggest.ExactContextFeature;
 import edu.dal.corr.suggest.Feature;
 import edu.dal.corr.suggest.LanguagePopularityFeature;
 import edu.dal.corr.suggest.LevenshteinDistanceFeature;
-import edu.dal.corr.suggest.LexiconExistenceFeature;
+import edu.dal.corr.suggest.LexiLexiconExistenceFeature;
 import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
 import edu.dal.corr.suggest.RelaxContextFeature;
+import edu.dal.corr.suggest.SpecialLexiconExistenceFeature;
 import edu.dal.corr.suggest.StringSimilarityFeature;
 import edu.dal.corr.suggest.Suggestion;
+import edu.dal.corr.suggest.WikiLexiconExistenceFeature;
 import edu.dal.corr.util.FileUtils;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.ResourceUtils;
@@ -49,9 +51,9 @@ public class Main
         }),
         Arrays.asList(new Feature[] {
             new LevenshteinDistanceFeature(),
-            new LexiconExistenceFeature(ResourceUtils.LEXI_LEXICON),
-            new LexiconExistenceFeature(ResourceUtils.SPECIAL_LEXICON),
-            new LexiconExistenceFeature(ResourceUtils.WIKI_LEXICON),
+            new LexiLexiconExistenceFeature(),
+            new SpecialLexiconExistenceFeature(),
+            new WikiLexiconExistenceFeature(),
             new LevenshteinDistanceFeature(),
             new LanguagePopularityFeature(),
             new StringSimilarityFeature(),

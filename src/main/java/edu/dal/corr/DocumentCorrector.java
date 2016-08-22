@@ -52,7 +52,7 @@ public class DocumentCorrector
     }
     
     t.start();
-    Suggestions.write(suggestions, Paths.get("tmp/suggestion.out"));
+    Suggestions.write(suggestions, Paths.get("tmp/suggestion.out"), "suggest");
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
           "Writing to file...\n" +

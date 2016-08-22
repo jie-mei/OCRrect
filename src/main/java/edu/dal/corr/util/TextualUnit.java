@@ -16,7 +16,11 @@ public abstract class TextualUnit
 
   private String text;
 
-  protected TextualUnit() {}
+  /**
+   * This constructor is used for serialization purpose only. Concrete
+   * subclasses should not call this constructor.
+   */
+  TextualUnit() {}
 
   protected TextualUnit(final String text)
   {
