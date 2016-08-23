@@ -14,10 +14,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import edu.dal.corr.util.LogUtils;
+import edu.dal.corr.util.ResourceUtils;
 import edu.dal.corr.word.Word;
 
 /**
- * @since 2016.08.10
+ * @since 2016.08.23
  */
 public class Suggestions
 {
@@ -99,20 +100,35 @@ public class Suggestions
     });
   }
   
-  
-  public static List<Suggestion> readList(Path in)
+  public static List<Suggestion> read(Path in)
   {
     return LogUtils.logMethodTime(1, () ->
     {
+      if (in == null || ! Files.exists(in)) {
+        return null;
+      }
+
       List<Suggestion> suggestions = new ArrayList<>();
-      try (ObjectInputStream ois = new ObjectInputStream(
-          Channels.newInputStream(FileChannel.open(in)))) {
-        int size = ois.readInt();
-        for (int i = 0; i < size; i++) {
-          suggestions.add((Suggestion) ois.readObject());
+      if (! Files.isDirectory(in)) {
+        try (ObjectInputStream ois = new ObjectInputStream(
+            Channels.newInputStream(FileChannel.open(in)))) {
+          int size = ois.readInt();
+          for (int i = 0; i < size; i++) {
+            suggestions.add((Suggestion) ois.readObject());
+          }
+        } catch (IOException | ClassNotFoundException e) {
+          throw new RuntimeException(e);
         }
-      } catch (IOException | ClassNotFoundException e) {
-        throw new RuntimeException(e);
+      } else {
+        List<Path> paths = ResourceUtils.getPathsInDir(in.toString(), ".*\\.[0-9]+");
+        for (Path p : paths)  {
+          try (ObjectInputStream ois = new ObjectInputStream(
+              Channels.newInputStream(FileChannel.open(in)))) {
+            suggestions.add((Suggestion) ois.readObject());
+          } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+          }
+        }
       }
       return suggestions;
     });

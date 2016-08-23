@@ -17,6 +17,7 @@ import edu.dal.corr.suggest.RelaxContextFeature;
 import edu.dal.corr.suggest.SpecialLexiconExistenceFeature;
 import edu.dal.corr.suggest.StringSimilarityFeature;
 import edu.dal.corr.suggest.Suggestion;
+import edu.dal.corr.suggest.Suggestions;
 import edu.dal.corr.suggest.WikiLexiconExistenceFeature;
 import edu.dal.corr.util.FileUtils;
 import edu.dal.corr.util.IOUtils;
@@ -29,36 +30,15 @@ import edu.dal.corr.word.WordFilter;
 /**
  * @since 2016.08.10
  */
-public class Main
+public class Evaluate
 {
   public static void main(String[] args)
     throws IOException
   {
-    NgramBoundedReaderSearcher ngramSearch = NgramBoundedReaderSearcher.read(
-        FileUtils.TEMP_DIR.resolve(Paths.get("5gm.search")),
-        ResourceUtils.FIVEGRAM.stream()
-            .map(Path::toString)
-            .collect(Collectors.toList())
-            .toArray(new String[ResourceUtils.FIVEGRAM.size()])
-        );
-
-    @SuppressWarnings("unused")
-    List<Suggestion> suggestions = new DocumentCorrector().correct(
-        new GoogleTokenizer(),
-        Arrays.asList(new WordFilter[] {
-            new CommonPatternFilter(),
-            new CommonDictionayWordFilter()
-        }),
-        Arrays.asList(new Feature[] {
-            new LevenshteinDistanceFeature(),
-            new StringSimilarityFeature(),
-            new LexiLexiconExistenceFeature(),
-            new SpecialLexiconExistenceFeature(),
-            new WikiLexiconExistenceFeature(),
-            new LanguagePopularityFeature(),
-            new ExactContextFeature(ngramSearch),
-            new RelaxContextFeature(ngramSearch)
-        }),
-        IOUtils.read(ResourceUtils.INPUT));
+    List<Suggestion> suggests = Suggestions.read(Paths.get("tmp/suggestion"));
+    for (Suggestion s : suggests) {
+      System.out.println(String.format("%s %d: %d",
+            s.text(), s.position(), s.candidates().length));
+    }
   }
 }
