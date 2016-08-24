@@ -24,7 +24,8 @@ public class DocumentCorrector
 {
   private static final Logger LOG = Logger.getLogger(DocumentCorrector.class);
 
-  public List<Suggestion> correct(Tokenizer tokenizer, List<WordFilter> filters, List<Feature> features, String content)
+  public List<Suggestion> correct(Tokenizer tokenizer, List<WordFilter> filters,
+      List<Feature> features, String content)
   {
     Timer t = new Timer();
     List<Word> words = Words.get(content, tokenizer,
@@ -59,6 +60,22 @@ public class DocumentCorrector
           "  - time taken:  %4.2f seconds",
           t.interval()));
     }
+    
+    Suggestions.rewriteTop(
+        Paths.get("tmp/suggestion"),
+        Paths.get("tmp/suggestion.top.1000"), 1000);
+    
+    Suggestions.rewriteTop(
+        Paths.get("tmp/suggestion"),
+        Paths.get("tmp/suggestion.top.100"), 100);
+    
+    Suggestions.rewriteTop(
+        Paths.get("tmp/suggestion"),
+        Paths.get("tmp/suggestion.top.10"), 100);
+    
+    Suggestions.rewriteTop(
+        Paths.get("tmp/suggestion"),
+        Paths.get("tmp/suggestion.top.3"), 3);
 
     return suggestions;
   }

@@ -309,7 +309,7 @@ SEEBOHM	SEEBOHAI	69800
 Buntings	Bunting's	69896	
 by	b}-	69983	
 Hemichelidon	H^michclidon	70538	
-ginosus	giiiosus	70557	
+ginosus	giiiosus	70557	BROKEN
 Hirundinidœ	Hirujidinida:	71031	unicode
 Family	FamUy	71713	
 HIRUNDINIDÆ	IIIRUXDINID. E	71719	bird-type
@@ -320,7 +320,7 @@ ranges	rauges	71868
 Spitzbergen	vSpitzbergeu	72045	place-name
 May,	Ma}^	72299	
 Mr	}ilr	72401	
-hawk	liawk	72412	
+hawk	liawk	72412	BROKEN:Froliawk
 buffish	huffish	72977	
 by,	b}^	73655	
 chimneys	chimne3's	74335	
@@ -690,7 +690,7 @@ difficult	diflScult	136720
 hoo	hi	136896	
 wheo is	ivlicoxs	136935	
 a better	abetter	136944	
-ticularly	ticularl}'	137120	
+partiticularly	particularl}'	137115	
 systematically	sj'stematicall}'	137276	
 captivity	captivit}'	137687	
 year	3'ear	138041	
@@ -855,7 +855,7 @@ supply	supplj-	165302
 Merlin	IVIerliii	165340	
 throughout	throughoitt	165499	
 frequently	frequentl_y	165692	
-ably	abl}'	165737	
+preferably	preferabl}'	165729	
 Usually	Usuall}^	166008	
 woolly	W00II3'	166281	
 entirely	entirel_v	166520	
@@ -1634,7 +1634,7 @@ seasons	seasous	302352
 and	aud	302390	
 and	aud	302477	
 the	tlie	302524	
-bury	bur}'	302800	
+Canterbury	Canter-bur}'	302792	BROKEN
 Salisbury	Salisbur_v	302962	
 years	vears	303057	
 nested	uested	303085	
@@ -2701,7 +2701,7 @@ TURDIDÆ	TURDID^	493059	unicode
 SYLVIINÆ	SYL VIIN^	493080	unicode
 polyglotta	polyglolla	493125	
 10th	loth	493238	numeric
-house	hoi:se	493290	
+house	hoi:se	493289	
 An	Au	493739	
 Christchurch	Christclinrch	493865	
 Charterhouse	Charterhonse	493977	

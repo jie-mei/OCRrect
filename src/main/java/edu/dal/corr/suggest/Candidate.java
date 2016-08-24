@@ -32,7 +32,7 @@ public class Candidate
     return scores;
   }
   
-  public float score(Class<Feature> feature)
+  public float score(Class<? extends Feature> feature)
   {
     return scores[typeMap.get(feature)];
   }

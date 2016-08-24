@@ -2,6 +2,7 @@ package edu.dal.corr.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Set;
 
 import gnu.trove.map.hash.TObjectLongHashMap;
@@ -25,12 +26,17 @@ public class Unigram
   }
 
   private TObjectLongHashMap<String> map;
-  
+
   private Unigram()
+  {
+    this(ResourceUtils.UNIGRAM);
+  }
+  
+  private Unigram(Path unigram)
   {
     map = new TObjectLongHashMap<String>();
     try (
-      BufferedReader br = IOUtils.newBufferedReader(ResourceUtils.UNIGRAM)
+      BufferedReader br = IOUtils.newBufferedReader(unigram)
     ){
       for (String line; (line = br.readLine()) != null;) {
         String[] fields = line.split("\t");

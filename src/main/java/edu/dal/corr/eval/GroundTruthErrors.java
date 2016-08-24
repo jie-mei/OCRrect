@@ -24,6 +24,9 @@ public class GroundTruthErrors
       try (BufferedReader br = IOUtils.newBufferedReader(path)) {
         for (String line = br.readLine(); line != null; line = br.readLine()) {
           String[] splits = line.split("\t", 4);
+          if (splits.length < 4) {
+            System.out.println(line);
+          }
           String gtName = splits[0];
           String errName = splits[1];
           int pos = Integer.parseInt(splits[2]);

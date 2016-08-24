@@ -1,18 +1,15 @@
 package edu.dal.corr.word;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
 import edu.dal.corr.util.LogUtils;
+import edu.dal.corr.util.StringUtils;
 
 /**
  * This class consists exclusively of static methods that related to {@link
@@ -40,7 +37,7 @@ class WordTokenizers
   {
     return LogUtils.logMethodTime(1, () ->
     {
-      String concatenated = concatLines(text);
+      String concatenated = StringUtils.fixLineBrokenWords(text);
 
       // Store eight latest reading consecutive tokens and positions.
       Token empty = new Token("", -1);
@@ -115,45 +112,5 @@ class WordTokenizers
 
       return words;
     });
-  }
-  
-  private static Pattern BROKEN_WORD = Pattern.compile("\\S+(-\\s*)$");
-  private static Pattern TAILING_SPACE = Pattern.compile("(\\s*)$");
-  
-  /**
-   * Concatenate content lines and fix the broken word created by line wrap.
-   * 
-   * @param  content A string.
-   * @return The input content without internal line-break and broken word
-   *    fixed.
-   */
-  private static String concatLines(String content)
-  {
-    StringBuilder sb = new StringBuilder();
-    try (BufferedReader br = new BufferedReader(new StringReader(content))) {
-      String curr = null;
-      for (String next = null ; (next = br.readLine()) != null; curr = next) {
-        if (curr == null) continue;
-        
-        // Check the line tail. If there is word broken by line wrap, remove the
-        // internal hyphen and trailing white-spaces.
-        Matcher brokenWord = BROKEN_WORD.matcher(curr);
-        if (brokenWord.find()) {
-          curr = curr.substring(0, curr.length() - brokenWord.group(1).length());
-        } else {
-          // Trim the tailing white-space characters.
-          Matcher tailSpace = TAILING_SPACE.matcher(curr);
-          if (tailSpace.find()) {
-            curr = curr.substring(0, tailSpace.start()) + " ";
-          }
-        }
-        sb.append(curr);
-      }
-      // Concatenate the last line.
-      sb.append(curr);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-    return sb.toString();
   }
 }

@@ -1,0 +1,2731 @@
+ORIOLIDÆ	ORIOLID^.	61	unicode bird-type
+family	famil}^	77	
+which	whicli	144	
+Icteridœ	IdcridcE	401	unicode bird-type
+Corvinœ	Corvince	687	unicode bird-type
+in	iu	1143	
+greyish	greyisli	1576	bird-type
+Corvidœ	Corvidcr	1786	unicode bird-type
+Family	Familx	1951	
+ORIOLIDÆ	ORIOL ID^E	1959	unicode
+galbula	ga/bula	2000	
+in	iu	2920	
+nest	uest	2949	
+May,	Maj^	3148	
+Feilden	Feildeu	3173	person-name
+yellowish	j^ellowish	3682	
+just	j ust	5473	
+usually	nsually	5607	
+fine	fii:e	5994	
+occasionally	occasionall}'	6163	
+wheet	?( '/■<■(•/	6416	
+li	//	6429	
+vee-o.”	vec-o'''	6433	unicode
+Macpherson	IMacphersou	6457	person-name
+easy	eas}'	6769	
+leaves.”	leaves."	6994	unicode
+largely	largel}'	7035	
+larvæ	larvae	7065	unicode bird-type
+by	b}^	7195	
+any	an}'	7470	
+extremely	extremelj'	7711	
+trying	tr3'ing	7756	
+advantageously	advantageousl}'	8132	
+readily	readil}--	8209	
+unhappily	unhappil}-	8290	
+confinement	coniinement	8675	
+day	da}'	8808	
+LANIIDÆ	LANIID^	8884	unicode bird-type
+defined	defiued	9229	
+defined	defiued	9425	
+Laniidœ	Laniidcv	9576	unicode bird-type
+any	an}'	9826	
+Laniidœ	Laniida:	10112	unicode bird-type
+nearly	uearlj^	10584	
+Seebohm	Seebohni	10624	person-name
+the	tlie	10664	
+Corvinœ	Corvi)ia	10669	unicode bird-type
+his	liis	10988	
+Manual	}ilanual	10993	
+Flycatchers	Flj-catchers	11054	bird-type
+Family	Faiuiiv	11070	
+LANIIDÆ	LAXIILKl-:	11078	bird-type
+SHRIKE	Shrh^e	11106	
+Lanius	Lauius	11115	bird-type
+excubitor	txciibilor	11122	bird-type
+bird	biixl	11193	
+the	tlie	11614	
+excubitor	cxcubitor	11671	bird-type
+major	viajor	11794	
+excubitor	exaibiior	11901	bird-type
+typical	t3'pical	11927	
+the	tlie	12361	
+lencopterus	Icncopterus	12453	
+Southern	vSouthern	12505	
+L	Z	12560	bird-type
+excubitor	cxcubitor	12563	bird-type
+homeyeri	honieyeri	12634	bird-type
+	'	12644	
+the	tlie	12787	
+Sittingbourne	Sittingbourue	12918	
+egg	^^%	13124	
+year	j-ear	13171	
+excubitor	(xcubitoy	13266	bird-type
+belly	bell}-	14040	
+seen	seeu	14181	
+country,	countr}^	14303	
+Parus	Parus.	14636	bird-type
+Regulus	Regiilus	14646	bird-type
+prey,	pre}^	14802	
+bulky	bulk}'	15198	
+bents	Ijcnts	15264	
+and	aud	15497	
+and	aud	15783	
+Gätke	Gatke	15937	unicode person-name
+says	sa3'S	15943	
+quently	qnently	16017	
+LANIIDÆ	LAXIID.^.	17662	unicode bird-type
+Lanius	Lioiiits	17699	bird-type
+minor	)iii>iof	17708	bird-type
+GMEL	Gjiel	17718	bird-type
+the	tlie	17772	
+only	onl}^	17877	
+1889	i88g	17935	numeric
+every	everj^	18232	
+Family	Famtly	18327	
+LANIIDÆ	LANIID.'E	18334	unicode bird-type
+collurio	coUurio	18377	bird-type
+Indus	Indns	18906	place-name
+valley	vallej^	18970	
+Land	Laud	19063	place-name
+uncommon	imcommon	19298	
+only	onl}'	19469	
+grey	gre}-	19785	
+buffish	huffish	20132	
+with	w-ith	20401	
+early	earl}'	20674	
+frequently	frequentl}'	21271	
+three	tliree	22717	
+Golden	Goldeu	24340	bird-type
+difficulty	difficult}'	24830	
+the	tlie	25539	
+Corvinæ	Corvincr	25622	unicode bird-type
+Günther	Glinther	25790	unicode person-name
+July	Jul}^	26264	
+10th	loth	26492	numeric
+10th	loth	26588	numeric
+and	aud	26790	
+smells	.smells	27054	
+LANIIDÆ	LANIID. 'E	27933	unicode bird-type
+pomeranus	pomcranus	27975	bird-type
+beyond	bej^ond	28145	
+Turkey	Turke}-	28503	
+crown	erowu	29233	
+chestnut	chestnnt	29360	
+outer	onter	29632	
+under	nnder	29648	
+buff	bnff	29692	
+colouring	colonring	29763	
+young	voung	29830	
+broadly	broadl}-	29929	
+under	nnder	30036	
+heavily	heavil}-	30050	
+haunts	hannts	30173	
+thinly	thinl}'	30196	
+purpose	pnrpose	31041	
+until	nntil	31066	
+they	the}-	31072	
+Gnaphalium	Gnaplialiuni	31424	
+)	J	31436	
+usually	usuallj^	31619	
+very	ver}'	31808	
+rarely	rarel}-	31814	
+pomeranus	potneraHus	31845	bird-type
+another	anotlier	32146	
+up	np	32190	
+country	countr}-	32234	
+round	ronnd	32243	
+affection	aff"ection	32429	
+displays	display's	32464	
+says	saj'S	32742	
+krah	laali	32787	
+krah	ki-ah	32800	
+says	saj'S	33454	
+Possibly	Possiblj'	33945	
+Witchell	W'itchell	34219	
+satisfactory	satisfactor}^	34673	
+should	shoiild	34837	
+contradiction	coutradictiou	34878	
+Woodchat	Wotxicliat	34959	
+also	als j	35290	
+says	saj'S	35296	
+pomeranus	poiiui-iVtiis	35308	
+rufus)	nt/us)	35389	
+LANIIDÆ	L ANIID. 'E	35586	unicode bird-type
+MASKED	Maskkd	35604	bird-type
+SHRIKE	Shrikp:	35611	bird-type
+Lanius	Laniiis	35621	
+nubicus	iin/inna	35630	bird-type
+LICHT	LrciiT	35640	bird-type
+11th	iith	35716	numeric
+AMPELIDÆ	AMPELID.55	35842	unicode bird-type
+Liothrix	Lioi/irix	35974	bird-type
+Passeres	Passercs	36283	bird-type
+Subfamily,	Subfamil}^	36782	
+II	n	36971	
+1	i	36977	
+Ampelis	Ainpelis	37006	bird-type
+beauty	beaut}-	37490	
+anything	anj'thing	37508	
+AMPELIDÆ	AMPEL ID. E	37676	unicode bird-type
+Ampelis	A/nptiis	37704	bird-type
+garrulus	f;ay>///us	37713	bird-type
+LINN	LlNN	37725	bird-type
+Turkey	Turke}'	38116	
+1867-8	1867-S	38663	numeric
+aud	and	39234	ERROR
+tips	tij^s	39652	
+V-like	\^-like	39690	
+inner	iuuer	40056	
+cir-ir-ir-ir-re	cir-ir-iy-ir-re	41612	bird-sound
+largely	largel}'	41838	
+fæces	fseces	43121	unicode
+buy	bu}'	43267	
+any	au}^	43272	
+and	aud	43464	
+quite	c|uite	43914	
+aviary	aviarv	43978	
+Waxwing	Wa.Kwing	43990	bird-type
+captivity,	captivit3%	44042	
+and	aud	44092	
+in	m	44124	
+certainly	certaiul}-	44154	
+MUSCICAPIDÆ	MUSCICAPID^	44263	unicode
+Subfamily	Subfamil}'	44351	
+Turdinœ	Turdtna:	44394	unicode bird-type
+eyes	e3'^es	44861	
+mostly	mostl}''	44905	
+Seebohm	vSeebohm	45814	
+Palæarctic	Palaearctic	45868	unicode
+MUSCICAPIDÆ	MUSCICAPIDyE	46265	unicode
+Tromsö	Tromso	46396	unicode
+Minor	IMinor	46599	
+Flycatcher	Fljxatcher	46771	
+every	everjr	46815	
+slightly	slightl}'	47152	
+greyish	gre3'ish	47322	
+white	wliite	47331	
+young	j-oung	47598	
+Flycatcher	Flj'catcher	47758	
+outskirts	out.skirts	47781	
+such	siich	47912	
+usually	usuall}-	47936	
+and	aud	48309	
+my	ni}'	48320	
+and	aud	48567	
+vary	var}'	48694	
+Flycatcher	Flycatctier	49420	
+1878	1S78	49810	numeric
+says	sa3'S	50232	
+away	awa}'	50486	
+zt	cf	50742	meaningless
+zt	sf	51209	meaningless
+Gurney’s	Gumey's	51770	unicode
+destroyed	destro3'ed	52198	
+effectually	effectuallv	52426	
+destroyed	destro3^ed	53106	
+was	\\'a.s	53291	
+destroyed	destro3'ed	53304	
+away	awa}-	53441	
+destroyed	destro3-ed	53505	
+away	awa}'	53572	
+by	b}^	53578	
+Flycatcher	Fl3'catcher	53692	
+persecution	perseciition	53806	
+should	shoiild	53836	
+successfully	successfull3'	53909	
+years	3'ears	53953	
+young	3'oung	53968	
+Fly	Fl3	53983	
+	-	53986	ERROR
+lamp	lan:p	54038	
+temporarily	temporaril3^	54049	
+they	the3'	54181	
+by	b3'	54287	
+aviary	aviar3'	54373	
+Hirundinidœ	Hirundinidce	54615	unicode
+MUSCICAPIDÆ	ML 'SCICAPID.F	54760	unicode
+Muscicapa	Miiscicapa	54799	
+atricapilla	africapil/a	54810	
+Flycatcher	Fl3'catcher	54986	
+buffish	huffish	56413	
+says	saj's	57257	
+cousider	consider	57829	
+very	ver}'	57898	
+Flycatcher	Fl3'catcher	58248	
+instinctively	instinctivel}'	58715	
+timbre	tijubre	59777	
+finish	iiuish	60111	
+my	nij^	60192	
+Gätke	Gatke	60412	unicode
+understand	imderstand	60826	
+Europe	Kurope	60939	
+way	w'Siy	62252	
+soon	soou	62903	
+Family	Familv	62999	
+MUSCICAPIDÆ	MUSCICAPID.-E.	63006	
+BECHST	Bkchst	63069	
+May,	Ma3%	63292	
+Transylvania	Trans3dvania	63495	
+January	January'	64038	
+Scilly	ScilW	64120	
+and	aud	64162	
+Gurney	Guruey	64545	
+Bechstein	Bechsteiu	64655	
+in	iu	65810	
+year	j'ear	66494	
+minuta	mituita	66591	bird-name
+russi	ri<sst	67345	
+cervicalis	ccrvicalis	67446	
+capitata	capiiata	67494	
+breeding	breediug	67600	
+in	iu	67609	
+and	aud	67625	
+unobtrusive	nnobtrnsive	67709	
+and	aud	67765	
+pink	piuk	67814	
+pink	p'nik	67820	
+spink	spi)ik	67852	
+füid	fnid	67963	unicode
+füid	fiiidr	67969	unicode sound-simulation
+phwick	plnvick	68052	sound-simulation
+phwit	phivW	68068	sound-simulation
+pink	puik	68137	
+and	aud	68143	
+Gätke	Giitke	68231	unicode
+in	iu	69275	
+HIRUNDINIDÆ	HIRUNDINID^	69786	unicode
+SEEBOHM	SEEBOHAI	69800	
+Buntings	Bunting's	69896	
+by	b}-	69983	
+Hemichelidon	H^michclidon	70538	
+ginosus	giiiosus	70557	
+Hirundinidœ	Hirujidinida:	71031	unicode
+Family	FamUy	71713	
+HIRUNDINIDÆ	IIIRUXDINID. E	71719	bird-type
+Hirundo	Ilinoido	71750	bird-type
+rustica	yu\tica	71759	
+mountain	luountaiu	71858	
+ranges	rauges	71868	
+Spitzbergen	vSpitzbergeu	72045	place-name
+May,	Ma}^	72299	
+Mr	}ilr	72401	
+hawk	liawk	72412	
+buffish	huffish	72977	
+by,	b}^	73655	
+chimneys	chimne3's	74335	
+sycamore	s3'camore	74570	
+hay	ha}'	74911	
+by	b}'	74993	
+young	3'oung	75877	
+year	j^ear	76183	
+clutch	chitch	76637	
+melody	melod}'	76861	
+very	ver}'	77046	
+hwit	hvi/	77171	
+hwit	hivit	77177	
+tit	(il	77233	meaningless
+largely	largel}'	77272	
+ephemeræ	ephemerae	77308	unicode
+an	au	77712	
+outspread	out.spread	77834	
+aviary	aviar}-	78663	
+Family	Familx	78711	
+HIRUNDINIDÆ	HIR UNDINID. -E	78718	bird-type
+THE	"FiiK	78736	
+RED	RivD	78742	bird-type
+RUMPED	RuMPKi)	78747	
+Hirundo	HiriDido	78765	
+rufula	nifula	78774	
+TEMM	TE^I^	78782	
+in	iu	78842	
+HIRUNDINIDÆ	HI R UNDINID. E	78865	unicode bird-type
+Chelidon	CInlidon	78896	
+LINN	LiXN	78913	
+throughout	througliout	78944	
+says	sa3's	79017	
+green	greeu	79714	
+horn	horu	79740	
+with	\vith	79776	
+perhaps	perliaps	79847	
+smoky	smok\-	79890	
+by	b}'	80153	
+white	w^hite	80236	
+Martin	IMartin	80287	
+walk	w-alk	80744	
+certainly	certainl}'	80779	
+szeet	szeci	81025	
+demi	denii	81381	
+they	the}'	81999	
+rosy	ros}'	82078	
+hay	ha}'	82587	
+hay	ha}-	82769	
+only	onl_v	82806	
+July	Jul}'	83089	
+W	\V	83120	person-name
+Martins	AIartins	83171	
+young	j'ouug	83297	
+yolk	j-olk	83435	
+day	da}'	83753	
+Martins	IMartins	84111	
+Hirundinidœ	Hinindinida:	84168	unicode
+Although	x^lthough	85198	
+would	w^ould	85241	
+the	tlie	85591	
+usually	usualljr	85612	
+could	conld	85643	
+early	earlj^	85889	
+generally	generall}-	85926	
+my	ni}-	85969	
+acutely	acutel}'	86398	
+Family	1-amily	86721	
+HIRUNDINIDÆ	IIIR UNDL\ ID.E	86729	bird-type
+Cotile	Col ill	86765	
+riparia	ri/^ariii	86773	
+LINN	LiN'N	86784	
+Occasionally	Occasionallj'	87508	
+Martin	lMartin	88345	bird-type
+obliquely	obliquelj^	89205	
+neatly	neatl}'	89976	
+the	tlie	90030	
+curved	cnrvcd	90035	
+surface	snrface	90048	
+the	tlie	90069	
+carefully	carefully-	90125	
+pretty	prett}-	90195	
+unhappily	unhappih'	90277	
+very	ver}'	90289	
+Martin's	]\Iartin's	90449	bird-type
+many	man}'	90519	
+may	nia_v	90548	
+slightly	slightl}-	90825	
+glossy	gloss}-	90835	
+rosy	ros}-	90918	
+appearance	aj^pearance	90924	
+annoyance	anno3auce	91061	
+every	ever}-	91094	
+temporary	temporar}'	91377	
+frequently	frequentl}'	91583	
+chigos	cliigos	91881	
+sweer	szvter	91975	
+vaguely	vaguel}'	92066	
+usually	usuall}'	92128	
+purely	pureh^	92275	
+flies	flics	92349	
+young	3'oung	92475	
+by	b}'	92650	
+rarely	rarel}-	92939	
+in	iu	93075	
+when	wlieu	93195	
+July	Jul}-	93236	
+Martins	Martius	93278	bird-type
+young	j'oiing	93328	
+fly	fl}^	93343	
+in	iu	93662	
+an	au	94382	
+in	iu	94570	
+until	uutil	94695	
+Martins	Martius	95036	bird-type
+FRINGILLIDÆ	FRINGILLID.€	95096	unicode
+family	famil}'	95116	
+number	uumber	95138	
+eating	eatiug	95174	
+Saunders	Saimders	95196	
+only	011I3'	95205	
+(Fringillinœ)	fFrin^HluurJ	95243	unicode
+(Emberizinœ)	(E>i!beyiziHaJ	95269	unicode
+Coccothraustinœ	Coccothraitstiiuc	95394	unicode
+and	aud	95608	
+Fringillidœ	F) hio'iUidcr	95793	unicode
+and	aud	95927	
+and	aud	95996	
+partially	partially-	96125	
+Coccothraustinœ	CoccothraiisibuT	96363	unicode
+Fringillinœ	Fringillincc	96647	unicode
+very	ver}'	96826	
+Emberizinœ	E»ib€risi)ur	96987	unicode
+may	ma}'	97040	
+completely	complete!}'	97173	
+they	the}'	97434	
+Fringillidœ	Fringillida	97555	unicode
+FRINGILLIDÆ	FRIKGILLID.'E	97670	unicode bird-type
+COCCOTHRAUSTINÆ	COCCOTHRAUSTIN/E	97697	unicode bird-type
+Ligurinus	JLigiiriniis	97733	
+chloris	ch/ori^	97746	
+the	tlie	97765	
+the	tlie	97799	
+generally	generall}-	97860	
+common	conunon	98022	
+yellow	3'ellow	99498	
+company	compau}-	100053	
+always	alwaj's	100220	
+zshweer	zshwee>-	100426	
+defiance	deiiance	100609	
+which	whicli	101384	
+fifty	"fift}-	101478	
+occasionally	occasionally'	101692	
+in	iu	103034	
+chiefly	chief!}'	103361	
+occasionally	occasionall}'	103460	
+brown	browu	103498	
+principally	principall}'	103641	
+they	the_y	103708	
+fly	fl_v	103748	
+by	b}-	103797	
+may	ma}'	103877	
+in	iu	104073	
+frequent	frec|ueut	104112	
+zshweer	zshivecr	104715	
+manœuvre	manoeuvre	104957	unicode
+egg	^^^	105347	
+hatched	batched	105381	
+in	iu	105596	
+busily	biisily	105810	
+occasion	occasiou	105922	
+and	aud	105957	
+why	whj-	106095	
+unremunerative	unremuuerative	106136	
+and	aud	106297	
+Family	Family^	106582	
+FRINGILLIDÆ	FRINGILLID.'E	106590	bird-type
+COCCOTHRAUSTINÆ	COCCOTIIRA USTIN/E	106617	unicode bird-type
+Coccothraustes	Coccotliraustcs	106653	
+fifty	Aft}'	107230	
+years	3-ears	107236	
+Fifeshire	Fifesliire	107613	
+cinnamon	ciunamon	107756	
+grey	gre}-	107869	
+yellower	j-ellower	107963	
+extremity	extremit}'	108266	
+flesh	ilesh	108447	
+coloure	coloured	108475	
+young	3'Oung	108571	
+very	ver}?	109065	
+cry	cr}'	109426	
+very	ver}'	109458	
+yews	3'ews	109706	
+usually	usuall}^	109933	
+holly	holl}'	110018	
+always	alwa3-s	110281	
+nest	uest	110666	
+and	aud	110703	
+buffish	bufl&sh	110984	
+and	aud	111057	
+and	aud	111106	
+lilacine	lilaciue	111167	
+grey	gre}'	111176	
+closely	closel}'	111224	
+year	3'ear	111744	
+cherry	cherr^'	111756	
+canary	canar}-	111874	
+14th	i4tli	111998	
+efforts	efi^orts	112422	
+nest	uest	112672	
+any	an}'	113376	
+fully	full}'	113426	
+yet	j-et	113521	
+Macpherson	Alacpherson	113560	
+wholly	wholl}'	113654	
+faculty	facult}'	113689	
+my	ni}'	113702	
+the	tlie	113765	
+sounds	soiinds	113949	
+beauty	beaut}^	113993	
+Homeyer	Home3'er	114160	
+489	4S9	114207	numeric
+Grosbeaks	Gro.sbeaks	114396	
+they	the}-	114463	
+Fringilla	Fyi>igiIIa	114829	
+any	au}'	114888	
+Fringilla	I^ri)ioi/ln	114937	
+Passer	Piisser	114968	
+Emberizinœ	Emberizina:	115036	unicode
+Aviculturist	Avicultiirist	115064	
+FRINGILLIDÆ	FRINGILLID.^	115178	unicode bird-type
+FRINGILLINÆ	FRINGILLIN.E	115204	unicode bird-type
+CROSSBILL	CroSvSbill	115234	
+Loxia	Lo\ia	115247	
+bifasciata	bifasctala	115253	
+BREHM	Brkhm	115271	
+and	aud	115360	
+and	aud	115544	
+11th	nth	115766	
+neighbourhood	ueighbourhood	115945	
+Doubleday	Doubleda}'	116175	
+Epping	Eppiug	116215	
+in	iu	116367	
+and	aud	116376	
+and	aud	116630	
+belly	bell}'	116848	
+young	j'oung	117119	
+they	the}'	117687	
+very	ver}-	118008	
+in	iu	118070	
+in	iu	118296	
+in	iu	118454	
+mentioning	meutiouing	118697	
+Gätke	Gatke	118999	unicode
+1889	18S9	119018	numeric
+16th	i6tli	119203	
+FRINGILLIDÆ	FRIXGILLIDrE	119697	unicode
+FRINGILLINÆ	FRINGILLIAVE	119723	unicode
+Loxia	Loxta	119761	
+curvirostra	iUi'7'iyosira	119767	
+LINN	Lixx	119782	
+this	tliis	119825	
+greater	gi-eater	119854	
+Himalayas	Himakn-as	119923	
+In	lu	119967	
+principally	principall}'	120002	
+months	mouths	120042	
+sometimes	.sometimes	120296	
+positively	positively'	120677	
+entirely	entireh-	120754	
+say	sa_v	120833	
+Cyanospiza	Cyaiiospiza	120917	
+any	an}-	121004	
+year	j-ear	121059	
+though	tliougli	121946	
+They	The}^	122069	
+very	ver_y	122079	
+early	earh'	122085	
+family	faniilj^	122445	
+party	part}^	122454	
+party	part}^	122536	
+they	the}'	122543	
+mountain	mouutain	122777	
+chip	cliip	123915	
+nest	nesl	124665	
+dry	dr\-	124803	
+from	fri)m	124932	
+rarely	rarely-	124956	
+they	the}'	124978	
+vary	var_v	124984	
+greyish	gre_vish	125025	
+dark	dai-k	125103	
+underlying	underlj-ing	125132	
+Esq	Esc|	125301	
+young	3'oung	125329	
+largely	largel}'	125356	
+larvæ	larvae	125394	unicode
+fond	fund	125674	
+only	onl}'	125785	
+my	nn'	125894	
+generally	geuerall_v	126025	
+very	ver\-	126057	
+busily	bnsil}'	126118	
+employed	emploj-ed	126126	
+smaller	suuiller	126292	
+very	ver}'	126797	
+my	mj'	127063	
+which	wliicli	127488	
+his	liis	127533	
+away	awaj^	127834	
+away	awa}^	127963	
+chip	i/iip	128069	
+likely	likel}-	128208	
+the	the}-	128347	
+6th	6tli	128386	
+1887	1S87	128401	numeric
+smaller	sujaller	128485	
+used	irsed	128526	
+clays	days	128552	
+carefully	carefull}'	128622	
+by	b^^	128742	
+FRINGILLIDÃ	FRIXGILLILhE	129436	unicode
+FRINGILLNÃ	FR I Mj 11. LLWE	129462	unicode
+PINE	Pink	129485	bird-name
+Pyrrhula	Pyy)linla	129501	
+enucleator	cmiclcatoy	129511	
+probability	probabilit}^	130057	
+only	oul}-	130184	
+July	Jul}'	130275	
+aviary	aviar}'	130703	
+very	verj^	130797	
+FRINGILLIDÃ	FRINGILLID.^	131009	unicode
+FRINGILLINÃ	FRINGILLIN.^	131035	unicode
+Pyrrhula	Py})hula	131066	
+europœa	curopaa	131075	unicode
+SHARPE	SHARPB	131097	
+distribution	distributiou	131114	
+by	b}-	131357	
+Pyrrhula	Fyrrhula	131412	
+pyrrhula	pyrrhulay	131421	
+Pyrrhula	Pyyyhula	131561	
+major	niajoy	131570	
+Siberia	vSiberia	131628	
+eye	e3'e	131987	
+the	tlie	133235	
+melanism	melauisni	133240	
+which	whicli	133251	
+chiefly	chief!}'	133365	
+frequently	frequentl}"	133650	
+by	b}-	133676	
+wayside	wa3-side	133795	
+by	b}'	133878	
+upper	iipper	133933	
+horizontal	lunnzontal	133953	
+yew	j-ew	133991	
+blackberry	blackberr}'	134058	
+cup	ci:p	134661	
+are	ai^e	134759	
+rarely	rarel}'	135033	
+which	wdiich	135407	
+week	\veek	135814	
+nidification	nidificatiou	135865	
+July,	Jul}^	135966	
+steadily	steadil}^	136284	
+day	da}'	136352	
+difficult	diflScult	136720	
+hoo	hi	136896	
+wheo is	ivlicoxs	136935	
+a better	abetter	136944	
+ticularly	ticularl}'	137120	
+systematically	sj'stematicall}'	137276	
+captivity	captivit}'	137687	
+year	3'ear	138041	
+by	b}'	138372	
+you	3'ou	139039	
+the	tlie	139130	
+thereby	thereb\'	139308	
+they	the}'	139435	
+and	aud	140130	
+FRINGILLIDÆ	^FRINGIL L ID. F	140410	unicode
+FRINGILLINÆ	FR I XG I L L INAl	140440	unicode
+erythrinus	erythrinm	140497	
+FRINGILLIDÆ	FRINGILLID.'E	141216	unicode
+FRINGILLINÆ	FRINGILLIN.F	141243	unicode
+hortulanus	horlulanus	141278	
+may	ma}'	141874	
+Swaysland	Swaj'sland	142153	
+yellowish	j-ellowish	143134	
+young	j-ouug	143473	
+very	ver}'	143485	
+yellow	3'ellow	143498	
+question	cpiestion	143555	
+Gätke	Gatke	143665	unicode
+Sleswick	Slcswick	143984	
+summer	.summer	144245	
+hilly	hill}'	144404	
+quoted	qnoted	144795	
+Seebohm	Seebolim	144805	
+Aurès	Aur^s	144970	unicode
+luxuriant	Inxuriant	145014	
+beautifully	beautifull_v	145120	
+point	puint	145549	
+grey	gre}^	146493	
+very	verj^	146686	
+Canary	Canar}-	147211	
+wheet	whect	147232	
+the	die	147512	
+generation	geiieratiou	147723	
+Mr	Air	147888	
+hoped	hojDed	148023	
+in	iu	148202	
+buy,	bu}^	148266	
+not	uot	148278	
+many	man}'	148324	
+wary	war}-	148419	
+may	may-	148481	
+Canary	Canar\'	148521	
+daily	dail}'	148560	
+always	al\va3's	148638	
+my	m}'	148751	
+in	iu	148784	
+Serins	vSerins	148827	
+May	Ma}'	149032	
+selecting	selectiug	149083	
+in	iu	149832	
+FRINGILLIDÆ.	FRINGILLID. E.	150690	unicode
+FRINGILLINÆ	FRINGILLIAVE	150716	unicode
+Chrysomitris	Clitysomitris	150744	
+spinus	spinas.	150758	
+Siskin	vSiskin	151077	
+Surrey	Surrej^	151383	
+yellow	A'cllow	152284	
+yellow	3-ellow	152449	
+yellow	3'ellow	152691	
+the	tlie	153063	
+greyer	gre3'er	153211	
+about	aboiit	153332	
+country	countr}-	153343	
+eagerly	eagerl}-	153443	
+strongly	strongl}'	153612	
+my	ni}-	153708	
+glee	gUc	153875	
+zeisig	zei^ig	153880	
+tit	iit	153910	meaningless
+hootelee	JwoteUe	153943	
+glee	^f-Ar	153962	
+aviary	aviar}-	154072	
+zeisig	cc/.v/V	154145	
+probably	probabl}'	154153	
+tit	///	154374	
+May,	]Ma3%	154621	
+continually	continuall3-	154766	
+You	Yon	154815	
+cry,	cr3%	154880	
+flying	fl3'ing	154921	
+joyous	jo3-ous	155087	
+away	awa3'	155184	
+full	fnll	155222	
+animation	auimation	155230	
+with	witli	155281	
+pleasure	pleasnre	155287	
+particularly	particularl}'	155306	
+pouring	ponring	155443	
+very	vcr}-	155575	
+birch	Ijirch	155831	
+upon	iipon	156055	
+which	wdiich	156061	
+that	tliat	156117	
+the	tl;c	156123	
+horsehairs	horsel]airs	156359	
+usually	usuallj'	156546	
+greyish	gre3dsh	156646	
+captivity	captivit}'	157377	
+wonderfully	wonderfull}'	157765	
+aviary	aviar}'	157901	
+days	daj-s	157925	
+thoroughly	thoroughl}-	157944	
+for	fox-	158069	
+fly	fl}'	158176	
+and	aud	158196	
+directly	directl}'	158207	
+finally	finall}-	158338	
+away	awa_v	158724	
+many	man^-	158742	
+always	alwaj'S	158831	
+surprisingly	snrprisingh'	158861	
+my	m}'	159325	
+liberty,	libert}^	159459	
+presently	presentl}'	159526	
+young	3'oung	159815	
+FRINGILLIDÆ	FRINGILLIDyE	159932	unicode
+FRINGILLINÆ	FKINGILLIN.F	159958	unicode
+Chrysomitris	CJuysoinilt is	159992	
+citrinella	ciirinclla	160007	
+Yarmouth	Yarmoutli	160052	
+FRINGILLIDÆ	FRIXG ILL ID. E	160106	unicode
+Subfamily	Sii/La,uily	160124	
+FRINGILLINÆ	LKL\ '( i/L L LW E	160136	
+Carduelis	CdJ-LucIis	160173	
+elegans	clci^a)is	160184	
+STEPH	vSteph	160195	
+R	DR	160204	
+inhabits	iuhabits	160237	
+Canary	Canar}-	160295	
+Egypt	Eg3'pt	160396	
+Krasnoyarsk	Krasuo3-arsk	160452	
+many	man}-	160764	
+satiny	satinj'	161229	
+with	wdth	161822	
+on	ou	161842	
+with	wnili	162381	
+mostly	niostl}'	162474	
+the	tlie	162505	
+the	tlie	162547	
+with	witli	162608	
+huffish	l)iiffish	162614	
+horn	horu	162726	
+brown	browu	162731	
+usually	nsuall}'	162854	
+slightly	.slightly	162863	
+far	fi^r	163034	
+cheeks	checks	163081	
+distinctly	distinctl}'	163154	
+Grey	Gre3'	163456	
+easy	eas}-	163952	
+young	j-oung	163969	
+different	diff"erent	163992	
+formerly	former!}'	164868	
+by	bN'	165255	
+only	onl}-	165274	
+supply	supplj-	165302	
+Merlin	IVIerliii	165340	
+throughout	throughoitt	165499	
+frequently	frequentl_y	165692	
+ably	abl}'	165737	
+Usually	Usuall}^	166008	
+woolly	W00II3'	166281	
+entirely	entirel_v	166520	
+dry	dr}-	166542	
+built	l)uilt	166614	
+especially	especiall}'	166808	
+they,	the3%	166898	
+Whee-é-ur	l]l/ci-c-ur	167387	unicode
+whee-é-ur	whec-c-ur	167400	unicode meaningless
+whee-é-ur	whtc-c-nr	167411	unicode meaningless
+too-oo-ee	too-00-cc	167422	meaningless
+ti-weea	li-iveea	167433	meaningless
+ti-weea	ii-ivcca	167443	meaningless
+whitweea	wliihvcea	167453	meaningless
+chiwhit	cliiwliit	167464	
+chiwit	c/iiivit	167475	meaningless
+chiwit	clira'it	167485	meaningless
+wheec	whetc, ivhctc	167496	meaningless
+wheec, wheec	wlitcc	167511	meaningless
+by	b}^	167556	
+body	bod}-	167630	
+bears	beai"s	167703	
+chit	(■////	167813	
+chitteri	chittcyi	167848	
+tolerably	tolerabl}'	167887	
+frequently	frequeuth'	167997	
+young	3'oung	168146	
+extent	cxteut	168188	
+and	aud	168208	
+confinement	confiueinent	168242	
+aviary	aviar^y	168307	
+and	aud	168820	
+incessantly,	incessanth^	168860	
+chiwit	c/iiivif	168917	sound-simulation
+chiwit	ihh^'it	168927	
+chiwit	c/iiiviiy	168936	sound-simulation
+spray	spra}'	169107	
+dare	dai^e	169316	
+aviary	aviar}^	169413	
+young	j-oung	169851	
+immediately	immediatel}'	169902	
+young	3'oung	170044	
+young	j-oung	170156	
+plucked	pkicked	170496	
+Canary’s	Canar^^'s	170778	unicode
+young	j-oung	170862	
+captivity	captivit}'	171077	
+my	ruy	171209	
+really	reality	171843	
+FRINGILLIDÆ	FRIXGILLID.^E	172366	unicode bird-type
+Subfamily	Suhfamilx	172382	
+FRINGILLINÆ	FRIXGILLLW-E	172392	bird-type
+Acanthis	Acanihis	172427	
+linaria	liiiaria	172436	
+rufescens	ni/csccus	172580	
+hornemanni	Iiorncmanni	172597	
+hornemanni	horncmanni	172791	
+separately	separatel}-	172946	
+A	.1.	173086	
+rufescens	n/fi-sciiis	173090	
+linaria	liiiaria	173125	
+A	.7	173154	
+hornemanni	hoi iiema)i):i	173158	
+exilipes	exiiipe^	173195	
+closely	closelj'	173369	
+types	t3-pes	173386	
+usually	usuall^^	173549	
+sufficiently	sufliciently	173571	
+principally	principall}'	173990	
+Coburu	Coburn	174554	person-name
+whitish	wdiitish	174887	
+buffish	bufEsh	175281	
+yellowish	3-ellowish	175387	
+prominently	prominentl}'	175600	
+throat	tliroat	175676	
+young	youug	175701	
+sandy	sand}'	175794	
+rosy	ros}'	175864	
+p	^p	178032	
+Canary	Canar\'	178374	
+tewey	tnvcy	178393	
+Mealy	jMealy	179192	
+says	sa3-s	179260	
+from	iVom	179405	
+apoplexy	apoplex}'	179533	
+young	j-oung	179671	
+Stoke	vStoke	179723	
+1860	i860	179740	numeric
+Singularly	Singularl}'	180122	
+Gätke	Gatke	180606	unicode
+4th	4tli	180808	
+5th	5tli	180817	
+“innumerable	"innumerable	180861	unicode
+covered	co\-ered	180940	
+in	iu	181205	
+glutted	gdutted	181241	
+FRINGILLIDÆ	FRIXGILLID.E	181278	unicode
+FRINGILLINÆ	FR I N(ULLL\L-E	181304	unicode
+LESSER	LEvSser	181326	
+Acanthis	.■{ciDilhis	181344	
+rufescens	ra/csci-ns	181356	
+VIEILLOT	ViElLLOT	181368	
+in	iu	181386	
+and	aud	181405	
+in	iu	181425	
+In	Iu	181570	
+and	aud	181671	
+in	iu	181675	
+in	iu	181736	
+means	meaus	181790	
+abundantly	abundantl}'	182058	
+year	j-ear	182077	
+buﬃsh	huffish	182349	unicode
+in	iu	182391	
+buﬃsh	huffish	182616	unicode
+at	:it	182659	
+blackish	bUickish	182699	
+brown	bruw n	182708	
+hazel	hazeL	182722	
+slightly	slightl}-	182809	
+male	uuile	182929	
+young	^-oung	182940	
+nearly	ncarl_v	182947	
+in	iu	183106	
+they	the}'	183238	
+in	iu	183306	
+Mealy	Meal}'	183407	
+neatly	neatl}'	183580	
+dry	drj'	183693	
+nearly	nearly'	184062	
+in	iu	184218	
+Murston	Alurston	184510	
+entirely	entireh'	184681	
+twenty	Iwenty	184907	
+They	Tliey	185123	
+they	tliey	185186	
+cherry	clierr}-	185547	
+Mr	r^Ir	185607	
+sixty	sixt}'	185857	
+May	IVIay	186059	
+my	ni}-	186312	
+quantity	quantit}'	187077	
+water	w-ater	187641	
+in	iu	187974	
+confinement	coufiuemeut	187977	
+very	ver}^	188256	
+Brambling’s	Brambliug's	188300	unicode
+railway	railwaj'	188398	
+My	M}-	188522	
+only	onl}'	188654	
+Beverley	Beverle3%	188880	
+by	b_y	189115	
+many	man}'	189248	
+in	iu	189406	
+yellowish	3'ellowish	189514	
+very	ver}-	189593	
+Gätke’s	Gatke's	189718	unicode
+identity	identit}^	189920	
+FRINGILLIDÆ	FRLYGILLID.E	190136	unicode
+FRINGILLINÆ	FRLXG ILL I l\L-E	190162	unicode
+TWITE	Tamte	190186	
+Acanthis	Acaiithis	190194	
+flavirostri	/lavuvsh'is	190204	
+the	tlie	190227	
+Sharpe	Sliarpe	190270	
+Italy	Ital}^	190833	
+1894	1S94	191178	numeric
+Mountain	Mountaiu	192477	
+neb	ueb	192519	
+Lintie	Liutie	192523	
+in	iu	192575	
+moorlands	moorlauds	192612	
+portions	portious	192638	
+Britain	Britaiu	192656	
+and	aud	192827	
+in	iu	193075	
+feeding	feediug	193241	
+by	b}'	193356	
+twah	hvah	193617	
+in	iu	193858	
+rocky	rock}^	193920	
+complete	cimiplete	194774	
+lay	la}-	194839	
+nidification	uidification	195194	
+in	iu	195598	
+they	the}-	195705	
+they	the}'	195894	
+(Acanthis	fAca)ilhis	196721	
+in	iu	197189	
+stormy	storni}'	197664	
+16th	i6th	197850	numeric
+on	un	198236	
+19th	iQtIi	198244	
+are	arc	198255	
+had	liad	198474	
+they	the}'	198582	
+they	thej'	198612	
+young	j-oung	198728	
+they	the}-	198949	
+FRINGILLIDÆ	FRlXGlLLID.E	199280	unicode
+FRINGILLINÆ	I'RIXGILLLWF	199305	unicode
+THE	Thf:	199320	
+Acanthis	.■Icdiit/ns	199334	
+cannabina	cniniahinit	199346	
+throughout	tlirougliotit	199373	
+in	iu	199412	
+Scaudinavia	Scandiuavia	199415	
+in	iu	199444	
+broadly	broadlj^	200211	
+narrowly	narrow!}'	200348	
+buffish	bufhsh	200703	
+ear-coverts	ear- coverts	200712	
+youngish	j^oungish	200873	
+belly	bell}^	200891	
+many	nianj?	201669	
+radius	radins	201806	
+ulna	nlua	201817	
+humerus	hiunerus	201900	
+emarginate	cmurgiuate	202044	
+considerably	considerabl}-	203258	
+ragged	raereed	204265	
+huffish	huffish	204463	
+tell	fe//	205064	
+tell	telF''	205076	
+you	j^ou	205129	
+turra	tiirra!	205395	
+twit	tivit	205463	
+te-ewy	tc-eivy	205496	
+chiwi	chkm	205540	meaningless
+chiwi	chhm	205546	meaningless
+chiwi	chiivi	205552	meaningless
+through	througli	205738	
+chick	c/ii'ck	205835	
+cluck	chick	205889	
+cannabina	ia)i)ial)i)i(t	206053	
+Saunders	vSaunders	206232	
+capacity	capacit}'	206583	
+mimicry	niimicr}-	206597	
+any	an}'	206610	
+my	ni}'	206662	
+flying	il_ving	206694	
+years	3-ears	206747	
+beyond	be3-ond	206768	
+not	nt)t	206997	
+country	countrj-	207209	
+Linnet	Linuet	207404	
+they	the}-	208071	
+old	uld	208494	
+II	IL	209210	
+Gurney,	Gurne3^	209265	
+my	nu-	209518	
+carry	carrj'	209613	
+theoretically	theoreticall}'	209826	
+FRINGILLIDÃ	FRINGILLID.-E	210033	unicode
+FRINGILLINÃ	FRINGILLINAi	210060	unicode
+domesticus	domcsticus	210102	
+Italy	Italj^	210227	
+italiœ	italice	210309	unicode
+Ceylon	Ce^don	210392	
+In	lu	210435	
+the	tlie	210471	
+into	iuto	210514	
+Zealand	Zealaud	210534	
+where	wheie	210566	
+Saunders	Sautiders	210657	
+his	liis	210773	
+usually	usualh'	210808	
+male	nuile	210928	
+grey	gre}-	211004	
+blackish	blackisli	211441	
+grey	gre}-	211451	
+brown	ljrowu	211692	
+brown	browu	211730	
+ashy	ash}^	211913	
+yellowish-	j-ellowish-	212294	
+superciliary	superciliarj'	212459	
+largely	largel}-	212741	
+dry	dr}'	213063	
+when	wlien	213077	
+country	countr_v	213198	
+only	onl}'	213815	
+rows	i^ows	213863	
+hungry	huugr}'	214040	
+progeny	progeu}'	214364	
+young	3-oung	214453	
+partly	partl}^	214515	
+bulky	bulk}'	215603	
+directly	directl}'	215721	
+cavity	cavit}'	215740	
+hanging	liaugiug	215869	
+the	tlie	215881	
+of	uf	215893	
+16	i6	215940	numeric
+my	nu-	216144	
+white	v.'hite	216511	
+Shrike	Slirike	216608	
+ground	grouud	216766	
+may	ma}-	216970	
+reply	repl}'-	217673	
+you	j-ou	217846	
+journal	journal	218001	
+month	mouth	218129	
+chow	c/iow	218422	meaningless
+chow	choiu	218429	meaningless
+chow	choiv	218450	meaningless
+by	b}'	218509	
+young	3^oung	218571	
+note	uote	218735	
+which	-wliicli	218740	
+Witchell	Witcliell	218762	
+sounds	souuds	218805	
+chow	c/iov.1	218823	
+rarely	rarel}^	218918	
+hand	haud	218993	
+songs	sougs	219045	
+Canary’s	Canary's	219142	unicode
+Canary	Canar}'	219414	
+larvæ	larvae	219502	unicode
+London	Loudon	219590	
+FRINGILLIDÆ	FRINGILLID^	219865	unicode
+FRINGILLINÆ	FRINGILLIALF	219889	unicode
+montanus	nioiitanus	219930	
+REEBOHM	SEEBOHM	219949	
+Palæarctic	Palsearctic	220074	unicode
+Afghanistan	Afgliaiiistau	220407	
+and	aud	220422	
+found	fouud	220448	
+throughout	througliout	220477	
+rarity	rarit}-	220707	
+steadily	steadil}'	220893	
+Deny	Derry	221076	
+in	iu	221082	
+company	compau}'	221379	
+slightly	slightl}'	221500	
+bauds	bands	221780	
+summer	sunnner	221818	
+in	iu	221846	
+found	fouud	222163	
+shyness	shj-ness	222362	
+generally	generall}'	223028	
+in	iu	223080	
+especially	especiallj^	223101	
+in	iu	223371	
+in	iu	223552	
+vary	var3'	224268	
+in	iu	224559	
+hide	bide	225005	
+most	mo-t	225207	
+in	iu	226377	
+colouring	cuUmriug	226380	
+nest	uest	226395	
+containing	contaiuiug	226400	
+an	au	226411	
+lime	liuie	226451	
+kiln	kilu	226457	
+almost	ahuost	226471	
+probably	probabl}'	226655	
+family	famih'	227092	
+frequently	frequentl}'	227166	
+any	an}'	228131	
+in	iu	228196	
+in	iu	228585	
+aviary	aviar}-	228591	
+steady	stead}'	228913	
+aviary	aviar}'	229053	
+necessarily	necessaril_y	229129	
+On	Ou	229335	
+very	verj'	229449	
+short	sliort	229455	
+FRINGILLIDÆ	FKIXGILL ID. E	229591	unicode
+FRINGILLINÆ	FRIXGILLIN^	229619	unicode
+Fringilla	Fiingilla	229649	
+cœlebs	ccclcbs	229659	unicode
+LINN	LiXN	229668	
+Fringillidœ	FringiUidcc	229707	unicode
+Fringillinœ	Fringi/Iincr	229867	unicode
+Fringilla	Fringill	230118	
+and	aud	230736	
+the	tlie	230984	
+front	iVont	231528	
+and	aud	231572	
+and	aud	231905	
+they	the}'	232085	
+very	ver}'	232410	
+and	aud	232523	
+and	aud	232776	
+immediately	immediatel}'	233153	
+Emberizinœ	Einbcrizina	233177	unicode
+hen	heu	233496	
+subdued	snbdued	233515	
+early	earl}'	233825	
+turrrrrl	tioyi-nl	234112	meaningless
+torrrrrl	ioi)yi'rI	234122	meaningless
+variously	variousl}-	234420	
+chucha	cliuclia	234534	
+churr	c/turr	234543	
+ear	iar	234567	
+frequently	frequentl}'	234576	
+wheatear	ivhcatcar	234588	
+chuckwados	c/iucktvados	234662	
+twit	hvi/	235082	
+young	}'Oung	235107	
+chizzit	chizzif	235126	
+chizzit	cltizzit	235135	
+chizzit	cliizzit	235145	
+chizzick	cliizzic/c	235195	
+says	sa3'S	235208	
+chick	cliick	235303	
+twink	tzviiik	235400	
+spink	spiiik	235409	
+exceedingly	exceedingh-	235924	
+pretty	pretty'	236050	
+glaringly	glaringl}'	236093	
+handy,	hand}^	236234	
+frequently	freqiieutl}'	236327	
+would	wonld	236400	
+frequently	freciuentl}-	236903	
+days	da^-s	237012	
+lay	la^'	237095	
+slightly	slightl}'	237133	
+by	h\	237232	
+Derwent	Derweut	237319	
+by	b}'	237442	
+Canary	Canarj-	237574	
+by	b}-	237756	
+type	t\pe	237913	
+spiders’	spiders'	237985	unicode
+layer	la3'er	238070	
+hardly	hardl}-	238217	
+reddish	I'eddish	238841	
+type	t3'pe	238863	
+certainly	certainl}-	239054	
+larvæ	larvae	239260	unicode
+chiefly	chiefl}'	239354	
+upon	upou	239363	
+years	3'ears	239449	
+certainly	certaiul}^	239559	
+easy	eas}^	239749	
+they	the}^	239767	
+Chaffinch	ChafSnch	240047	
+anyone	anj^one	241042	
+Canary	Canary/	241246	
+Fringillidœ	Fringillida:	241566	unicode
+Emberizinœ	Emberizince	241812	unicode
+FRINGILLIDÃ	 FR I X(UL L ID. ¥..	241832	unicode
+subfamily	Suh/amily	241854	
+FRINGILLINÃ	^FRIXGIL L IN^E	241865	unicode
+BRAMBLING	Bramblixg	241887	
+Fringilla	Frinoii/d	241899	
+nontifringilla	iiii>iitijriii<^illii	241909	
+LINN	LiNX	241932	
+OF	OI""	241939	
+the	tlie	241944	
+distribution	distribiuiou	241949	
+of	uf	241962	
+Saunders	vSauiiders	241985	
+Brambling	Brambliug	242023	
+the	tlie	242068	
+mainland	niainhmd	242073	
+throughout	throughont	242092	
+valley	valle}'	242161	
+while	wliile	242183	
+Mediterranean	Alediterraueau	242379	
+Pyrenees	P3'renees	242523	
+generally	generalh'	242799	
+plumage	phnnage	243130	
+margins	luargius	244183	
+neck	ueck	244227	
+on	ou	244317	
+plumage	plnmage	244460	
+but	bnt	244468	
+duller	dnller	244486	
+upper	npper	244511	
+much	mnch	244578	
+young	yonng	244603	
+but	bnt	244644	
+quickly	qnickly	244658	
+colouring	colonriug	244695	
+plumage	plnmage	244720	
+Chaffinch	Chafflnch	244890	
+Brambling	Brambliug	245538	
+p	j)	245818	
+on	ou	246227	
+being	beiug	246776	
+egg	tgg	247300	
+brown	browu	247433	
+but	Init	247708	
+zshweeo	zs/nvtro	247916	
+whit	iv/t//	248243	
+ziv	zw	248300	
+wheat	ivhcat	248661	
+ear	car	248681	
+may	maj-	248850	
+simply	simplj-	249384	
+days	da^-s	249715	
+turned	turucd	250238	
+into	iuto	250248	
+greatly	greatl}'	250586	
+FRINGILLIDÆ	FRINGILLID.E	250995	unicode
+FRINGILLINÆ	FRINGILLIN.F	251021	unicode
+Montifringilla	lllonli/yingilla	251053	
+LINN	LlNN	251079	
+FRINGILLIDÆ	I-'RIX(]ILLID.-E	251247	unicode
+Subfamily	Suhjamily	251266	
+EMBERIZINÆ	EMBERIZIA\-E	251277	unicode
+BUNTING	Euntixo	251309	
+Emberiza	Eiiiho'iza	251319	
+melanocephala	))!c!iiiioiipliaia	251330	
+the	tlic	251369	
+Bunting	Buutiug	251402	
+any	auy	251421	
+Germany	German}^	251779	
+Gätke	Gatke	252117	unicode
+it	i*^	252257	
+is	i''	252261	
+an	''^^i	252265	
+year	5-ear	253318	
+by	b}-	253592	
+probably	probabl}^	253656	
+February	Februar}'	253761	
+Steele’s	Steele's	253954	unicode
+my	mj-	254329	
+not	uot	254432	
+conspicuously	conspicuou.sly	257133	
+but	btit	257987	
+consists	ctmsists	258591	
+not	nut	258643	
+very	\-ery	258667	
+chit	clitt	258775	
+chiririri.	chiriririy	258957	meaningless
+aviary	aviar}-	259458	
+be	l)e	259495	
+dangerously	daugerousl}-	259635	
+FRINGILLIDÆ	FRINGILLID.-E	259700	unicode
+Subfamily	Suhfamily	259716	
+EMBERIZINÆ	EMBERIZIN.F	259726	
+Emberiza	E)iiberiza	259759	
+Norway	Norwa}'	260018	
+Riga	Riea	260095	
+Petræa	Petrsea	260509	unicode
+shores	.shores	261387	
+dark	dai'k	261677	
+primary	primary-	261707	
+yellowish	j-elluwish	261721	
+sparsely	sparsel}'	261898	
+yellow	3-ellow	262229	
+yellow	3'ellow	262262	
+greyer	grej-er	262361	
+frequently	frequeutl}'	263054	
+ungainly	ungainlj'	263107	
+apology	apolog}^	263138	
+“tees	'' kis	263671	unicode meaningless
+tees	tcis	263679	meaningless
+tees	/ccs	263685	meaningless
+tis‐is-is-s-s-r-r-re,”	tis-is-is-s-s-r-r-rc,'"	263691	unicode meaningless
+“tic-tic-teese,”	''■tk-tic-tccsc,''	263734	unicode meaningless
+kaak	kaak^	264008	
+The	Tlie	264014	
+clumsy	clums}^	264049	
+strong	strung	264073	
+the	tlie	264083	
+rarely	rarel}-	264672	
+with	watli	264681	
+they	the}-	264893	
+densely	densel}-	265196	
+confluent	couiluent	265345	
+extremity	extremit_y	265403	
+May	Ma}^	265483	
+larvæ	larvae	265846	unicode
+quantities	cjuantities	265938	
+unpleasing	uupleasing	266627	
+nesting	uesting	266963	
+Mulheim	Mulheini	266996	
+abundantly	abuudantl}-	267031	
+indifferently	indifferent!}-	267158	
+the	tlie	267249	
+embodying	embod3'ing	267476	
+Skylark’s	Skjdark's	267654	unicode
+I	1	267669	
+capacity	capacit}'	267748	
+FRINGILLIDÆ	I' K /A 'GIL L ID. E	267769	unicode
+EMBERIZINÆ	EMBERIZIN. E	267805	unicode
+from	^from	267933	
+this	tliis	268527	
+Bunting	Buntiug	268654	
+considerably	consideiably	268698	
+in	iu	268711	
+with	\\-ith	269518	
+parts	jarts	270243	
+young	3'oung	270568	
+in	iu	271255	
+when	wheu	271543	
+of	ni	271821	
+chink	cliink\	271867	
+chee	cluc	271910	
+chich	(Inch	272395	
+chich	cliicli	272402	
+The	Tlie	272700	
+down	dowm	272732	
+egg	o^g^	273969	
+sienna	sieuua	274026	
+III	HI	274164	
+frequently	frequentl}'	275785	
+ﬀerrelup	ffcyrclup!	275876	unicode
+you	3'ou	276071	
+close	.close	276584	
+larvæ	larvae	277063	unicode
+fonder	fouder	277220	
+shilling	sliilling	277773	
+partly	parti}'	277840	
+aviary	aviar}-	278235	
+they	the}'	278269	
+Arbor	.irbor	278302	
+vitœ	vita	278309	
+FRINGILLIDÆ	FRlXi UL L ID. F	279411	unicode
+Subfamily	Suhjaiiiily	279430	
+EMBERIZINÆ	FHIBFRIZIA >F	279442	
+YELLOW‐BREASTED	Yellow-Breasted	279462	unicode
+Cley	Clc}-	279546	
+FRINGILLIDÆ	FRFXGILLID.F	279659	unicode
+Subfamily	Suhfam ily	279674	
+EMBERIZINÆ	EMBERIZIN\F	279685	
+Emberiza	Eiiibcriza	279718	
+cirlus	chins	279729	
+rare	rave	280228	
+recognized	reeogni/.ed	280537	
+collection	eollcctiou	280555	
+clutch	cluteli	280568	
+on	ou	280642	
+June	Jnnc	280645	
+unquestionably	nuqnestionably	280670	
+E	R	280694	
+cirlus	cir/us	280697	
+1888	i<S8(S	280856	numeric
+longitudinally	longitudinall}^	281211	
+yellow	j-ellow	281348	
+nearly	nearl}'	281707	
+very	verv	281777	
+nearly	nearl}'	282148	
+nearly	nearh-	282372	
+rarely	rarel}-	282625	
+much	ninch	282701	
+Northamptonshire	Northampton.shire	282824	
+on	ou	283098	
+chea-che	chea-c/icy	283867	
+my	niv	283900	
+1877	1^77	283938	
+frequently	frequenlh^	283946	
+May	AIa\'	284152	
+my	m}-	284283	
+May	Ma}-	284421	
+very	ver}-	284485	
+rarely	rarel}-	285301	
+four	foiir	285413	
+occasionally	occasionall}'	285776	
+loosely	looselj'	285892	
+roots	routs	285976	
+and	aud	285983	
+one	oue	286031	
+fine	fiue	286074	
+have	liave	286239	
+Gätke	Gatke	286503	unicode
+Zaunammer	Zaiincviniur	286617	
+Emberiza	Einhoiza	286749	
+Zippammer	Zippa»n>icr	286778	
+Gätke	Gatke	286828	unicode
+Emberiza	Embcriza	286888	
+cirlus	chins	286897	
+by	b}'	286950	
+Emberiza	Einboiza	287120	
+schœniclus	ichccnicluis	287129	unicode
+greedy	greed}-	287654	
+suddenly	suddenlj-	288153	
+FRINGILLIDÆ	FRINGILLID. E.	288195	unicode
+EMBERIZINÆ	EMBERIZLW E	288222	unicode
+THE	Tiiiv	288236	
+ORTOLAN	Ortulax	288242	
+BUNTING	Buxtixg	288250	
+Emberiza	Emlio'i'-a	288260	
+hortulana	hoiiiihuui	288271	
+LINN	LiNX	288283	
+IN	" T N	288290	
+Scandinavia	Scaudiuavia	288296	
+northern	uortheni	288312	
+range	rauge	288343	
+lat	hit	288441	
+valley	vallc}-	288515	
+Minor	Elinor	288663	
+Abyssinia	Ab}-ssinia	289200	
+and	aud	290527	
+brown	browu	290563	
+and	aud	290669	
+browner	browuer	290673	
+only	onl\'	290829	
+liberty	libert}*	291136	
+May	INIay	291965	
+and	aud	292266	
+slightly	slightl}^	292270	
+an	au	292382	
+materially	materiall}-	292546	
+and	aud	292693	
+melancholy	melauchol}-	292754	
+lying	Ij'iug	293085	
+may	ma}-	293158	
+and	aud	293274	
+you	3'ou	293325	
+you	30U	293342	
+your	3our	293354	
+reality	realit}-	293495	
+captivity	captivit}'	293653	
+equally	equall}'	293692	
+Mannikins	lylannikius	294167	
+aviary	aviar}'	294192	
+they	thev	294334	
+they	the}'	294376	
+they	the}'	294481	
+in	iu	294851	
+show	show-	295261	
+Russ’	Russ'	295471	unicode
+Sitagra	SiVcrora	296095	
+S	fS	296104	
+Liothrix	Liolhrix	296292	
+and	aud	296301	
+Zosterops	Zosferops	296305	
+many	mauy	296336	
+behaviour	l)ehaviour	296420	
+and	aud	296437	
+and	aud	296550	
+bathing	bathiug	296620	
+they	the}/	296665	
+and	aud	296734	
+FRINGILLIDÆ	I'KlNiJILLID. E	296873	unicode
+Subfamily	Suhfamily	296891	
+EMBERIZINÆ	EMBERIZIX. E	296901	
+Emberiza	E/iiixrizd	296937	
+cia	iia	296948	
+TWO	WO	296960	
+1902	i()02	297011	numeric
+FRINGILLIDÆ	FRINCjIL L ID. E	297062	unicode
+Subfamily	SuhJamily	297081	
+Emberiza	Eiiibciiza	297134	
+cioides	aoidcs	297145	
+the	tlie	297176	
+Family	Eamtly	297496	
+FRINGILLIDÆ	ERLYGILLID.E	297503	
+Subfamily	Suhfamiiy	297518	
+EMBERIZINÆ	EMBERIZLWE	297528	
+Emberiza	Eiiihcriza	297562	
+rustica	rusliid	297573	
+London	L'mdon	297837	
+FRINGILLIDÆ	^FRINGILLID. E	298313	unicode
+Subfamily	SuhJamily	298330	
+EMBERIZINÆ	EMBERIZLW E	298340	
+Emberiza	Eiiilia-iza	298375	
+pusilla	piihilla	298387	
+specimen	specinieu	298410	
+near	uear	298433	
+2nd	and	298460	numeric
+1864	1S64	298465	numeric
+Fair	Eair	298601	
+FRINGILLIDÆ	FRINGILLID.E	298855	unicode
+EMBERIZINÆ	EMBEREZIN.'E	298881	unicode
+Emberiza	Eiiibcriza	298915	
+schœniclus	sclianicliis	298926	unicode
+Africa	x\frica	299412	
+in	iu	299477	
+and	uud	299499	
+subspecies	snbspecies	299516	
+only	onh-	299727	
+smoky	smok3'	300393	
+neck	ueck	300853	
+superciliary	superciliar}^	301101	
+county	count}-	302248	
+may	maj-	302328	
+seasons	seasous	302352	
+and	aud	302390	
+and	aud	302477	
+the	tlie	302524	
+bury	bur}'	302800	
+Salisbury	Salisbur_v	302962	
+years	vears	303057	
+nested	uested	303085	
+month	mouth	303105	
+nests	uests	303141	
+found	f )und	303215	
+month	mouth	303339	
+containing	contaiuing	303359	
+fig	Jig	303519	
+Jansen	Jauseu	303732	
+and	aud	304243	
+tiny	tin\'	304301	
+This	Tliis	304405	
+and	aud	304582	
+by	b}'	304706	
+her	Iier	304907	
+nest	uest	304912	
+in	iu	305087	
+stems	stciiis	305763	
+in	iu	305920	
+varying	var^dng	306574	
+underlying	ixnderlying	306727	
+cheo	chco	307623	meaningless
+chee	chce	307641	meaningless
+chee	chcc	307647	meaningless
+zshwee	zshivec	307687	
+tschee	tsclicc	307726	
+cry	cr}^	307813	
+larvæ	larvse	307880	unicode
+summer	snmmer	307910	
+recently,	recentl3^	308584	
+FRINGILLIDÆ	FRINGILLID.'E	308970	unicode
+EMBERIZINÆ	EMBERIZIN.F	308997	unicode
+Calcarius	CahdriKs	309033	
+lapponicus	/(ifpoiiiais	309042	
+LINN	Lixx	309056	
+Seebohm	Seebolim	309547	
+but	bnt	309581	
+to	tu	309703	
+in	iu	309819	
+north	mn-th	310022	
+in	iu	310040	
+South	vSouth	310043	
+Manual	]\Ianual	310101	
+Flamborough	Flaniborough	310822	
+female	feuiale	312122	
+partly	parti}'	312498	
+tawny	tawu}-	312592	
+more	mure	312726	
+11th	iith	313096	numeric
+May	Ma}-	313101	
+au	an	313161	
+in	iu	313252	
+away	awa}-	313431	
+particularly	particularl}-	313570	
+Seebohm’s	Seebolim's	313781	unicode
+18th	i8th	313966	numeric
+principally	principall}'	314302	
+company	compau}-	314318	
+cheng	chciig	315260	
+gutturally	gutturall}'	315336	
+generally	generally'	315479	
+flying	fl\"ing	315513	
+chee	iltct'	315744	
+Lapland	Laj^land	315844	
+ground	groiind	315931	
+dry	dr}'	315972	
+marshy	marsh}-	316245	
+profusely	profusel}-	316317	
+grey	gre}'	316496	
+underlying	iinderlying	316557	
+vary	var}'	316597	
+II	IL	316818	
+Gätke	Gatke	316842	unicode
+wildness	wilduess	316973	
+years	3'ears	317074	
+melancholy	melanchol}^	317140	
+only	onlj^	317391	
+moult	moiilt	317949	
+up	np	318310	
+Mr	Air	318399	
+Gurney	Gurne}-	318410	
+probably	probabl}'	318546	
+certainly	certainl}'	318694	
+FRINGILLIDÆ	FRINGJLLID.E	319120	unicode
+EMBERIZINÆ	EMBERIZIN^F:	319147	unicode
+Plectrophenax	Plectroplunax	319181	
+nivalis	niva/is	319195	
+LINN	Lixx	319204	
+ACIRCUMPOLAR	ACIRCUAIPOLAR	319212	
+Malta	IMalta	319633	
+Italy	Ital}'	319688	
+Saxby	Saxb}-	320074	
+July	Juh-	320085	
+2nd	and	320090	numeric
+1861	1 86 1	320095	
+July	Jul}'	320106	
+Hinaman	Hinanian	320137	
+young	3-oung	320161	
+Grant	Graut	320304	
+Rannoch	Raunoch	320397	
+four	lour	320579	
+greyer	grej'er	320930	
+Mountain	IMountain	321513	
+Bunting	Bnnting	321523	
+Lorrain	Lorraiu	321536	
+every	ever}'	321843	
+they	the}-	322373	
+they	the}'	322638	
+we	^ve	322867	
+various	varions	323025	
+nearly	nearly-	323121	
+hunting	huntiug	323212	
+generally	geuerallv	323540	
+strictly	strictl}'	323574	
+aptly	apllj^	323840	
+by	b\'	324026	
+grey	grej'	324037	
+nidification	uidification	324167	
+early	earl}'	324300	
+dry	dr}'	324463	
+quantity	cpiantity	324572	
+usual	iisual	324675	
+considerably	considerabl}'	324727	
+song	soug	325637	
+flying	fl^'ing	325870	
+tweek	fivcck	325985	
+zshweeo	zslnveco	326044	
+Gätke’s	Gatke's	326590	unicode
+frequently	frequently'	326657	
+by	b}'	327053	
+Gunton	Gnnton	327072	
+Corton	Gorton	327157	
+nearly	nearl}-	327185	
+they	the}'	327520	
+very	ver}'	327764	
+stuffy	stuff}'	328085	
+Fielden	Fieldeu	328563	
+in	iu	328594	
+Basin	Basiu	328637	
+Bunting	Buuting-	328699	
+(Plectrophanes	fPlectropliauis	328708	
+our	onr	328746	
+posture	postnre	328887	
+Hush	Hnsh	328906	
+hush	hnsh	328912	
+you	yon	328921	
+My	IMy	329024	
+in	iu	329155	
+STURNIDÆ	vSTURNID^	329231	unicode
+Icteridœ	hicridcr	329324	unicode
+on	ou	329383	
+Corvidœ	Corvida	329426	unicode
+and	aud	329598	
+long	loug	329607	
+not	uot	329664	
+when	wlieu	329687	
+when	wheu	329845	
+and	aud	330006	
+hungry	hungr}'	330087	
+consequently	consequentl}-	330099	
+in	iu	330386	
+in	iu	330401	
+and	aud	330418	
+in	iu	330554	
+Icteridœ	Ictcridcc	330622	unicode
+years	j^ears	330682	
+in	iu	330704	
+Icterus	Ictcyus	330781	
+Sturnid	Stuiiiidcc	330997	unicode
+Icterid	Icki tdcc	331039	unicode
+Corvid	Coivida	331053	unicode
+Sturnid	Stuniidcc	331255	unicode
+Icterid	Icicrida	331269	unicode
+Family	Fawily	331582	
+STURNIDÆ	STURNW.-E	331589	
+Sturnus	Sfitniiis	331616	
+Italy	Ital}'	331739	
+Italy	Ital}'	331838	
+generally	generall}-	332094	
+everywhere	ever3'where	332332	
+abundant	abuudaut	332344	
+in	iu	332353	
+used	nsed	332391	
+by	b}'	332402	
+common	commou	332474	
+nearly	uearh'	332484	
+county	count}'	332497	
+breeding	Ijreeding	332525	
+in	iu	332750	
+excepting	e.xceptiug	332823	
+sandy	sandj'	333410	
+greyer	gre3-er	333446	
+conspicuously	conspicuousl}'	333516	
+under	imder	333718	
+in	iu	333786	
+may	ma}'	334221	
+in	iu	334277	
+evidently	evidentl}-	334860	
+early	earl}'	335467	
+cah	cali	336009	
+reedy	reed}-	336113	
+apparently	apparentl}'	336129	
+dee-ur	dcc-ur	336256	
+hee-ur	Iicc-ur	336263	
+hee	hcc	336276	
+very	ver}'	336280	
+young	j'oung	336319	
+beautifully	beautifull}'	336769	
+4-inch	4-incli	337149	
+been	beeu	337606	
+they	the_v	337675	
+easily	easil}-	337692	
+my	m}-	338168	
+only	onlj-	338308	
+larvæ	larvae	338461	unicode
+heavy	heav}^	339055	
+they	thej'	339810	
+by	b}-	340207	
+incessantly	incessantlj'	340219	
+cleverly	clever!}-	340400	
+note	uute	340432	
+body	bod}'	340654	
+form	torm	340832	
+STURNIDÆ	STURNID.^	340889	unicode
+roseus	loseus	340937	
+year	}ear	341895	
+was	\vas	342213	
+has	lias	342289	
+every	ever}'	342318	
+county	count}-	342325	
+May	Ma}'	342438	
+Vide	\'ide	342483	
+Scilly	Scill}-	342543	
+in	iu	342610	
+usually	usualh-	343595	
+Andropogon	Andropogoii	343802	
+sorghus)”	soy ah us y	343814	unicode
+flocks	ilocks	345179	
+they	tliey	345267	
+very	ver}-	345713	
+Krüper	Kriiper	346132	unicode
+quarries	c^uarries	346506	
+Turdidœ	Turdida	347576	unicode
+Lilford	lyilford	347591	
+roseus	roscns	348024	
+lively	livel}^	348624	
+up	iip	349021	
+Where	Whei^e	349137	
+Sturnus	S/iinius	349530	
+vulgaris	vult^aris	349539	
+unnatural	nnnatural	349781	
+CORVIDÆ	CORVID.F:	349830	unicode
+Pyrrhocorax	Pyrrliocoyax	350341	
+Nucifraga	Altci/raga	350474	
+wing	wiug	350624	
+Garrulus	Gaii-ulus	350639	
+primary	primar}^	351029	
+Corvus	Coi'viis	351069	
+unmusical	immusical	351430	
+bulky	bulk}'	351452	
+THE	'I'liK	352354	
+Pyrrhocorax	Pyi rliocoiax	352370	
+graculus	i;)acn/i(s	352384	
+cage	cape	352408	
+that	tliat	352455	
+but	Init	352488	
+distribution	distribntion	352555	
+Appenines	Appenincs	352952	
+hill	liill	353119	
+Lundy	Lnndy	353833	
+many	man}'	353855	
+possibly	possibl}'	353942	
+recently	recentl}'	354281	
+with	-with	354503	
+chiefly	chiefl}'	354731	
+colony	colon}'	354821	
+largely	largely'	355072	
+alternately	alternatel}-	355142	
+suddenly	suddenl}'	355186	
+KhÃ©Ã©â	Khef	355374	unicode
+khÃ©Ã©â	klia'	355382	unicode
+larvæ	larvae	355575	unicode
+probably	probabl}'	355590	
+wholly	wholl}'	355667	
+crevice	cixvice	355696	
+frequently	frecjuently	355919	
+generally	generally'	356384	
+whether	Avhether	357045	
+Crystal	Crj'Stal	357304	
+1887	1S87	357364	numeric
+been	l)een	357512	
+but	bnt	357537	
+must	mnst	357580	
+stating	slating	357674	
+graculus	'^raculns	357983	
+but	l)ut	358076	
+On	Oi\	358121	
+CORVIDÆ	CORl'ID.E	358965	unicode
+Nucifraga	Aiiii/rut^d	358994	
+caryocatactes	Ciiryocatachs	359006	
+LINN	LiXX	359021	
+throughout	tlironghont	359051	
+the	tlie	359063	
+Palæarctic	Palrearetic	359068	unicode
+Europe	Enrope	359100	
+South	vSontli	359111	
+Norway	Norwaj'	359119	
+mountains	nionntains	359216	
+Hungary	Hungar_v	359230	
+mountains	monntains	359272	
+occasionally	occasionallv	359384	
+Benenden	Benendeu	359861	
+January	January'	359880	
+spotted	.spotted	359999	
+decidedly	decidedl}'	360700	
+me	nie	361068	
+Seebohm	vSeebohm	361370	
+upon	wpon	361628	
+Jerdon	Jerdou	362048	
+fully	fnlly	362112	
+young	j-oung	362126	
+they	the}'	362592	
+they	the}'	362684	
+careful	carefnl	362804	
+same	.same	363014	
+10th	lotli	363636	numeric
+month	mouth	363719	
+observes	obser\es	363837	
+June	Jnne	363926	
+earth	eartli	364482	
+Corvidœ	Corvuicc	364787	unicode
+Seebohm	vSeebohm	364823	
+tameness	tameuess	364849	
+larvæ	larvse	365152	unicode
+beetles	laeetles	365176	
+that	tliat	365332	
+kray	kya\	365510	
+they	tliej'	366410	
+the	tlie	366861	
+every	ever}'	366913	
+my	mv	367214	
+to	io	367222	
+aviary	aviar^'	367252	
+my	ni}'	367536	
+away	awaj^	367668	
+‘every	'ever}'	367904	unicode
+my	ni}-	368235	
+extremely	extremel}'	368518	
+crowed	crozved	368812	
+CORVIDÆ	CORMD.E	369065	unicode
+Garrulus	Ga})ulu$	369085	
+glandarius	glainlatins	369094	
+by	b}^	369614	
+web	w^eb	370472	
+chiefly	chiefl}'	370921	
+young	3'oung	371053	
+young	3'oung	371437	
+only	onl}'	371713	
+may	ma}'	372287	
+chaik	cliaik	372460	
+chaik	cliaik	372468	
+chaik	cliaik	372476	
+company	compau}^	372511	
+very	vcr}'	372620	
+arrgh	arrt^li	372632	
+the	tlic	372696	
+singularly	singularl}^	373064	
+way	waj'-	373775	
+undergrowth	undergrowtli	373801	
+to	ti)	374297	
+vicinity	viciuit}'	374340	
+curiosity	curiosit}'	374402	
+comes	conies	374460	
+yet	j'et	374523	
+by	b}'	375202	
+strongly	strongl}-	375480	
+typical	t3'pical	375840	
+clay	cla3	376049	
+Solanum	Solanuni	377297	
+shrew	.shrew	377661	
+possessed	po.ssessed	378349	
+Family	Familx	379297	
+CORVIDÆ	CORMIK^.	379304	
+rustica	rus/ica	379333	
+SCOP	Scor	379342	
+unhappily	unhappil_y	379398	
+up	iip	380656	
+buoyant	Imoyant	381589	
+but	l)ul	381597	
+broad	liroad	381645	
+Although	AltlKiugh	381826	
+them	tliem.	381904	
+Magpies	Alagpies	382291	
+Naturally	Naturallj-	382570	
+gently	gentl}'	382676	
+commonly	commouly	382766	
+buoyantly	buoyautl}'	383690	
+usually	usually'	383911	
+May	IMa}-	383996	
+the	tlie	384513	
+S	vS	384584	
+Norway	Norwaj-	384646	
+‘Manual	'Manual	384800	unicode
+by	b}'	385542	
+very	ver^^	385656	
+bulky	bulk}'	385662	
+always	alwaj-s	385694	
+exceptionally	exceptiouall}'	386038	
+uniformly	uniforml}^	386165	
+larvæ	larvae	386646	unicode
+young	3-oung	386660	
+Magpie	IMagpie	386901	
+Bonhote	Bouhote	387338	
+Corvidœ	Corvida	387390	unicode
+beautifully	beautifulh'	387535	
+family	famil}'	387729	
+Family	Fami/v	388025	
+CORVIDÆ	CORJVD.-E	388032	
+Corvus	Corv/i.s	388058	
+monedula	iiioncdula	388067	
+and	aud	388601	
+and	aud	388628	
+and	aud	389101	
+slightly	slightlj'	389276	
+seen	.seen	389586	
+flying	flj'ing	389603	
+chack	clunk	389675	
+only	onl}'	390224	
+our	oirr	390787	
+some	sonic	391972	
+changes	chang-es	391985	
+gracefully	graccfnllv	392011	
+round	ronnd	392022	
+which	wliich	392063	
+evolutions	evolntions	392116	
+ground	gronnd	392285	
+undoubtedly	undoubtedl}-	392436	
+variously	varioush'	392534	
+cae,	cae.	392557	
+caw	caiv	392562	
+quick	(jiiick	392568	
+&c	cv	392583	
+heard	licard	392620	
+chack	cliack	392662	
+chark	cli,u-k	392673	
+any	au}'	392793	
+of	(jf	392942	
+chimney,	chimne3%	392948	
+or	t)r	393370	
+those	th(jse	393616	
+found	Rmnd	393636	
+merely	mere!}'	393663	
+few	fe\v	393714	
+Milton	]\Iiltou	393823	
+Magpie	Alagpie	394406	
+injurious	ininrious	394541	
+young	j^oiing	394687	
+early	earh'	394727	
+in	ill	394748	
+the	tlie	394752	
+year	3ear	394757	
+beech	bcech	394770	
+mast	niast	394776	
+carrion	carriou	394826	
+would	Mould	394926	
+11th	nth	395003	
+young	3'oung	395221	
+my	1113'	395365	
+only	onl}'	395422	
+ground	gr(nind	395597	
+properly	properl}-	395666	
+lying	l3'ing	395910	
+flying	1^3ang	396116	
+they	the3^	396261	
+my	m3'	396308	
+young	3'oung	396486	
+year	3'ear	396575	
+Jay	Ja3'	396864	
+by	Ijy	397253	
+equally	equall3'	397341	
+her	lier	397580	
+exceedingly	exceeding!}'	397640	
+ludicrous	Indicrous	397653	
+much	ninch	397793	
+many	man}'	397860	
+my	ni}'	397872	
+John	lohn	397892	
+This	Tliis	397959	
+necessary	neccssarj-	398366	
+equal	eqiial	398971	
+difficulty	difficult}^	399226	
+CORVIDÆ	COR I ID. E	399396	unicode
+Corvus	Coivus	399422	
+corax	torax	399429	
+throughout	tliroughoul	399455	
+the	tlie	399479	
+limit	liuiil	399484	
+south	soutli	399540	
+been	l)een	399869	
+my	ni}'	400309	
+Shetlands	Shetlauds	400690	
+yet	3'et	401310	
+play	pla}'	401345	
+Vol	\'ol	401517	
+early	earl}-	401823	
+year	3-ear	401958	
+year	j'ear	401970	
+fortnight	fortnieht	402031	
+February	Februarj'	402146	
+young	j-oung	402197	
+May	Ma}'	402259	
+effect	eftect	402592	
+when	wheu	403305	
+tolerably	tolerabl}'	403525	
+much	mucli	404409	
+grey	grej^	404599	
+cruck	cnick	404943	
+cruck	01/ck	404950	
+pruck	pntck	404960	
+whurk	ivliurk	404996	
+whurk	ivliiirk	405005	
+mollusca	moUusca	405163	
+batrachians	batrachiaus	405182	
+generally	generall}'	405461	
+Sunday	Sunda_v	405477	
+my	mj-	405793	
+ut	iit	405802	
+mos	??ws	405806	
+fuit	fuif	405811	
+eye	e3'e	406112	
+his	liis	407261	
+the	tlie	407371	
+may	niaj'	407431	
+by	bv	407474	
+Harting	llarting	407487	
+Oology	Oologj'	407524	
+1864	1S64	407549	numeric
+the	tlie	407888	
+but	l)ut	407940	
+by	l)y	408011	
+hatched	hatclied	408047	
+which	wliieli	408095	
+however	liowever	408104	
+Comyns	Coniyus	408278	
+Lyvenden	Lyveudeu	408290	
+fully	full}'	408516	
+by	b}'	408994	
+his	liis	409455	
+the	tlie	410533	
+Family	Fa>,iilv	410687	
+CORVIDÆ	C0RJ7D.-E	410696	
+Corvus	Corviis	410727	
+corone	iOfoiic	410735	
+lying	Ijdng	410826	
+History	Histor}'	411753	
+appears	ajipears	412536	
+hybridize	h3-bridize	412786	
+Gätke	Gatke	412894	unicode
+years	3'ears	413021	
+they	the}'	413184	
+grey	gre}'	413514	
+colchicus	cuIchicKs	413635	
+torquatus	/oi-qna/us	413649	
+versicolor	vtrsicoloi-	413668	
+Barbary	Barbaiy	414012	
+quite	cpiite	414299	
+by	b}'	414418	
+That	Tliat	414482	
+combined	combiued	414653	
+badly	badl3	414743	
+say	saj^	414800	
+natural	natixral	414989	
+Carrion	Carriou	415037	
+three	tliree	415573	
+greedily	greedil}'	417584	
+larvæ	larvae	417621	unicode
+he	lie	417654	
+standing	.standing	417928	
+young	j'oung	418949	
+2nd	and	419390	numeric
+CORVIDÆ	C0K]'I1K-E	419786	unicode
+Corvus	Collins	419817	
+FOUND	" 1 ^OUND	419839	
+long	loug	419881	
+in	iu	419896	
+capellanus	capcllauns	420127	
+country	countr}^	420594	
+in	iu	421894	
+prying	pr\-ing	422068	
+eyes	e\'es	422076	
+carnivorous	carnivorons	422086	
+however	liowever	422123	
+years	j-ears	422234	
+St	vSt	422289	
+Moray	Mora}'	422331	
+newly	newlj'	422361	
+born	boru	422368	
+young	)-oung	422464	
+very	vcr}'	422511	
+any	au}'	422710	
+in	iu	422849	
+any	an\'	422965	
+destroys	destro3-s	423068	
+osprey	osprc}'	423189	
+by	b}'	423584	
+day	da\-	423588	
+Gätke	Gatke	423598	unicode
+o’clock	o'clock	423698	unicode
+o’clock	o'clock	423957	unicode
+scarcely,	scarcel}^	423990	
+simultaneously	simultaneous!}'	424483	
+Gätke	Gatke	424760	unicode
+readers’	readers'	424866	unicode
+economy	econom_v	425242	
+Everywhere	Evcr\'where	425262	
+although	altliough	425423	
+small	snuiU	425473	
+Italy	Ital}'	425656	
+scarcely	scarcel}'	425707	
+by	b}-	425768	
+they	thej^	426338	
+days	da3's	426396	
+early	earl}^	426408	
+by	bj^	426713	
+any	an}-	426744	
+unsparingly	unsparingl}'	426961	
+year	3'ear	426975	
+by	b}'	426994	
+corone	coroue	427225	
+precisely	precisel}^	427347	
+corone	coronc	427450	
+say	saj-	427630	
+Many	Mail}-	427882	
+with	willi	427945	
+there	tliere	427997	
+Gätke	Giitke	428202	unicode
+says	sa3's	428288	
+Grey	Gre}'	428575	
+exterminate	c\ten)ii}iatc	428701	
+Family	Fawilx	428808	
+CORVIDÆ	COR]'ID.E	428815	
+Corvus	Corviis	428838	
+frugilegus	/nigi/i(;i(s	428846	
+pretty	prett}^	429437	
+bare	l^are	429779	
+The	Tlie	429890	
+The	Tlie	429953	
+slender	.slender	430111	
+the	tlie	430129	
+slate	.slate	430207	
+larvæ	larvje	430337	unicode
+preferably	preferabl}^	430925	
+larvæ	larvae	431231	unicode
+only	onl}'	431291	
+segetum	segetuin	431458	
+fourteen	foiirteen	432120	
+from	fi^om	432330	
+commenced	connucuced	432737	
+in	iu	432766	
+unusually	unusualh-	432786	
+they	the}-	432974	
+February	Februar}-	433127	
+my	m^'	433158	
+they	the}-	433606	
+blue	-blue	434044	
+in	iu	434085	
+thickly	thicklj'	434167	
+they	the}-	434592	
+they	the}'	434731	
+accuracy	accuracv	435175	
+hungry	hungiy	435716	
+every	ever}'	435993	
+How	How-	436291	
+caw	catv	436669	
+ar-ee-o	ar-cc-o	436850	meaningless
+larvæ	larvae	436931	unicode
+my	ni}-	437412	
+ALAUDIDÆ	ALAUDIDJ-:	437730	unicode
+Saunders	vSannders	437772	
+placed	phiccd	437786	
+family	faniil_y	437798	
+certainly	certainly-	437849	
+Motacillid	Motaciilidcc	437954	unicode
+Seebohm’s	vSeel)ohm's	437974	unicode
+by	b}'	438042	
+Sharpe	Sharpc	438050	
+Seebohm’s	vSeebohm's	438307	unicode
+Finches	P'inchcs	438478	
+Montifringilla	Jloiifijniioi/Ia	438512	
+Plectrophanes	PUciropluvics	438533	
+Corydalla	Corydallar	438592	
+family	familj-	438636	
+probably	probabl}'	438701	
+this	tliis	438722	
+because	becanse	438749	
+Saunders	Sannders	438800	
+says	sa3-s	438844	
+majority	majorit}-	438869	
+Alaudid	Alaiiiiidic	438939	unicode
+Corvidæ	Coii'ida	438959	unicode
+Passeres	Passcrcs	439009	
+feet	i'eet	439051	
+many	man}'	439125	
+they	the}-	439211	
+larvæ	larvae	439436	unicode
+Alaudidæ	Aluudida	440173	unicode
+family	fainih'	440206	
+Malayana	j\Iala3-ana	440328	
+Family	Familx	440357	
+ALAUDIDÆ	ALAUDID.E	440365	
+arvensis	iDVCiisis	440399	
+Mongolia	IMongolia	440732	
+(excepting	\^excepting	441112	
+cantarella	caiitarclla	441287	
+gulgula	giilgiila	441331	
+cœlivox	axlivox	441359	unicode
+wattersi	ivai/crsi	441371	
+and	arid	441382	
+second	sccuiid	441757	
+under	inider	441803	
+with	witli	441852	
+blackish	l:)hickish	441858	
+brown	br(iwu	441869	
+the	tlie	441879	
+yellowish	j-ellowish	441953	
+does	d(jes	442055	
+young	3-oung	442085	
+tawny	tawn}^	442179	
+primary	primar}'	442404	
+distinctly	distinctl}-	442490	
+sex	se.\	442629	
+by	b}-	442823	
+plantations	plantatious	443205	
+individual	iudividual	443315	
+very	ver3'	443527	
+obliquely	obliquel}-	443745	
+rapidly	rapidl}'	443760	
+whee	'ivhcc	444109	meaningless
+whee	tvhee	444117	meaningless
+whee	w/icc	444124	meaningless
+generally	generall}-	444242	
+by	b}'	444311	
+buffish	huffish	444906	
+smoky	smok}'	444991	
+which	whicli	445213	
+(pl	(pi	445285	
+sienna	sieuua	445443	
+May	]\Iay	445634	
+July	Jul)'	445744	
+mother	niothcr	446054	
+bird	l)ird	446062	
+song	soug	446331	
+larvæ	larvae	446737	unicode
+usually	iisually	447004	
+9d	gd	447028	numeric
+1s	is	447078	numeric
+runner	runuer	447579	
+my	ui}'	447724	
+one	cue	447738	
+by	]jy	447742	
+tee-u	lec-it	448007	meaningless
+tee-u	tcc-u	448015	meaningless
+tee-u	tic-ii	448022	meaningless
+weary	wear}-	448092	
+then	tlien	448104	
+they	the}'	448206	
+subsequently	subsequentl}'	448261	
+young	3'oung	448287	
+ordinary	ordinary-	448447	
+flying	fl\ing	448606	
+consequences	consecjuences	448695	
+1887	1 88 7	449048	
+my	mj^	450210	
+they	the}-	450444	
+canary	canar}'	450720	
+your	3'our	451365	
+returned	i-eturned	451450	
+Gätke	Gatke	451834	unicode
+says	saj'S	451840	unicode
+ALAUDIDÆ	ALA UDID. F	452586	unicode
+Alauda	Alaitdn	452616	
+arborea	ar/iorca	452624	
+LINN	LlNN	452634	
+Russia	I Russia	452719	
+Howard	Iloivard	453160	
+upper	iipper	454150	
+distinctly	distinctl}'	454633	
+somewhat	soniewhal	454872	
+Sky	Sk3'	454892	
+decidedly	deeidedly	454919	
+Young	Yonng	454967	
+birds	l:)irds	454973	
+rufous	rnfons	454990	
+yellow	3'ellow	455055	
+Sharpe	vSharpe	455249	
+Lullula	Lullula	455308	meaningless
+Lu-lu	IvU-lu	455359	meaningless
+Irby	Irb}'	455438	
+says	sa3'S	455496	
+very	\&xy	455672	
+Chaparales	Chaparaks	455730	
+Spanish	vSpanish	455808	
+are	arc	455950	
+only	onl}'	456001	
+necessary	necessary'	456264	
+compactly	compactl}'	456604	
+Sky	Sk^^	456638	
+Seebohm	Secholiin	457022	
+buffish	huffish-	457074	
+generally	generall}'	457472	
+nearly	nearly'	457500	
+quite	cjuite	457629	
+early	eaidy	457636	
+very	ver^'	457824	
+pure	pnre	457830	
+by	b}-	457853	
+many	man}^	457857	
+certainly	certaiul}'	457929	
+my	mj-	458371	
+Sittingbourne	Sittiugbourne	458408	
+prominent	promineut	458653	
+away,	awaj^	458695	
+and	aud	458777	
+certainly	certainlj?	458963	
+by	b}'	459365	
+and	aud	459803	
+uncanny	uncann}'	460525	
+that	that'	460877	
+ALAUDIDÆ	ALA UDID. E	460974	unicode
+Alauda	Alanda	461007	
+cristata	crisfafa	461014	
+Europe	Eiirope	461064	
+The	Tlie	461860	
+with	watli	461913	
+feathers	fcatliers	462067	
+bastard	hastard	462104	
+brown	Ijrown	462157	
+greyish	greyi-sh	462170	
+margins	luargius	462179	
+which	whicli	462221	
+sandy	sandv	462298	
+outer	t)uter	462323	
+principally	principall}-	462457	
+the	tlie	462912	
+Irby	Irb}-	463074	
+are	arc	463316	
+only	onl}'	463399	
+Carretera	Curiiicit)	463488	
+Sanderling	Sauderling	463760	
+earth	eart	464137	
+dry	diy	464541	
+68	bS	464740	numeric
+which	wdiich	464762	
+sandy	sandj^	464870	
+rapidity	rapidit}'	464948	
+when	wlien	465008	
+generally	generall}'	465144	
+or	(U-	465168	
+in	iu	465172	
+family	fauiily	465185	
+during	duriug	465310	
+larvæ	larvae	465446	unicode
+says	sa3's	465627	
+Algeria	xA-lgeria	465641	
+into	iuto	465681	
+yellowish	3-ellowish	465892	
+uniformly	uuiformly	465914	
+in	iu	466216	
+in	iu	466238	
+plains	plaius	466298	
+gulgula	guli^iila*	466417	
+fine	flue	466447	
+in	iu	466509	
+and	aud	467492	
+considerably	considerabl}'	467562	
+the	tlie	467643	
+Pycnonotus	PyauviotKs	467658	
+leucotis	Icucotis	467669	
+which	wliich	467703	
+by	b}^	467824	
+Jerdon's	Jerdou's	467828	
+they	the}'	468162	
+Pére	Pere	468262	unicode
+1871	187 1	468281	
+larvæ	larvae	468724	unicode
+Family	Familx	468930	
+ALAUDIDÆ	ALA UDID^	468937	
+WINGED	AVinged	468959	
+Melanocorypha	ilTclanocorypha	468974	
+GMEL	Gmp;l	469000	
+England	Eugland	469385	
+Family	Faunlx	469639	
+ALAUDIDÆ	ALAUDID.E	469646	
+Melanocorypha	Mcla)iOLoyypha	469675	
+yeltoniensis	ycltontemis	469690	
+ALAUDIDÆ	ALAl'DID.-Ji	470446	unicode
+Calandrella	Ciila)idixlla	470483	
+brachydactyla	bnuhydaityla	470497	
+genus	geuus	470596	
+Calandrella	Calandrclla	470602	
+Alauda	Alaiida	470797	
+Abyssinia	xAbyssinia	470994	
+six	si.x	471215	
+sandy	sand3'	471629	
+brown	browu	471636	
+buffish	huffish	471789	
+the	tlie	471999	
+yellowish	j^ellowish	472047	
+side	side.	472407	
+Calandra	Cahuidra	472657	
+fallow	falhnv	472680	
+ground	i^round	472687	
+any	au}'	472737	
+slight	sliglit	472742	
+bird	l)ird	472831	
+bird	liird	472900	
+tameness	tameuess	472996	
+difficulty	difficult}'	473031	
+without	withoiit	473085	
+jerky	jerk}'	473299	
+unite	nnite	475555	
+many	man}'	475590	
+thousand	tliousand	475596	
+quite	qnite	475617	
+flying	flj'ing	475684	
+numbers	nnnibers	475699	
+country	conntr}-	475740	
+ground	groiind	475871	
+wounded	wonnded	475961	
+always	alwa3'S	476071	
+they	the}'	476196	
+Gätke	Gatke	476608	unicode
+very	ver}-	476797	
+solitary	solitar}'	476803	
+momentarily	momeutaril}-	477249	
+very	ver\'	477344	
+extraordinarily	extraordinarilj''	477367	
+Sky	Sk}--	477630	
+Family	Familx	477859	
+ALAUDIDÆ	A LA I DID. E	477866	
+Otocorys	Olocurvs	477900	
+alpestris	alpcstris	477909	
+LINN	LiNX	477920	
+beyond	bej'ond	477959	
+Shore	vShore	480082	
+hills	liills	480134	
+of	nf	480141	
+entirely	entirely'	480228	
+bush	Inish	480295	
+melody	melod3	480414	
+Alauda	.Uauda	480684	
+arvensis	arz'i-fis/s	480691	
+you	3'OU	480711	
+etc	etc.	481234	
+their	tlieir	481455	
+specimens	speciniens	482083	
+crops	crop	482219	
+Polygonaceœ	Polygonacea	482262	unicode
+larvæ	larvae	482408	unicode
+pupæ	pupae	482420	unicode
+frequently	frequentl}^	482642	
+Gätke	Gatke	482690	unicode
+captivity	captivit}'	483027	
+year	j-ear	483725	
+Canary	Canar3^	484204	
+Canary	Canar}'	484269	
+in	iu	484331	
+every	ever}'	484448	
+already	alreadj'	486149	
+include	inclttde	486359	
+remedy	remedv	486845	
+deficiency	deficienc}'	486856	
+TURDIDÆ	TURDID^	486993	unicode
+Subfamily	Subfamih	487003	
+TURDINÆ	TURDINyF	487013	
+Turdus	Turdiis	487043	
+dubius	dubiiis	487051	
+Gunthorpe,	Gunthorpe.	487112	
+Stornoway	Stornowa}-	487200	
+18th	i8th	487354	numeric
+TURDIDÆ	Ti 'RDID. E	487510	unicode
+Subfamily	Subfaniily	487524	
+TURDINÆ	TL 'RUIN. E	487536	
+stapazina	shipazina	487586	
+year	3'ear	487752	
+occidentalis	occidoitalis	487973	
+deserti	daerti	488027	
+TURDIDÆ	TURD ID. E	488114	unicode
+TURDIDÆ	TURDIN.E	488138	unicode
+PALL	Paix	488192	
+Shetlands	vShetlands	488295	
+May	Maj'	488311	
+March	]\Iarch	488591	
+TURDIDÃ	TURDID.^	488810	unicode
+TURDINÃ	TURDIN/E	488832	unicode
+SPOTTED	Spottf:d	488853	
+Cyanecula	Cxa)icciila	488875	
+1st	ist	489028	numeric
+TURDIDÃ	TURDID^	489258	unicode
+TURDINÃ	TURDIN^	489279	unicode
+philomela	fliilomcla	489323	
+16th	1 6th	489646	numeric
+September	vSeptember	489714	
+24th	24t]i	489896	
+young	3'oung	490004	
+15th	1 5th	490269	numeric
+Ludlow	Li^dlow	490305	
+Family	Fawilx	490418	
+TURDIDÆ	TURD ID. -E	490426	
+Subfamily	5«//rtw//r	490440	
+SYLVIINÆ	5 J Z I ILY^	490452	
+Sylvia	Svlviii	490491	
+melanocephala	viclanoccpliaUx	490499	
+1st	ist	490983	numeric
+TURDIDÆ	Ti 7^ DILL -E	491002	unicode
+Subfamily	SuhJaniiiy	491018	
+SYLVIINÆ	SYL J 7IA\ E	491029	
+PALLAS	PallAvS	491044	
+Phylloscopus	Phy/Iosiopus	491071	
+proregulus	f^ivrcgit/iis	491084	
+15th	i5tli	491235	numeric
+year	3'ear	491276	
+Tulloch	Tnlloch	491310	
+May	Ma}^	491337	
+TURDIDÆ	TURDID.F	491388	unicode
+Subfamily	Subjaimly	491399	
+SYLVIINÆ	SYL I IIN.E	491410	
+Phylloscopus	Phy//oscop!is	491450	
+lighthouse	lighthonse	491509	
+TURDIDÆ	TURDIL)^	491554	unicode
+SYLVIINÆ	SYL I 'IIN.E	491576	unicode
+Phylloscopus	Phylloscopiis	491622	
+viridanus	viridaiius	491636	
+BLYTH	Blvth	491648	
+Sutherlandshire	Siitherlandshire	491760	
+common	couiinou	491820	
+found	fouud	491849	
+Shetlands	Shetlauds	491892	
+Family	Fnmtlx	491988	
+TURDIDÆ	TL ^RDID. E	491997	
+Subfamily	Sii/^/,u>n/\	492011	
+SYLVIINÆ	S J Z J VLV. E	492024	
+Aedon	Aidon	492062	
+galactodes	(^alcnimAs	492068	
+TURDIDÆ	TURDID.E	492162	unicode
+Subfamily	Siih/auiily	492173	
+SYLVIINÆ	SYL I IIN^E	492184	
+Aedon	Acdoii	492224	
+familiaris	fnmiliaris	492231	
+TURDIDÆ	TURD ID ^	492306	unicode
+SYLVIINÆ	SYL I IIN^	492329	unicode
+schwarzi	sckwarzi	492376	
+Haigh	Haigli	492483	
+TURDIDÆ	Tl 'KDID. E	492501	unicode
+Subfamily	Su/ifaniuy	492515	
+SYLVIINÆ	SVL I 'ILWF	492526	
+CETTI’S	Cetti'vS	492540	unicode
+WARBLER	Warrlkr	492549	
+Cettia	Cetfin	492559	
+cettii	ccttii	492566	
+May	Ma}'	492619	
+TURDIDÆ	TURDID^	493059	unicode
+SYLVIINÆ	SYL VIIN^	493080	unicode
+polyglotta	polyglolla	493125	
+10th	loth	493238	numeric
+house	hoi:se	493290	
+An	Au	493739	
+Christchurch	Christclinrch	493865	
+Charterhouse	Charterhonse	493977	
+January	Januar}'	494475	
+Scilly	Scill}'	494667	
+MOTACILLIDÆ	MO TA CILLID. -E	495102	unicode
+Motacilla	j] lot ac ilia	495147	
+borealis	60/ra/is	495162	
+1901	1 90 1	495258	numeric
+shot	.shot	495315	
+MOTACILLIDÆ	MO TA CIL L ID^	495487	unicode
+melanocephala	vulauoccphala	495542	
+May	Ma}-	495601	
+13th	ijtli	495606	
+flava	flaz'a	495643	
+following	followiug	495666	
+Family	Fa mi ly	495678	
+MOTACILLIDÆ	MO TA CILL ID. F	495688	
+SYKES’	SykEvS'	495707	unicode
+20th	2otli	495803	numeric
+I898	1898	495810	numeric
+MOTACILLIDÆ	MO TA CILLlDzE	495825	unicode
+ASHY‐HEADED	AvShy-Headed	495846	unicode
+SAVI	Sa\'I	495895	
+flava	/lava	496108	
+nowadays	nowadaj'S	496155	
+Scilly,	Scill3%	497117	

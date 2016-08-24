@@ -20,14 +20,21 @@ class FeatureSuggestionBuilder
   private TFloatArrayList scores;
   private NormalizationOption opt;
 
-  FeatureSuggestionBuilder(Class<? extends Feature> type, Word word, NormalizationOption opt)
+  FeatureSuggestionBuilder(Class<? extends Feature> type, String name,
+      int position, NormalizationOption opt)
   {
     this.type = type;
-    name = word.text();
-    position = word.position();
+    this.name = name;
+    this.position = position;
     candidates = new ArrayList<>();
     scores = new TFloatArrayList();
     this.opt = opt;
+  }
+
+  FeatureSuggestionBuilder(Class<? extends Feature> type, Word word,
+      NormalizationOption opt)
+  {
+    this(type, word.text(), word.position(), opt);
   }
  
   FeatureSuggestionBuilder(Feature feature, Word word)

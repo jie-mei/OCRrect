@@ -51,7 +51,7 @@ public class Suggestions
   }
   
   /**
-   * Write suggestions to file.
+   * Write suggestions to one file.
    * 
    * @param  suggestions  A list of suggestions.
    * @param  out  The folder of the output files.
@@ -99,8 +99,25 @@ public class Suggestions
       });
     });
   }
+
+  public static void write(Suggestion suggestion, Path out, String name)
+  {
+    try {
+      Files.createDirectories(out);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    try (ObjectOutputStream oos = new ObjectOutputStream(
+        Channels.newOutputStream(FileChannel.open(
+            out.resolve(name),
+            StandardOpenOption.CREATE, StandardOpenOption.WRITE)))) {
+      oos.writeObject(suggestion);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
   
-  public static List<Suggestion> read(Path in)
+  public static List<Suggestion> readList(Path in)
   {
     return LogUtils.logMethodTime(1, () ->
     {
@@ -120,17 +137,76 @@ public class Suggestions
           throw new RuntimeException(e);
         }
       } else {
-        List<Path> paths = ResourceUtils.getPathsInDir(in.toString(), ".*\\.[0-9]+");
+        List<Path> paths = ResourceUtils.getPathsInDir(in.toString(), "*");
         for (Path p : paths)  {
-          try (ObjectInputStream ois = new ObjectInputStream(
-              Channels.newInputStream(FileChannel.open(in)))) {
-            suggestions.add((Suggestion) ois.readObject());
-          } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-          }
+          suggestions.add(read(p));
         }
       }
       return suggestions;
+    });
+  }
+
+  public static Suggestion read(Path in)
+  {
+    return LogUtils.logMethodTime(1, () ->
+    {
+      try (ObjectInputStream ois = new ObjectInputStream(
+          Channels.newInputStream(FileChannel.open(in)))) {
+        return (Suggestion) ois.readObject();
+      } catch (IOException | ClassNotFoundException e) {
+        throw new RuntimeException(e);
+      }
+    });
+  }
+  
+  /**
+   * Create a new suggestion with only the top suggested candidates from each
+   * feature type.
+   */
+  public static Suggestion top(Suggestion suggest, int top)
+  {
+    String word = suggest.text();
+    SuggestionBuilder sb = new SuggestionBuilder(word, suggest.position());
+
+    for (int tIdx = 0; tIdx < suggest.types().size(); tIdx++) {
+      Class<? extends Feature> type = suggest.types().get(tIdx);
+      FeatureSuggestionBuilder fsb = new FeatureSuggestionBuilder(
+          type, suggest.text(), suggest.position(),
+          NormalizationOption.NONE);
+      
+      List<FeatureCandidate> fcList = new ArrayList<>();
+      for (int cIdx = 0; cIdx < suggest.candidates().length; cIdx++) {
+        Candidate c = suggest.candidates()[cIdx];
+        float score = c.score(type);
+        fcList.add(new FeatureCandidate(type, c.text(), score));
+      }
+      
+      fcList.sort((a, b) -> {
+        double diff = a.score() - b.score();
+        if (diff == 0) {
+          double lcsA = StringSimilarityScorer.lcs(a.text(), word);
+          double lcsB = StringSimilarityScorer.lcs(b.text(), word);
+          diff = lcsA - lcsB;
+        }
+        return diff == 0 ? 0 : diff > 0 ? -1 : 1;
+      }); 
+      
+      fcList.stream().limit(top).forEach(fc -> {
+        fsb.add(fc);
+      });
+      
+      sb.add(fsb.build());
+    }
+    return sb.build();
+  }
+  
+  public static void rewriteTop(Path in, Path out, int top)
+  {
+    List<Path> paths = ResourceUtils.getPathsInDir(in.toString(), "*");
+    paths.parallelStream().forEach(p -> {
+      String fname = p.getFileName().toString();
+      Suggestion suggest = top(read(p), top);
+      write(suggest, out, fname);
     });
   }
 }

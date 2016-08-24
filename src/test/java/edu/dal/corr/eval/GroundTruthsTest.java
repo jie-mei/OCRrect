@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.ResourceUtils;
+import edu.dal.corr.util.StringUtils;
 import gnu.trove.map.hash.TCharObjectHashMap;
 
 public class GroundTruthsTest
@@ -23,7 +24,7 @@ public class GroundTruthsTest
     throws Exception
   {
     errors = GroundTruthErrors.read(ResourceUtils.GT_ERROR);
-    input = IOUtils.read(ResourceUtils.INPUT);
+    input = StringUtils.fixLineBrokenWords(IOUtils.read(ResourceUtils.INPUT));
     gt = IOUtils.read(ResourceUtils.GT);
     unicodeMap = new TCharObjectHashMap<String>();
     unicodeMap.put((char) 8208, "-");
@@ -44,6 +45,9 @@ public class GroundTruthsTest
     errors.forEach(e -> {
       String textInInput = input.substring(e.position(),
           e.position() + e.errorText().length());
+      System.out.println(e);
+      System.out.println(input.substring(e.position() - 10,
+          e.position() + e.errorText().length() + 10));
       assertEquals(e.errorText(), textInInput);
     });
   }
