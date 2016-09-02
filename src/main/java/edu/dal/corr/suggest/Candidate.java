@@ -2,6 +2,8 @@ package edu.dal.corr.suggest;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import edu.dal.corr.util.TextualUnit;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
@@ -35,12 +37,17 @@ public class Candidate
   public void printTypeMap() {
     System.out.println("MAP SIZE: " + typeMap.keySet().size());
     for (Class<? extends Feature> type : typeMap.keySet()) {
-      System.out.print(type + " " + typeMap.get(type));
+      System.out.println(type + " " + typeMap.get(type));
     }
   }
   
   public float score(Class<? extends Feature> feature)
   {
     return scores[typeMap.get(feature)];
+  }
+  
+  @Override
+  protected HashCodeBuilder buildHash() {
+    return new HashCodeBuilder().append(scores);
   }
 }

@@ -22,7 +22,11 @@ public class Suggestion
   private final List<Class<? extends Feature>> types;
   private final Candidate[] candidates;
 
-  Suggestion(String name, int position, List<Class<? extends Feature>> types, Candidate[] candidates)
+  Suggestion(
+      String name,
+      int position,
+      List<Class<? extends Feature>> types,
+      Candidate[] candidates)
   {
     super(name, position);
     this.types = types;
@@ -56,14 +60,12 @@ public class Suggestion
     return scores;
   }
 
-  public List<Class<? extends Feature>> types()
-  {
+  public List<Class<? extends Feature>> types() {
     return types;
   }
   
   @Override
-  protected HashCodeBuilder buildHash()
-  {
+  protected HashCodeBuilder buildHash() {
     return super.buildHash()
         .append(candidates)
         .append(types);

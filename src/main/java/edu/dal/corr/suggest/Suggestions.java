@@ -9,9 +9,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.util.ResourceUtils;
@@ -172,38 +176,31 @@ public class Suggestions
   public static Suggestion top(Suggestion suggest, int top)
   {
     String word = suggest.text();
-    SuggestionBuilder sb = new SuggestionBuilder(word, suggest.position());
+    Candidate[] candidates = suggest.candidates();
 
-    for (int tIdx = 0; tIdx < suggest.types().size(); tIdx++) {
-      Class<? extends Feature> type = suggest.types().get(tIdx);
-      FeatureSuggestionBuilder fsb = new FeatureSuggestionBuilder(
-          type, suggest.text(), suggest.position(),
-          NormalizationOption.NONE);
-      
-      List<FeatureCandidate> fcList = new ArrayList<>();
-      for (int cIdx = 0; cIdx < suggest.candidates().length; cIdx++) {
-        Candidate c = suggest.candidates()[cIdx];
-        float score = c.score(type);
-        fcList.add(new FeatureCandidate(type, c.text(), score));
-      }
-      
-      fcList.sort((a, b) -> {
-        double diff = a.score() - b.score();
-        if (diff == 0) {
-          double lcsA = StringSimilarityScorer.lcs(a.text(), word);
-          double lcsB = StringSimilarityScorer.lcs(b.text(), word);
-          diff = lcsA - lcsB;
-        }
-        return diff == 0 ? 0 : diff > 0 ? -1 : 1;
-      }); 
-      
-      fcList.stream().limit(top).forEach(fc -> {
-        fsb.add(fc);
-      });
-      
-      sb.add(fsb.build());
+    HashMap<String, Candidate> candMap = new HashMap<>();
+    for (int i = 0; i < suggest.candidates().length; i++) {
+      Candidate c = suggest.candidates()[i];
+      candMap.put(c.text(), c);
     }
-    return sb.build();
+    Set<Candidate> selected = new HashSet<>();
+
+    for (Class<? extends Feature> type : suggest.types()) {
+      Stream.of(candidates)
+        .sorted((c1, c2) -> {
+          double diff = c1.score(type) - c2.score(type);
+          if (diff == 0) {
+            diff = StringSimilarityScorer.lcs(c1.text(), word)
+                 - StringSimilarityScorer.lcs(c2.text(), word);
+          }
+          return diff == 0 ? 0 : diff > 0 ? -1 : 1;
+        })
+        .limit(top)
+        .forEach(c -> selected.add(c));
+    }
+
+    return new Suggestion(suggest.text(), suggest.position(), suggest.types(),
+        selected.toArray(new Candidate[selected.size()]));
   }
   
   public static void rewriteTop(Path in, Path out, int top)

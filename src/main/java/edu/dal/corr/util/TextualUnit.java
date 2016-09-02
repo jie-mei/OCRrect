@@ -22,8 +22,7 @@ public abstract class TextualUnit
    */
   TextualUnit() {}
 
-  protected TextualUnit(final String text)
-  {
+  protected TextualUnit(final String text) {
     this.text = text;
   }
 
@@ -32,8 +31,7 @@ public abstract class TextualUnit
    * 
    * @return  A name string.
    */
-  public String text()
-  {
+  public String text() {
     return text;
   }
   
@@ -46,20 +44,17 @@ public abstract class TextualUnit
     return false;
   }
   
-  protected HashCodeBuilder buildHash()
-  {
+  protected HashCodeBuilder buildHash() {
     return new HashCodeBuilder().append(text);
   }
   
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return buildHash().toHashCode();
   }
 
   @Override
-  public String toString()
-  {
+  public String toString() {
     return text;
   }
 }
