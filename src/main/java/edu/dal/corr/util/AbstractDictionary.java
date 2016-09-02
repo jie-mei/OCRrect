@@ -2,34 +2,42 @@ package edu.dal.corr.util;
 
 import java.util.List;
 
-import gnu.trove.map.TObjectByteMap;
-import gnu.trove.map.hash.TObjectByteHashMap;
+import gnu.trove.set.hash.THashSet;
 
 class AbstractDictionary
   implements Dictionary
 {
-  private TObjectByteMap<String> dict;
+  private THashSet<String> dict;
  
-  
-  protected AbstractDictionary(TObjectByteMap<String> map)
+  /**
+   * Construct the dictionary with a set of words.
+   * 
+   * @param set
+   */
+  protected AbstractDictionary(THashSet<String> set)
   {
-    dict = map;
+    dict = set;
   }
   
-  private static TObjectByteMap<String> toMap(List<String> list)
-  {
-    TObjectByteMap<String> map = new TObjectByteHashMap<>();
-    list.forEach(w -> map.put(w, (byte) 0));
-    return map;
-  }
-  
+  /**
+   * Construct the dictionary with a list of words.
+   * 
+   * @param  list  a word list.
+   */
   protected AbstractDictionary(List<String> list)
   {
-    this(toMap(list));
+    this(toTHashSet(list));
+  }
+  
+  private static THashSet<String> toTHashSet(List<String> list)
+  {
+    THashSet<String> set = new THashSet<>();
+    list.forEach(w -> set.add(w));
+    return set;
   }
 
   @Override
   public boolean contains(String word) {
-    return dict.containsKey(word);
+    return dict.contains(word);
   }
 }

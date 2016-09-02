@@ -18,10 +18,10 @@ import edu.dal.corr.suggest.SpecialLexiconExistenceFeature;
 import edu.dal.corr.suggest.StringSimilarityFeature;
 import edu.dal.corr.suggest.Suggestion;
 import edu.dal.corr.suggest.WikiLexiconExistenceFeature;
-import edu.dal.corr.util.FileUtils;
+import edu.dal.corr.util.PathUtils;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.ResourceUtils;
-import edu.dal.corr.word.CommonDictionayWordFilter;
+import edu.dal.corr.word.CommonWordFilter;
 import edu.dal.corr.word.CommonPatternFilter;
 import edu.dal.corr.word.GoogleTokenizer;
 import edu.dal.corr.word.WordFilter;
@@ -35,7 +35,7 @@ public class Main
     throws IOException
   {
     NgramBoundedReaderSearcher ngramSearch = NgramBoundedReaderSearcher.read(
-        FileUtils.TEMP_DIR.resolve(Paths.get("5gm.search")),
+        PathUtils.TEMP_DIR.resolve(Paths.get("5gm.search")),
         ResourceUtils.FIVEGRAM.stream()
             .map(Path::toString)
             .collect(Collectors.toList())
@@ -47,7 +47,7 @@ public class Main
         new GoogleTokenizer(),
         Arrays.asList(new WordFilter[] {
             new CommonPatternFilter(),
-            new CommonDictionayWordFilter()
+            new CommonWordFilter()
         }),
         Arrays.asList(new Feature[] {
             new LevenshteinDistanceFeature(),

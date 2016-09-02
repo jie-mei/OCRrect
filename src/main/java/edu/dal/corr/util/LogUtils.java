@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
@@ -14,6 +15,7 @@ import org.apache.log4j.PatternLayout;
 public class LogUtils
 {
   public static final Logger RUNTIME = Logger.getLogger("system.runtime");
+  public static final String LOG_DIR = "log";
 
 	private static Logger getCallerLogger()
 	{
@@ -116,6 +118,15 @@ public class LogUtils
 	  logTime(t, level, info);
     return result;
 	}
+
+	public static <T> T logToFile(Logger logger, String pathname, CodeReturnRunner<T> mt)
+	{
+	  FileAppender fa = newFileAppender(pathname);
+	  logger.addAppender(fa);
+	  T result = mt.run();
+	  logger.removeAppender(fa);
+    return result;
+	}
 	
 	
 	public interface CodeReturnRunner<T>
@@ -130,22 +141,51 @@ public class LogUtils
 	  logMethodTime(t, level, 3);
 	}
 	
+	public interface CodeRunner
+	{
+	   void run();
+	}
+	
 	public static void logTime(int level, CodeRunner mt, String... info)
 	{
     Timer t = new Timer();
     mt.run();
 	  logTime(t, level, info);
 	}
+
+  /*
+   *  Utilities for logging to file.
+   */
 	
-	public interface CodeRunner
+	private static final Logger LOG = Logger.getLogger(LogUtils.class);
+	private static final Logger UNADDITIVE_LOG = Logger.getLogger(
+	    LogUtils.class.getName() + ".unadditive.log");
+	static {
+	  UNADDITIVE_LOG.setAdditivity(false);
+	}
+
+	public static void logToFile(String pathname, boolean additivity, CodeLogRunner mt)
 	{
-	   void run();
+	  Logger logger = additivity ? LOG : UNADDITIVE_LOG;
+	  FileAppender fa = newFileAppender(pathname);
+	  logger.addAppender(fa);
+	  mt.run(logger);
+	  logger.removeAppender(fa);
+	}
+	
+	public interface CodeLogRunner
+	{
+	   void run(Logger logger);
 	}
 
   public static FileAppender newFileAppender(String pathname, Layout layout)
   {
     try {
-      return new FileAppender(layout, pathname, false);
+      pathname = pathname.startsWith(LOG_DIR + "/") ? pathname :
+          LOG_DIR + "/" + pathname;
+      FileAppender fa = new FileAppender(layout, pathname, false);
+      fa.setThreshold(Level.ALL);
+      return fa;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

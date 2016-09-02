@@ -142,21 +142,27 @@ public class Suggestions
           suggestions.add(read(p));
         }
       }
+
+      LogUtils.logToFile("suggest.read", false, (logger) -> {
+        suggestions.stream()
+          .sorted((a, b) -> a.position() - b.position())
+          .forEachOrdered(sug -> {
+            logger.debug(String.format("%6d %-25s (%d candidates)",
+                sug.position(), sug.text(), sug.candidates().length));
+          });
+      });
       return suggestions;
     });
   }
-
+  
   public static Suggestion read(Path in)
   {
-    return LogUtils.logMethodTime(1, () ->
-    {
-      try (ObjectInputStream ois = new ObjectInputStream(
-          Channels.newInputStream(FileChannel.open(in)))) {
-        return (Suggestion) ois.readObject();
-      } catch (IOException | ClassNotFoundException e) {
-        throw new RuntimeException(e);
-      }
-    });
+    try (ObjectInputStream ois = new ObjectInputStream(
+        Channels.newInputStream(FileChannel.open(in)))) {
+      return (Suggestion) ois.readObject();
+    } catch (IOException | ClassNotFoundException e) {
+      throw new RuntimeException(e);
+    }
   }
   
   /**

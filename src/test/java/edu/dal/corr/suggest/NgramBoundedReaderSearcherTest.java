@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.dal.corr.util.FileUtils;
+import edu.dal.corr.util.PathUtils;
 import edu.dal.corr.util.ResourceUtils;
 import edu.stanford.nlp.io.IOUtils;
 
@@ -105,7 +105,7 @@ public class NgramBoundedReaderSearcherTest
   public void testReadWrite()
     throws Exception
   {
-    Path tmpFile = Files.createTempFile(FileUtils.TEMP_DIR, "tmp", ".tmp");
+    Path tmpFile = Files.createTempFile(PathUtils.TEMP_DIR, "tmp", ".tmp");
     searcher.write(tmpFile);
     NgramBoundedReaderSearcher newSearcher = NgramBoundedReaderSearcher.read(tmpFile);
     assertEquals(searcher, newSearcher);

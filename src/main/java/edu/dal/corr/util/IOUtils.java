@@ -73,14 +73,30 @@ public class IOUtils
   public static THashSet<String> readList(Path path)
     throws IOException
   {
-    THashSet<String> dic = new THashSet<String>();
+    THashSet<String> set = new THashSet<String>();
     try (
       BufferedReader br = newBufferedReader(path)
     ){
       for (String line; (line = br.readLine()) != null;) {
-        dic.add(line);
+        set.add(line);
       }
     }
-    return dic;
+    return set;
+  }
+
+  public static THashSet<String> readList(List<Path> path)
+    throws IOException
+  {
+    THashSet<String> set = new THashSet<String>();
+    for (Path p : path) {
+      try (
+        BufferedReader br = newBufferedReader(p)
+      ){
+        for (String line; (line = br.readLine()) != null;) {
+          set.add(line.trim());
+        }
+      }
+    }
+    return set;
   }
 }

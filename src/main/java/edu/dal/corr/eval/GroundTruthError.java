@@ -1,5 +1,7 @@
 package edu.dal.corr.eval;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import edu.dal.corr.util.LocatedTextualUnit;
 
 public class GroundTruthError
@@ -22,9 +24,18 @@ public class GroundTruthError
 
   public String info() { return info; }
   
+  @Override
   public String toString()
   {
     return String.format("<%s>",
         String.join(", ", text(), errText, Integer.toString(position()), info));
+  }
+  
+  @Override
+  protected HashCodeBuilder buildHash()
+  {
+    return super.buildHash()
+        .append(errText)
+        .append(info);
   }
 }

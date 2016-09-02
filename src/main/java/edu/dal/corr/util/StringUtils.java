@@ -27,7 +27,7 @@ public class StringUtils
   {
     StringBuilder sb = new StringBuilder();
     try (BufferedReader br = new BufferedReader(new StringReader(str))) {
-      Dictionary dict = GoogleUnigramDictionary.getInstance();
+      Dictionary dict = GoogleUnigramHuristicThresholdDictionary.getInstance();
 
       String curr = null;
       String bkPart1 = null;
@@ -54,29 +54,24 @@ public class StringUtils
             // Otherwise keep the character sequence in the original text.
             String fixedWord1 = bkPart1 + bkPart2;
             String fixedWord2 = bkPart1 + "-" + bkPart2;
-            LogUtils.info(">>> " + fixedWord1 + ", " + fixedWord2);
+            // LogUtils.info(">>> " + fixedWord1 + ", " + fixedWord2);
 
             if (dict.contains(fixedWord2.toLowerCase())) {
               curr = "-" + bkPart2 + bkPart3 + repeat(" ", pad) + remain;
-
-              LogUtils.info("F2: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
+              // LogUtils.info("F2: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
 
             } else if (dict.contains(fixedWord1.toLowerCase())) {
               curr = bkPart2 + bkPart3 + repeat(" ", pad + 1) + remain;
-
-              LogUtils.info("F1: " + fixedWord1 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
+              // LogUtils.info("F1: " + fixedWord1 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
 
             } else if (dict.contains(bkPart1.toLowerCase())
                 && dict.contains(bkPart2.toLowerCase())) {
               curr = "-" + bkPart2 + bkPart3 + repeat(" ", pad) + remain;
-
-              LogUtils.info("F2: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
+              // LogUtils.info("F2: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
 
             } else {
               curr = "-" + repeat(" ", pad) + curr;
-
-              LogUtils.info("F3: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + repeat(" ", pad) + "," + bkPart2);
-
+              // LogUtils.info("F3: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + repeat(" ", pad) + "," + bkPart2);
             }
           }
           pad = 0;

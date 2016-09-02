@@ -11,14 +11,12 @@ import gnu.trove.map.hash.TObjectByteHashMap;
 /**
  * @since 2016.08.10
  */
-public class CommonDictionayWordFilter
+public class CommonWordFilter
   implements WordFilter
 {
-  private static Pattern NON_ENGLISH = Pattern.compile("[^a-zA-Z]+");
-
   private TObjectByteHashMap<String> dict;
   
-  public CommonDictionayWordFilter() 
+  public CommonWordFilter() 
   {
     PennTreebankTokenizer tkz = new PennTreebankTokenizer();
 
@@ -73,6 +71,8 @@ public class CommonDictionayWordFilter
       throw new RuntimeException(e);
     }
   }
+
+  private static Pattern NON_ENGLISH = Pattern.compile("[^a-zA-Z]+");
 
   @Override
   public boolean filter(Word word)

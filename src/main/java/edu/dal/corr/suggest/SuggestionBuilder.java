@@ -47,6 +47,9 @@ class SuggestionBuilder {
     // Build candidates.
     List<Candidate> cList = new ArrayList<>();
     TObjectIntHashMap<Class<? extends Feature>> typeMap = new TObjectIntHashMap<>();
+    for (int i = 0; i < types.size(); i++) {
+      typeMap.put(types.get(i), i);
+    }
     scoreMap.forEach((k, v) -> {
       // Pad 0s to the tail of score arrays.
       try {

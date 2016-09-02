@@ -32,6 +32,13 @@ public class Candidate
     return scores;
   }
   
+  public void printTypeMap() {
+    System.out.println("MAP SIZE: " + typeMap.keySet().size());
+    for (Class<? extends Feature> type : typeMap.keySet()) {
+      System.out.print(type + " " + typeMap.get(type));
+    }
+  }
+  
   public float score(Class<? extends Feature> feature)
   {
     return scores[typeMap.get(feature)];

@@ -8,8 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.dal.corr.word.PennTreebankTokenizer;
-import gnu.trove.map.TObjectByteMap;
-import gnu.trove.map.hash.TObjectByteHashMap;
+import gnu.trove.set.hash.THashSet;
 
 public class WebsterDictionary
   extends AbstractDictionary
@@ -26,14 +25,14 @@ public class WebsterDictionary
 
   private WebsterDictionary()
   {
-    super(readMap(ResourceUtils.WEBSTER_DICTIONARY));
+    super(readSet(ResourceUtils.WEBSTER_DICTIONARY));
   }
 
-  private static TObjectByteMap<String> readMap(Path file) 
+  private static THashSet<String> readSet(Path file) 
   {
     PennTreebankTokenizer tkz = new PennTreebankTokenizer();
 
-    TObjectByteMap<String> map = new TObjectByteHashMap<>();
+    THashSet<String> set = new THashSet<>();
     try (BufferedReader br = IOUtils.newBufferedReader(file)) {
 
       // The input text is a dictionary. Each word follows a detailed definition
@@ -65,7 +64,7 @@ public class WebsterDictionary
             while (tkz.hasNextToken()) {
               String word = tkz.nextToken().text().toLowerCase();
               if (derivations.contains(word)) {
-                map.put(word, (byte) 0);
+                set.add(word);
                 derivations.remove(word);
               }
             }
@@ -74,7 +73,7 @@ public class WebsterDictionary
           // For the current word, add the word to dictionary and reset the
           // derivations.
           String word = text.toLowerCase();
-          map.put(word, (byte) 0);
+          set.add(word);
           derivations = getDerivations(word);
           
           sb = new StringBuilder();
@@ -84,7 +83,7 @@ public class WebsterDictionary
           }
         }
       }
-      return map;
+      return set;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import edu.dal.corr.util.LocatedTextualUnit;
 
 /**
@@ -57,5 +59,13 @@ public class Suggestion
   public List<Class<? extends Feature>> types()
   {
     return types;
+  }
+  
+  @Override
+  protected HashCodeBuilder buildHash()
+  {
+    return super.buildHash()
+        .append(candidates)
+        .append(types);
   }
 }
