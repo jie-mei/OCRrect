@@ -4,15 +4,24 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import edu.dal.corr.util.LocatedTextualUnit;
 
 /**
- * An occurrence of a word in text.
+ * An abstract representation of word.
+ * An abstract word contains the following components:
+ * <ul>
+ *  <li> The string representation of this word.
+ *  <li> All context words.
+ *  <li> The offset from the beginning of the original text to the the position
+ *       of the first character in the error word.
+ * </ul>
  *
- * @since 2016.07.26
+ * @since 2016.09.07
  */
 public class Word
   extends LocatedTextualUnit
@@ -23,12 +32,12 @@ public class Word
   private String[] context;
 
   /**
-   * Construct the word occurrence object with the position and four neighboring
-   * words before and three after.
+   * Construct a word with the position and four neighboring words before and
+   * three after.
    * 
-   * @param  position  The offset from the beginning of the text.
-   * @param  context   A series of eight words. Four words before the occurring
-   *    word and three after.
+   * @param  position  the offset from the beginning of the text.
+   * @param  context   a series of eight words. Four words before the occurring
+   *                   word and three after.
    */
   public Word(int position, String... context)
   {
@@ -38,32 +47,73 @@ public class Word
     this.context = context;
   }
   
-  Word(String word)
-  {
-    super(word, -1);
+  /**
+   * Construct a context, which pivot is set using the information of this
+   * object.
+   * 
+   * @param  size   the size of the n-gram context.
+   * @param  index  the index of the pivot word in context.
+   */
+  private Context newContext(int size, int index) {
+    int rangeStr = 4 - index;
+    return new Context(position(), index,
+        Arrays.copyOfRange(context, rangeStr, rangeStr + size));
   }
   
-  public List<Context> getContexts()
+  /**
+   * Check if n-gram size is valid.
+   * 
+   * @param  size  the size of the n-gram context.
+   * @throws IllegalArgumentException  if size is not in a valid range.
+   */
+  private void checkContextSize(int size)
   {
-    return Arrays.asList(
-      new Context(position(), 4, Arrays.copyOfRange(context, 0, 5)),
-      new Context(position(), 3, Arrays.copyOfRange(context, 1, 6)),
-      new Context(position(), 2, Arrays.copyOfRange(context, 2, 7)),
-      new Context(position(), 1, Arrays.copyOfRange(context, 3, 8)));
-  }
-
-  public Context getContext(int index)
-  {
-    switch(index) {
-      case 1:  new Context(position(), 1, Arrays.copyOfRange(context, 3, 8));
-      case 2:  new Context(position(), 2, Arrays.copyOfRange(context, 2, 7));
-      case 3:  new Context(position(), 3, Arrays.copyOfRange(context, 1, 6));
-      case 4:  new Context(position(), 4, Arrays.copyOfRange(context, 0, 5));
-      default: throw new IllegalArgumentException(
-                   "Incorrect context index: " + index);
+    if (size > 5 || size < 1) {
+      throw new IllegalArgumentException(
+          "invalid context size is given: " + size);
     }
   }
   
+  /**
+   * Get all the of n-gram contexts which pivot is this word.
+   * 
+   * @param  size  the size of the ngram.
+   *
+   * @return a list of n-gram contexts which pivot is this word.
+   */
+  public List<Context> getContexts(int size)
+  {
+    checkContextSize(size);
+    // Note that we omit the n-gram context starting with pivot word for
+    // efficiency reason in future computation.
+    return IntStream.range(1, size - 1)
+      .mapToObj(i -> newContext(size, i))
+      .collect(Collectors.toList());
+  }
+
+  /**
+   * Get a n-gram contexts which pivot is this word.
+   * 
+   * @param  size  the size of the ngram.
+   * @param  index  the index of the pivot word in context.
+   * @return a context.
+   */
+  public Context getContext(int size, int index)
+  {
+    checkContextSize(size);
+    if (index <= 0 && index >= size) {
+      throw new IllegalArgumentException("invalid pivot index: " + index);
+    }
+    return newContext(size, index);
+  }
+  
+  /**
+   * Construct a new word, where all context words are transformed by a mapper
+   * function.
+   * 
+   * @param  mapper  a mapper function.
+   * @return a new word, where .
+   */
   public Word mapTo(Function<String, String> mapper)
   {
     String[] mapped = new String[8];
@@ -73,9 +123,18 @@ public class Word
     return new Word(position(), mapped);
   }
   
-  String info()
-  {
+  /**
+   * Get the string representation of the context words.
+   *
+   * @return the string representation of the context words.
+   */
+  String contextToString() {
     return " <\"" + String.join("\",\"", context) + "\">";
+  }
+  
+  @Override
+  public String toString() {
+    return text() + contextToString();
   }
   
   @Override

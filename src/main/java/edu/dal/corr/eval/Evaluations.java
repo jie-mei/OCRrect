@@ -9,10 +9,33 @@ import java.util.stream.Collectors;
 import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.word.Word;
 
+/**
+ * This class defines the static procedures used for evaluation.
+ *
+ * @since 2016.09.07
+ */
 public class Evaluations
 {
   private Evaluations() {}
   
+  /**
+   * Evaluate the error detection process. The evaluation result will be stored
+   * in {@code log} directory with the following names:
+   * <ul>
+   *  <li> {@code eval.detect.<prefix>.bounded}
+   *  <li> {@code eval.detect.<prefix>.unbounded}
+   *  <li> {@code eval.detect.<prefix>.undetected}
+   *  <li> {@code eval.detect.<prefix>.unmatched}
+   *  <li> {@code eval.detect.<prefix>.result}
+   * </ul>
+   * where {@code prefix} is a string given from parameter identifying the
+   * evaluation case.
+   *
+   * @param  prefix  the prefix used for naming the generated log files.
+   * @param  errors  a list of ground truth errors.
+   * @param  words   a list of error words, i.e. words will be sending to
+   *                 further correction process.
+   */
   public static void evalDetection(String prefix,
                                    List<GroundTruthError> errors,
                                    List<Word> words)

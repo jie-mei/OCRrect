@@ -18,7 +18,23 @@ import gnu.trove.map.hash.TObjectByteHashMap;
 public interface ContextSensitiveBenchmarkDetectMixin
   extends BenchmarkDetectMixin
 {
+  /**
+   * Generate detection result for contexts with the same first gram.
+   * 
+   * @param  first    the first gram.
+   * @param  context  a list of context starting which first gram is {@code first}.
+   * @return a map from suggested candidates to their according suggestion
+   *         confidence values.
+   */
   TObjectByteMap<Context> detect(String first, TObjectByteMap<Context> contextMap);
+
+  /**
+   * Define the size of the suggestion context. This method will be used in
+   * context creation during benchmark.
+   * 
+   * @return the size of the n-gram in context.
+   */
+  int detectionContextSize();
 
   /**
    * Get the final detection decision given context detection results.
@@ -27,8 +43,7 @@ public interface ContextSensitiveBenchmarkDetectMixin
    * @return {@code true} if none of the context result is true. Otherwise,
    *    {@code false}.
    */
-  default boolean detectByContextResult(List<Boolean> detected)
-  {
+  default boolean detectByContextResult(List<Boolean> detected) {
     return detected.stream().noneMatch(b -> b.booleanValue());
   }
 
@@ -40,8 +55,7 @@ public interface ContextSensitiveBenchmarkDetectMixin
    * @param  str  A string.
    * @return A normalized representation of a string.
    */
-  default Function<String, String> processDetectionString()
-  {
+  default Function<String, String> processDetectionString() {
     return String::toLowerCase;
   }
 
@@ -56,7 +70,7 @@ public interface ContextSensitiveBenchmarkDetectMixin
     // Construct a mapping from word to ngram contexts start with such word.
     Map<String, TObjectByteMap<Context>> wordContextMap = new HashMap<>();
     procWords.forEach(w -> {
-      w.getContexts().forEach(c -> {
+      w.getContexts(detectionContextSize()).forEach(c -> {
         String first = c.words()[0];
         TObjectByteMap<Context> contextMap = null;
         if ((contextMap = wordContextMap.get(first)) == null) {
@@ -76,7 +90,7 @@ public interface ContextSensitiveBenchmarkDetectMixin
 
     // Collect the results.
     List<Boolean> results = procWords.stream()
-        .map(Word::getContexts)
+        .map(w -> w.getContexts(detectionContextSize()))
         .map(contexts -> {
           List<Boolean> detected = contexts.stream()
               .map(c -> {
@@ -92,8 +106,7 @@ public interface ContextSensitiveBenchmarkDetectMixin
   }
 
   @Override
-  default boolean detect(Word word)
-  {
+  default boolean detect(Word word) {
     return detect(Arrays.asList(word)).get(0);
   }
 }

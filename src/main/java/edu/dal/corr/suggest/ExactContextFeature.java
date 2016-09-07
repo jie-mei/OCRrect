@@ -43,6 +43,11 @@ public class ExactContextFeature
   }
 
   @Override
+  public int detectionContextSize() {
+    return 5;
+  }
+
+  @Override
   public TObjectByteMap<Context> detect(String first,
       TObjectByteMap<Context> contextMap)
   {
@@ -73,6 +78,11 @@ public class ExactContextFeature
       resultMap.put(key, result);
     }
     return resultMap;
+  }
+
+  @Override
+  public int suggestionContextSize() {
+    return 5;
   }
 
   @Override

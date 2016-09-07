@@ -1,11 +1,9 @@
 package edu.dal.corr;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import edu.dal.corr.suggest.ExactContextFeature;
 import edu.dal.corr.suggest.Feature;
@@ -13,6 +11,7 @@ import edu.dal.corr.suggest.LanguagePopularityFeature;
 import edu.dal.corr.suggest.LevenshteinDistanceFeature;
 import edu.dal.corr.suggest.LexiLexiconExistenceFeature;
 import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
+import edu.dal.corr.suggest.NgramBoundedReaderSearchers;
 import edu.dal.corr.suggest.RelaxContextFeature;
 import edu.dal.corr.suggest.SpecialLexiconExistenceFeature;
 import edu.dal.corr.suggest.StringSimilarityFeature;
@@ -27,21 +26,19 @@ import edu.dal.corr.word.GoogleTokenizer;
 import edu.dal.corr.word.WordFilter;
 
 /**
- * @since 2016.08.10
+ * @since 2016.09.07
  */
 public class Main
 {
   public static void main(String[] args)
     throws IOException
   {
-    NgramBoundedReaderSearcher ngramSearch = NgramBoundedReaderSearcher.read(
-        PathUtils.TEMP_DIR.resolve(Paths.get("5gm.search")),
-        ResourceUtils.FIVEGRAM.stream()
-            .map(Path::toString)
-            .collect(Collectors.toList())
-            .toArray(new String[ResourceUtils.FIVEGRAM.size()])
-        );
+    // Read pre-processed 5-gram search indexing.
+    NgramBoundedReaderSearcher ngramSearch = NgramBoundedReaderSearchers.read(
+        PathUtils.TEMP_DIR.resolve(Paths.get("5gm.search")));
+    ngramSearch.setNgramPath(ResourceUtils.FIVEGRAM);
 
+    // Generate suggestions.
     @SuppressWarnings("unused")
     List<Suggestion> suggestions = new DocumentCorrector().correct(
         new GoogleTokenizer(),

@@ -7,9 +7,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import edu.dal.corr.util.LocatedTextualUnit;
 
 /**
- * A five-gram context of a text entity.
+ * An abstract representation of n-gram context. A n-gram is a sequence of
+ * consecutive words appearing in a text. There is one pivot word in this
+ * abstract n-gram representation, the rest words are the context word of this
+ * pivot words. This object allows to generate more relaxed n-grams
+ * representation, where some context words can be omitted. The pivot word
+ * cannot be omitted in this process.
  *
- * @since 2016.07.26
+ * @since 2016.09.07
  */
 public class Context
   extends LocatedTextualUnit
@@ -20,24 +25,46 @@ public class Context
   private int index;
   private String[] words;
 
-  public Context(int position, int idx, String... words)
+  /**
+   * Construct a n-gram context with a list of word strings as well as the index
+   * and of the pivot word.
+   *
+   * @param  idx       the index of the pivot word among word strings.
+   * @param  position  the position of the pivot word.
+   * @param  words     an array of word strings.
+   */
+  public Context(int idx, int position, String... words)
   {
     super(words[idx], position);
     this.index = idx;
     this.words = words;
   }
   
-  public String[] words() { return words; }
+  /**
+   * Get words in this n-gram context.
+   * 
+   * @return words in this n-gram context.
+   */
+  public String[] words() {
+    return words;
+  }
 
   /**
    * Get the index of the word in the context.
    * 
    * @return An integer represents the word index.
    */
-  public int index() { return index; }
+  public int index() {
+    return index;
+  }
 
-  public String toNgram()
-  {
+  /**
+   * Get a string representation, where grams are separated by an whitespace
+   * character.
+   *
+   * @return a string representation of n-gram.
+   */
+  public String toNgram() {
     return String.join(" ", words);
   }
 
@@ -60,16 +87,14 @@ public class Context
   }
   
   @Override
-  public HashCodeBuilder buildHash()
-  {
+  public HashCodeBuilder buildHash() {
     return super.buildHash()
         .append(index)
         .append(words);
   }
   
   @Override
-  public String toString()
-  {
+  public String toString() {
     return toNgram();
   }
 }

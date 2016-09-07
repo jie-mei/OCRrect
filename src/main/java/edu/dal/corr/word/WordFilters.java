@@ -35,7 +35,7 @@ class WordFilters
         if (filter(word, filters)) {
           words.remove(word);
           LOG.debug(String.format("%" + lenMax + "s %s", 
-              word.text(), word.info()));
+              word.text(), word.contextToString()));
         } else {
           i++;
         }

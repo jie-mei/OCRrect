@@ -1,26 +1,26 @@
 package edu.dal.corr.util;
 
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The utility class for declaring resource path.
  *
- * @since 2016.09.01
+ * @since 2016.09.07
  */
 public class ResourceUtils
 {
+  private ResourceUtils() {}
+
   /*
    * Input error texts.
    */
   public static Path TEST_INPUT_SEGMENT = getResource("test.in.seg.txt");
-  public static List<Path> INPUT = getResourceInDir("input", "*.txt");
-  public static List<Path> GT = getResourceInDir("gt", "*.txt");
+  public static List<Path> INPUT = getResourceInDir("*.txt", "input");
+  public static List<Path> GT = getResourceInDir("*.txt", "gt");
 
   /*
    * Lexicons.
@@ -44,38 +44,29 @@ public class ResourceUtils
   /*
    * Ngram corpus.
    */
-  public static Path UNIGRAM = null;
-  static {
-    for (String pname : new String[]{
+  public static Path UNIGRAM = tryAndGetPath(
       "/raid6/user/jmei/Google_Web_1T_5-gram/1gm/vocab",
-      "/home/default/data/Google_Web_1T_5-gram/1gm/vocab"
-    }) {
-      try {
-        UNIGRAM = getPath(pname);
-        break;
-      } catch(ResourceNotFoundException err) {
-      }
-    }
-    if (UNIGRAM == null) {
-      throw new RuntimeException("Error: cannot find resource\"unigram\".");
-    }
-  }
-  public static List<Path> FIVEGRAM = null;
-  static {
-    for (String pname : new String[]{
+      "/home/default/data/Google_Web_1T_5-gram/1gm/vocab");
+
+  public static List<Path> BIGRAM = tryAndGetPathsInDir(
+      "2gm-[0-9][0-9][0-9][0-9]",
+      "/raid6/user/jmei/Google_Web_1T_5-gram/2gms",
+      "/home/default/data/Google_Web_1T_5-gram/2gms");
+
+  public static List<Path> TRIGRAM = tryAndGetPathsInDir(
+      "3gm-[0-9][0-9][0-9][0-9]",
+      "/raid6/user/jmei/Google_Web_1T_5-gram/3gms",
+      "/home/default/data/Google_Web_1T_5-gram/3gms");
+
+  public static List<Path> FOURGRAM = tryAndGetPathsInDir(
+      "4gm-[0-9][0-9][0-9][0-9]",
+      "/raid6/user/jmei/Google_Web_1T_5-gram/4gms",
+      "/home/default/data/Google_Web_1T_5-gram/4gms");
+
+  public static List<Path> FIVEGRAM = tryAndGetPathsInDir(
+      "5gm-[0-9][0-9][0-9][0-9]",
       "/raid6/user/jmei/Google_Web_1T_5-gram/5gms",
-      "/home/default/data/Google_Web_1T_5-gram/5gms"
-    }) {
-      try {
-        FIVEGRAM = getPathsInDir(pname, "5gm-[0-9][0-9][0-9][0-9]");
-        break;
-      } catch(ResourceNotFoundException err) {
-      }
-    }
-    if (FIVEGRAM == null) {
-      throw new RuntimeException("Error: cannot find resource\"fivegram\".");
-    }
-  }
+      "/home/default/data/Google_Web_1T_5-gram/5gms");
 
   /**
    * Get resource file from compiled path.
@@ -87,10 +78,9 @@ public class ResourceUtils
   {
     try {
       return Paths.get(ResourceUtils.class.getClassLoader()
-          .getResource(pathname).getPath());
+        .getResource(pathname).getPath());
     } catch (NullPointerException e) {
-      throw new ResourceNotFoundException(
-          "Error: cannot find resource \"" + pathname + "\".", e);
+      throw new ResourceNotFoundException(pathname);
     }
   }
   
@@ -104,53 +94,80 @@ public class ResourceUtils
   {
     Path p = Paths.get(pathname);
     if (! Files.exists(p)) {
-      throw new ResourceNotFoundException(
-          "Error: cannot find resource \"" + pathname + "\".");
+      throw new ResourceNotFoundException(pathname);
     }
     return p;
   }
-
+  
   /**
-   * Retrieve all subpaths in the given pathname and filter by a wildcard.
+   * Try to retrieve path from one of the given pathnames using {@link
+   * #getPathsInDir(String, String)}. The given directories are
+   * tried in order.
    * 
-   * @param  path  the resource folder in the file system.
-   * @param  glob  a wildcard pattern for filtering the retrieved subpaths.
-   * @return a list of subpaths.
+   * @param  pathname   a list of pathname.
+   * @return a path from the first valid pathname in the list.
+   * @throws ResourceNotFoundException  if none of the given pathname is
+   *                                    valid.
    */
-  private static List<Path> listPaths(Path path, String glob)
+  public static Path tryAndGetPath(String... pathnames)
   {
-    List<Path> paths = new ArrayList<>();
-    try (DirectoryStream<Path> ds = Files.newDirectoryStream(path, glob)) {
-      for (Path p : ds) {
-        paths.add(p);
+    for (String pathname : pathnames) {
+      try {
+        return getPath(pathname);
+      } catch(ResourceNotFoundException e) {
       }
-    } catch (IOException e) {
-      throw new ResourceNotFoundException(
-          "Error: cannot find resource from \"" + path + "\".", e);
     }
-    paths.sort((a, b) -> a.getFileName().compareTo(b.getFileName())); 
-    return paths;
+    throw new ResourceNotFoundException();
   }
 
   /**
    * Retrieve all subpaths in the given pathname and filter by a wildcard.
    * 
-   * @param  dir   a folder pathname in the compiled path.
    * @param  glob  a wildcard pattern for filtering the retrieved subpaths.
-   * @return
-   */
-  public static List<Path> getPathsInDir(String dir, String glob) {
-    return listPaths(Paths.get(dir), glob);
-  }
-
-  /**
-   * Retrieve all subpaths in the given pathname and filter by a wildcard.
-   * 
    * @param  dir   a folder pathname in the file system.
-   * @param  glob  a wildcard pattern for filtering the retrieved subpaths.
    * @return
    */
-  public static List<Path> getResourceInDir(String dir, String glob) {
-    return listPaths(getResource(dir), glob);
+  public static List<Path> getPathsInDir(String glob, String dir) {
+    try {
+      return PathUtils.listPaths(Paths.get(dir), glob);
+    } catch (IOException e) {
+      throw new ResourceNotFoundException(e);
+    }
+  }
+  
+  /**
+   * Try to retrieve paths from one of the given directories using {@link
+   * #getPathsInDir(String, String)}. The given directories are tried in order.
+   * 
+   * @param  glob  a wildcard pattern for filtering the retrieved subpaths.
+   * @param  dir   a list of folder pathname in the file system.
+   * @return a list of subpaths from the first valid directory in the list.
+   * @throws ResourceNotFoundException  if none of the given directories is
+   *                                    valid.
+   */
+  public static List<Path> tryAndGetPathsInDir(String glob, String... dirs)
+  {
+    for (String dir : dirs) {
+      try {
+        return getPathsInDir(glob, dir);
+      } catch(ResourceNotFoundException e) {
+      }
+    }
+    throw new ResourceNotFoundException();
+  }
+
+  /**
+   * Retrieve all subpaths in the given pathname and filter by a wildcard.
+   * 
+   * @param  glob  a wildcard pattern for filtering the retrieved subpaths.
+   * @param  dir   a folder pathname in the file system.
+   * @return a list of pathname.
+   */
+  public static List<Path> getResourceInDir(String glob, String dir) {
+    try {
+      return PathUtils.listPaths(getResource(dir), glob);
+    } catch (IOException e) {
+      throw new ResourceNotFoundException(e);
+    }
   }
 }

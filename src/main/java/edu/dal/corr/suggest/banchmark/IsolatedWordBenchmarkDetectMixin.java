@@ -10,7 +10,7 @@ import edu.dal.corr.word.Word;
 /**
  * @since 2016.08.10
  */
-public interface ContextInsensitiveBenchmarkDetectMixin
+public interface IsolatedWordBenchmarkDetectMixin
   extends BenchmarkDetectMixin
 {
   default List<Boolean> detect(List<Word> words)

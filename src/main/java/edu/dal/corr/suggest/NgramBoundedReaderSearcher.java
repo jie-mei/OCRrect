@@ -5,25 +5,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.input.BoundedInputStream;
 
-import edu.dal.corr.util.LogUtils;
-import edu.dal.corr.util.ResourceUtils;
-import edu.dal.corr.util.Timer;
 import gnu.trove.list.array.TLongArrayList;
 
 /**
@@ -50,7 +40,7 @@ public class NgramBoundedReaderSearcher
    */
   private HashMap<String, CorpusSubset> offsetMap;
 
-  NgramBoundedReaderSearcher(List<Path> ngrams)
+  public NgramBoundedReaderSearcher(List<Path> ngrams)
       throws FileNotFoundException, IOException
   {
     ngramPaths = ngrams.stream()
@@ -126,10 +116,10 @@ public class NgramBoundedReaderSearcher
    * records in this subset have the same first word as the given word.
    * 
    * @param  word  A word
-   * @return A bufferedReader which underlying stream contains all the records
+   * @return a bufferedReader which underlying stream contains all the records
    *    in the ngram corpus which first word is the same as the given word, or
    *    {@code null} if there is no such records in the corpus.
-   * @throws IOException  If I/O error occurs.
+   * @throws IOException  if I/O error occurs.
    */
   public BufferedReader openBufferedRecordsWithFirstWord(String word)
       throws IOException
@@ -167,55 +157,37 @@ public class NgramBoundedReaderSearcher
       this.size = size;
     }
   }
-
+  
   /**
-   * Construct the object from serialized file. It is optional to overwrite the
-   * ngram data pathnames.
+   * Set pathnames to the n-gram data files.
    * 
-   * @param  in  A serialized file.
-   * @param  ngramData  Ngram data pathnames. It is used to overwrite the ngram
-   *      reading path in the constructed object.
-   * @return An object deserialized from the given file, which ngram
-   *      reading path is overwrited by the provided pathnames.
-   * @throws IOException  If I/O error occurs.
+   * @param  pathnames  an array of pathnames.
    */
-  public static NgramBoundedReaderSearcher read(Path in, String... ngramData)
-      throws IOException
+  public void setNgramPath(String... pathnames)
   {
-    Timer t = new Timer();
-
-    try (ObjectInputStream ois = new ObjectInputStream(
-        Channels.newInputStream(FileChannel.open(in)))) {
-      NgramBoundedReaderSearcher searcher =
-          (NgramBoundedReaderSearcher) ois.readObject();
-      LogUtils.logMethodTime(t, 2);
-
-      // Overwrite `ngramPaths` by input pathnames.
-      if (ngramData.length > 0) {
-        if (ngramData.length == searcher.ngramPaths.length) {
-          searcher.ngramPaths = ngramData;
-        } else {
-          throw new IllegalArgumentException();
-        }
-      }
-      return searcher;
-    } catch (ClassNotFoundException e) {
-      throw new RuntimeException(e);
+    if (pathnames.length == ngramPaths.length) {
+      ngramPaths = pathnames;
+    } else {
+      throw new IllegalArgumentException();
     }
   }
-  
-  public void write(Path out)
-      throws IOException
-  {
-    Timer t = new Timer();
 
-    Files.createDirectories(out.getParent());
-    try (ObjectOutputStream oos = new ObjectOutputStream(
-        Channels.newOutputStream(FileChannel.open(out,
-            StandardOpenOption.CREATE, StandardOpenOption.WRITE)))) {
-      oos.writeObject(this);
+  /**
+   * Set pathnames to the n-gram data files.
+   * 
+   * @param  paths  an list of paths.
+   */
+  public void setNgramPath(List<Path> paths)
+  {
+    if (paths.size() == ngramPaths.length) {
+      ngramPaths = paths
+        .stream()
+        .map(Path::toString)
+        .collect(Collectors.toList())
+        .toArray(new String[paths.size()]);
+    } else {
+      throw new IllegalArgumentException();
     }
-    LogUtils.logMethodTime(t, 2);
   }
   
   @Override
@@ -243,14 +215,5 @@ public class NgramBoundedReaderSearcher
       }
     }
     return true;
-  }
-  
-  public static void main(String[] args)
-      throws FileNotFoundException, IOException
-  {
-    // Preprocess the ngram and write the object in file.
-    List<Path> ngrams = ResourceUtils.FIVEGRAM;
-    NgramBoundedReaderSearcher searcher = new NgramBoundedReaderSearcher(ngrams);
-    searcher.write(Paths.get("tmp/5gm.search"));
   }
 }

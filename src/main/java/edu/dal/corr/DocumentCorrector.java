@@ -18,14 +18,16 @@ import edu.dal.corr.word.Words;
  * The {@code DocumentCorrector} class detect the natural language errors in
  * document and provides a list of candidates for each detected errors.
  * 
- * @since 2016.08.10
+ * @since 2016.09.07
  */
 public class DocumentCorrector
 {
   private static final Logger LOG = Logger.getLogger(DocumentCorrector.class);
 
-  public List<Suggestion> correct(Tokenizer tokenizer, List<WordFilter> filters,
-      List<Feature> features, String content)
+  public List<Suggestion> correct(Tokenizer tokenizer,
+                                  List<WordFilter> filters,
+                                  List<Feature> features,
+                                  String content)
   {
     Timer t = new Timer();
     List<Word> words = Words.get(content, tokenizer,
@@ -38,7 +40,7 @@ public class DocumentCorrector
           words.size(),
           t.interval()));
     }
-
+    
     t.start();
     List<Suggestion> suggestions = Suggestions.suggest(words, features);
     if (LOG.isInfoEnabled()) {
@@ -76,7 +78,7 @@ public class DocumentCorrector
     Suggestions.rewriteTop(
         Paths.get("tmp/suggestion"),
         Paths.get("tmp/suggestion.top.3"), 3);
-
+    
     return suggestions;
   }
 }

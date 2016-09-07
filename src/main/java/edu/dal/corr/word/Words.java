@@ -7,7 +7,18 @@ import org.apache.log4j.Logger;
 import edu.dal.corr.util.LogUtils;
 
 /**
- * @since 2016.08.10
+ * An abstract representation of a word.
+ * An abstract word contains the following informations:
+ * <ul>
+ *  <li> The string representation of this word.
+ *  <li> The string representation of the correct word according to the error
+ *       word.
+ *  <li> The offset from the beginning of the original text to the the position
+ *       of the first character in the error word.
+ *  <li> Addition note of this errors.
+ * </ul>
+ *
+ * @since 2016.09.07
  */
 public class Words
 {
@@ -28,7 +39,7 @@ public class Words
             .max()
             .getAsInt();
         words.stream()
-            .map(w -> String.format("%" + lenMax + "s %s", w.text(), w.info()))
+            .map(w -> String.format("%" + lenMax + "s %s", w.text(), w.contextToString()))
             .forEach(LOG::trace);
       }
       return words;

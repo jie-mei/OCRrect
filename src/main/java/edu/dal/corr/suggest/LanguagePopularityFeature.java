@@ -1,6 +1,6 @@
 package edu.dal.corr.suggest;
 
-import edu.dal.corr.suggest.banchmark.ContextInsensitiveBenchmarkDetectMixin;
+import edu.dal.corr.suggest.banchmark.IsolatedWordBenchmarkDetectMixin;
 import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.Word;
 
@@ -9,7 +9,7 @@ import edu.dal.corr.word.Word;
  */
 public class LanguagePopularityFeature
   extends AbstractScoreableFeature
-  implements ContextInsensitiveBenchmarkDetectMixin
+  implements IsolatedWordBenchmarkDetectMixin
 {
   private Unigram unigram;
   

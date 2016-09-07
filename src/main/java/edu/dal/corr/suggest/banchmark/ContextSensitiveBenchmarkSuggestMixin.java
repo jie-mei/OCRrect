@@ -14,28 +14,56 @@ import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 
 /**
- * @since 2016.08.10
+ * @since 2016.09.07
  */
 public interface ContextSensitiveBenchmarkSuggestMixin
   extends BenchmarkSuggestMixin
 {
+  /**
+   * Generate suggestions for a list of contexts with the same first gram.
+   * 
+   * @param  first    the first gram.
+   * @param  context  a list of context starting which first gram is {@code first}.
+   * @return a map from suggested candidates to their according suggestion
+   *         confidence values.
+   */
   List<TObjectFloatMap<String>> suggest(String first, List<Context> contexts);
 
-  default TObjectFloatMap<String> suggest(Context context)
-  {
+  /**
+   * Define the size of the suggestion context. This method will be used in
+   * context creation during benchmark.
+   * 
+   * @return the size of the n-gram in context.
+   */
+  int suggestionContextSize();
+
+  /**
+   * Generate suggestions for one context.
+   * <p>
+   * This method is a shortcut for suggesting one context in the benchmark
+   * approach. This method calls {@link #suggest(String, List)} in the
+   * subroutine.
+   * </p>
+   * 
+   * @param  context  a context.
+   * @return a map from suggested candidates to their according suggestion
+   *         confidence values.
+   */
+  default TObjectFloatMap<String> suggest(Context context) {
     return suggest(context.words()[0], Arrays.asList(context)).get(0);
   }
 
   /**
-   * This method is applied as a post-processing step for getting string. A
-   * implemented class can override this method to modify the post-processing
+   * This method is applied as a post-processing step for getting string.
+   * <p>
+   * An implemented class can override this method to modify the post-processing
    * behaviors.
+   * </p>
    * 
-   * @param  str  A string.
-   * @return A normalized representation of a string.
+   * @param  str  a string.
+   * @return a normalized representation of a string.
    */
-  default Function<String, String> processSuggestionString()
-  {
+  default Function<String, String> processSuggestionString() {
     return String::toLowerCase;
   }
   
@@ -43,12 +71,13 @@ public interface ContextSensitiveBenchmarkSuggestMixin
    * Merge the {@code <k, v>} pairs from two maps into one. Note that input map
    * could potentially be a {@code null} object.
    * 
-   * @param  mapA  A map.
-   * @param  mapB  Another map.
-   * @return A map which includes all the mappings from both input maps.
+   * @param  mapA  a map.
+   * @param  mapB  another map.
+   * @return a map which includes all the mappings from both input maps.
    */
   default TObjectFloatMap<String> mergeContextSuggests(
-      TObjectFloatMap<String> mapA, TObjectFloatMap<String> mapB)
+      TObjectFloatMap<String> mapA,
+      TObjectFloatMap<String> mapB)
   {
     TObjectFloatMap<String> merged = new TObjectFloatHashMap<>();
     Arrays.asList(mapA, mapB).forEach(map -> {
@@ -67,13 +96,13 @@ public interface ContextSensitiveBenchmarkSuggestMixin
   {
     // Modify the strings in the input words.
     List<Word> procWords = words.stream()
-        .map(w -> w.mapTo(processSuggestionString()))
-        .collect(Collectors.toList());
-
+      .map(w -> w.mapTo(processSuggestionString()))
+      .collect(Collectors.toList());
+    
     // Construct a mapping from word to ngram contexts start with such word.
     Map<String, List<Context>> wordContextMap = new HashMap<>();
     procWords.forEach(w -> {
-      w.getContexts().forEach(c -> {
+      w.getContexts(suggestionContextSize()).forEach(c -> {
         String first = c.words()[0];
         List<Context> contexts = null;
         if ((contexts = wordContextMap.get(first)) == null) {
@@ -94,38 +123,20 @@ public interface ContextSensitiveBenchmarkSuggestMixin
         suggestMap.put(contextList.get(i), mapList.get(i));
       }
     });
-
-//    System.out.println("Generated:");
-//    
-//    List<Context> contexts = procWords.stream()
-//        .flatMap(w -> w.getContexts().stream())
-//        .collect(Collectors.toList());
-//    System.out.println(contexts.size());
-//
-//    System.out.println(suggestMap.keySet().size());
-//    
-//    suggestMap.keySet().forEach(k -> {
-//      System.out.println("\t" + k + " -> " + k.index() + " " + contexts.contains(k));
-//
-//      TObjectFloatMap<String> map = suggestMap.get(k);
-//      map.keySet().forEach(c -> System.out.println("\t\t" + c + ":" + map.get(c) + ", "));
-//      System.out.println();
-//    });
     
     // Collect the results.
     return procWords.stream()
-        .map(w -> w.getContexts().stream()
-            .map(suggestMap::get)
-            .reduce(new TObjectFloatHashMap<String>(), (a, b) -> {
-              return mergeContextSuggests(a, b);
-            })
-        )
-        .collect(Collectors.toList());
+      .map(w -> w.getContexts(suggestionContextSize()).stream()
+        .map(suggestMap::get)
+        .reduce(new TObjectFloatHashMap<String>(), (a, b) -> {
+          return mergeContextSuggests(a, b);
+        })
+      )
+      .collect(Collectors.toList());
   }
 
   @Override
-  default TObjectFloatMap<String> suggest(Word word)
-  {
+  default TObjectFloatMap<String> suggest(Word word) {
     return suggest(Arrays.asList(word)).get(0);
   }
 }

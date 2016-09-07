@@ -19,21 +19,29 @@ import edu.dal.corr.word.StatisticalGoogleNgramThresholdWordFilter;
 import edu.dal.corr.word.Words;
 
 /**
- * @since 2016.08.10
+ * @since 2016.09.07
  */
 public class Evaluate
 {
   public static void main(String[] args)
     throws IOException
   {
-     evalDetection(ResourceUtils.GT_ERROR, ResourceUtils.INPUT);
+    evalDetection(ResourceUtils.GT_ERROR, ResourceUtils.INPUT);
   }
 
+  /**
+   * Evaluate the error detection performance using different combination of
+   * word filters.
+   *
+   * @param  gtErrorFile  path to the ground truth.
+   * @param  inputFiles   path to the input files.
+   */
   public static void evalDetection(Path gtErrorFile, List<Path> inputFiles)
     throws IOException
   {
     List<GroundTruthError> errors = GroundTruthErrors.read(gtErrorFile);
-
+    
+    // Read input and fix the broken words due to the line break.
     String input = StringUtils.fixLineBrokenWords(IOUtils.read(inputFiles));
     
     Evaluations.evalDetection("commonPattern", errors,

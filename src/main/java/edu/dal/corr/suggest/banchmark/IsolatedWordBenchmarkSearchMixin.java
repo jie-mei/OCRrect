@@ -13,7 +13,7 @@ import edu.dal.corr.word.Word;
 /**
  * @since 2016.08.10
  */
-public interface ContextInsensitiveBenchmarkSearchMixin
+public interface IsolatedWordBenchmarkSearchMixin
   extends BenchmarkSearchMixin
 {
   @Override

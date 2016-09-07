@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 import edu.dal.corr.suggest.banchmark.BenchmarkScoreMixin;
 import edu.dal.corr.suggest.banchmark.BenchmarkSearchMixin;
-import edu.dal.corr.suggest.banchmark.ContextInsensitiveBenchmarkSearchMixin;
+import edu.dal.corr.suggest.banchmark.IsolatedWordBenchmarkSearchMixin;
 import edu.dal.corr.word.Word;
 import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.map.hash.TObjectFloatHashMap;
@@ -17,7 +17,7 @@ import gnu.trove.map.hash.TObjectFloatHashMap;
 abstract class AbstractScoreableFeature
   extends AbstractFeature
   implements BenchmarkSearchMixin, BenchmarkScoreMixin,
-    ContextInsensitiveBenchmarkSearchMixin
+    IsolatedWordBenchmarkSearchMixin
 {
   private static final int DISTANCE_THRESHOLD = 3;
   private Searchable revLevDistance;

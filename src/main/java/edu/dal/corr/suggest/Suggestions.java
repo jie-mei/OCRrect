@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import edu.dal.corr.util.LogUtils;
-import edu.dal.corr.util.ResourceUtils;
+import edu.dal.corr.util.PathUtils;
 import edu.dal.corr.word.Word;
 
 /**
@@ -141,9 +141,14 @@ public class Suggestions
           throw new RuntimeException(e);
         }
       } else {
-        List<Path> paths = ResourceUtils.getPathsInDir(in.toString(), "*");
-        for (Path p : paths)  {
-          suggestions.add(read(p));
+        List<Path> paths;
+        try {
+          paths = PathUtils.listPaths(in, "*");
+          for (Path p : paths)  {
+            suggestions.add(read(p));
+          }
+        } catch (IOException e) {
+          throw new RuntimeException(e);
         }
       }
 
@@ -205,7 +210,12 @@ public class Suggestions
   
   public static void rewriteTop(Path in, Path out, int top)
   {
-    List<Path> paths = ResourceUtils.getPathsInDir(in.toString(), "*");
+    List<Path> paths = null;
+    try {
+      paths = PathUtils.listPaths(in, "*");
+    } catch (IOException e) {
+      new RuntimeException(e);
+    }
     paths.parallelStream().forEach(p -> {
       String fname = p.getFileName().toString();
       Suggestion suggest = top(read(p), top);

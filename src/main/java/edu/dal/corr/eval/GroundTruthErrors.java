@@ -10,17 +10,27 @@ import java.util.regex.Pattern;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.LogUtils;
 
+/**
+ * This class defines the static procedures for operating {@code
+ * GroundTruthError} objects.
+ *
+ * @since 2016.09.07
+ */
 public class GroundTruthErrors
 {
-  private static Pattern ERROR = Pattern.compile(".*ERROR.*");
-
   private GroundTruthErrors() {}
-  
+
+  /**
+   * Read a list of ground truth errors from file.
+   *
+   * @param  path  path to file containing the ground truth error records.
+   */
   public static List<GroundTruthError> read(Path path)
   {
     return LogUtils.logMethodTime(1, () ->
     {
       List<GroundTruthError> errors = new ArrayList<>();
+      
       try (BufferedReader br = IOUtils.newBufferedReader(path)) {
         for (String line = br.readLine(); line != null; line = br.readLine()) {
           String[] splits = line.split("\t", 4);
@@ -44,4 +54,11 @@ public class GroundTruthErrors
       return errors;
     });
   }
+
+  /*
+   * The regex pattern contains in the deprecated error records, which is
+   * intended to be omitted in the reading procedure.
+   */
+  private static Pattern ERROR = Pattern.compile(".*ERROR.*");
+  
 }

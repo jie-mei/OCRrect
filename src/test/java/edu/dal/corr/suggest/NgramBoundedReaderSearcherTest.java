@@ -106,8 +106,8 @@ public class NgramBoundedReaderSearcherTest
     throws Exception
   {
     Path tmpFile = Files.createTempFile(PathUtils.TEMP_DIR, "tmp", ".tmp");
-    searcher.write(tmpFile);
-    NgramBoundedReaderSearcher newSearcher = NgramBoundedReaderSearcher.read(tmpFile);
+    NgramBoundedReaderSearchers.write(searcher, tmpFile);
+    NgramBoundedReaderSearcher newSearcher = NgramBoundedReaderSearchers.read(tmpFile);
     assertEquals(searcher, newSearcher);
     Files.delete(tmpFile);
   }
