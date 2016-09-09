@@ -1,6 +1,7 @@
 package edu.dal.corr;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -34,9 +35,10 @@ public class Main
     throws IOException
   {
     // Read pre-processed 5-gram search indexing.
-    NgramBoundedReaderSearcher ngramSearch = NgramBoundedReaderSearchers.read(
-        PathUtils.TEMP_DIR.resolve(Paths.get("5gm.search")));
-    ngramSearch.setNgramPath(ResourceUtils.FIVEGRAM);
+    NgramBoundedReaderSearcher bigram   = getNgramSearch("2gm.search", ResourceUtils.BIGRAM);
+    NgramBoundedReaderSearcher trigram  = getNgramSearch("3gm.search", ResourceUtils.TRIGRAM);
+    NgramBoundedReaderSearcher fourgram = getNgramSearch("4gm.search", ResourceUtils.FOURGRAM);
+    NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM);
 
     // Generate suggestions.
     @SuppressWarnings("unused")
@@ -53,9 +55,26 @@ public class Main
             new SpecialLexiconExistenceFeature(),
             new WikiLexiconExistenceFeature(),
             new LanguagePopularityFeature(),
-            new ExactContextFeature(ngramSearch),
-            new RelaxContextFeature(ngramSearch)
+            new ExactContextFeature.BigramExactContextFeature(bigram),
+            new ExactContextFeature.TrigramExactContextFeature(trigram),
+            new ExactContextFeature.FourgramExactContextFeature(fourgram),
+            new ExactContextFeature.FivegramExactContextFeature(fivegram),
+            new RelaxContextFeature.BigramRelaxContextFeature(bigram),
+            new RelaxContextFeature.TrigramRelaxContextFeature(trigram),
+            new RelaxContextFeature.FourgramRelaxContextFeature(fourgram),
+            new RelaxContextFeature.FivegramRelaxContextFeature(fivegram),
         }),
         IOUtils.read(ResourceUtils.INPUT));
+  }
+  
+  public static NgramBoundedReaderSearcher getNgramSearch(
+      String pathname,
+      List<Path> dataPath)
+    throws IOException
+  {
+    NgramBoundedReaderSearcher ngramSearch = NgramBoundedReaderSearchers.read(
+        PathUtils.TEMP_DIR.resolve(Paths.get(pathname)));
+    ngramSearch.setNgramPath(dataPath);
+    return ngramSearch;
   }
 }

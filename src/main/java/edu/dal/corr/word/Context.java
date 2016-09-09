@@ -21,6 +21,8 @@ public class Context
   implements Serializable
 {
   private static final long serialVersionUID = 4170733392972229406L;
+  
+  public static int MAX_CONTEXT_SIZE = 5;
 
   private int index;
   private String[] words;
@@ -75,7 +77,7 @@ public class Context
       Context another = (Context) obj;
       if (words.length == another.words.length) {
         for (int i = 0; i < words.length; i++) {
-          if (words[i] != another.words[i]) {
+          if (! words[i].equals(another.words[i])) {
             return false;
           }
         }

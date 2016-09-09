@@ -21,7 +21,7 @@ import gnu.trove.map.hash.TObjectByteHashMap;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 
 /**
- * @since 2016.08.10
+ * @since 2016.09.09
  */
 public class ExactContextFeature
   extends AbstractFeature
@@ -29,33 +29,35 @@ public class ExactContextFeature
              ContextSensitiveBenchmarkSuggestMixin
 {
   protected NgramBoundedReaderSearcher searcher;
+  private int ngramSize;
   
-  public ExactContextFeature(NgramBoundedReaderSearcher searcher)
+  public ExactContextFeature(NgramBoundedReaderSearcher searcher, int ngramSize)
   {
-    super();
     this.searcher = searcher;
+    this.ngramSize = ngramSize;
   }
   
-  public ExactContextFeature(List<Path> ngrams)
+  public ExactContextFeature(List<Path> ngrams, int ngramSize)
     throws FileNotFoundException, IOException
   {
-    this(new NgramBoundedReaderSearcher(ngrams));
+    this(new NgramBoundedReaderSearcher(ngrams), ngramSize);
   }
 
   @Override
   public int detectionContextSize() {
-    return 5;
+    return ngramSize;
   }
 
   @Override
-  public TObjectByteMap<Context> detect(String first,
+  public TObjectByteMap<Context> detect(
+      String first,
       TObjectByteMap<Context> contextMap)
   {
     TObjectByteHashMap<String> ngramMap = new TObjectByteHashMap<>();
     contextMap.keySet().forEach(context -> {
       ngramMap.put(context.toNgram(), (byte) 0);
     });
-
+    
     // Check for the existence of n-grams in corpus.
     try (BufferedReader br = searcher.openBufferedRecordsWithFirstWord(first)) {
       if (br != null) {
@@ -63,7 +65,7 @@ public class ExactContextFeature
           String[] splits = line.split("\t");
           String ngram = processDetectionString().apply(splits[0]);
           if (ngramMap.containsKey(ngram)) {
-            ngramMap.adjustValue(ngram, (byte) 1);
+            ngramMap.put(ngram, (byte) 1);
           }
         }
       }
@@ -82,7 +84,7 @@ public class ExactContextFeature
 
   @Override
   public int suggestionContextSize() {
-    return 5;
+    return ngramSize;
   }
 
   @Override
@@ -166,4 +168,36 @@ public class ExactContextFeature
     copy[position] = " ";
     return String.join(" ", copy);
   }
+
+  public static class BigramExactContextFeature
+    extends ExactContextFeature
+  {
+    public BigramExactContextFeature(NgramBoundedReaderSearcher searcher) {
+      super(searcher, 2);
+    }
+  }
+
+  public static class TrigramExactContextFeature
+    extends ExactContextFeature
+  {
+    public TrigramExactContextFeature(NgramBoundedReaderSearcher searcher) {
+      super(searcher, 3);
+    }
+  }
+
+  public static class FourgramExactContextFeature
+    extends ExactContextFeature
+  {
+    public FourgramExactContextFeature(NgramBoundedReaderSearcher searcher) {
+      super(searcher, 4);
+    }
+  }
+  public static class FivegramExactContextFeature
+    extends ExactContextFeature
+  {
+    public FivegramExactContextFeature(NgramBoundedReaderSearcher searcher) {
+      super(searcher, 5);
+    }
+  }
+
 }

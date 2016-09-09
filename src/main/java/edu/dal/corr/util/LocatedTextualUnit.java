@@ -17,12 +17,6 @@ public abstract class LocatedTextualUnit
   private static final long serialVersionUID = -780573715784587087L;
 
   private int position;
-  
-  /**
-   * This constructor is used for serialization purpose only. Concrete
-   * subclasses should not call this constructor.
-   */
-  LocatedTextualUnit() {}
 
   protected LocatedTextualUnit(final String name, final int position)
   {

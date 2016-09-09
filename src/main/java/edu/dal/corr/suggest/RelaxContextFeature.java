@@ -25,19 +25,20 @@ public class RelaxContextFeature
   implements ContextSensitiveBenchmarkDetectMixin,
              ContextSensitiveBenchmarkSuggestMixin
 {
-  public RelaxContextFeature(NgramBoundedReaderSearcher searcher)
+  public RelaxContextFeature(NgramBoundedReaderSearcher searcher, int ngramSize)
   {
-    super(searcher);
+    super(searcher, ngramSize);
   }
   
-  public RelaxContextFeature(List<Path> ngrams)
+  public RelaxContextFeature(List<Path> ngrams, int ngramSize)
     throws FileNotFoundException, IOException
   {
-    this(new NgramBoundedReaderSearcher(ngrams));
+    this(new NgramBoundedReaderSearcher(ngrams), ngramSize);
   }
 
   @Override
-  public List<TObjectFloatMap<String>> suggest(String first,
+  public List<TObjectFloatMap<String>> suggest(
+      String first,
       List<Context> contexts)
   {
     // Initialize a hash map storing mappings from skipped ngram context to all
@@ -128,5 +129,45 @@ public class RelaxContextFeature
           return String.join(" ", relaxdSkipNgram);
         })
         .collect(Collectors.toList());
+  }
+
+  class UnigramRelaxContextFeature
+    extends RelaxContextFeature
+  {
+    public UnigramRelaxContextFeature(NgramBoundedReaderSearcher searcher) {
+      super(searcher, 1);
+    }
+  }
+
+  public static class BigramRelaxContextFeature
+    extends RelaxContextFeature
+  {
+    public BigramRelaxContextFeature(NgramBoundedReaderSearcher searcher) {
+      super(searcher, 2);
+    }
+  }
+
+  public static class TrigramRelaxContextFeature
+    extends RelaxContextFeature
+  {
+    public TrigramRelaxContextFeature(NgramBoundedReaderSearcher searcher) {
+      super(searcher, 3);
+    }
+  }
+
+  public static class FourgramRelaxContextFeature
+    extends RelaxContextFeature
+  {
+    public FourgramRelaxContextFeature(NgramBoundedReaderSearcher searcher) {
+      super(searcher, 4);
+    }
+  }
+
+  public static class FivegramRelaxContextFeature
+    extends RelaxContextFeature
+  {
+    public FivegramRelaxContextFeature(NgramBoundedReaderSearcher searcher) {
+      super(searcher, 5);
+    }
   }
 }

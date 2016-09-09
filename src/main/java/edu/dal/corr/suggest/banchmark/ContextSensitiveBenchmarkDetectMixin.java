@@ -13,7 +13,7 @@ import gnu.trove.map.TObjectByteMap;
 import gnu.trove.map.hash.TObjectByteHashMap;
 
 /**
- * @since 2016.08.10
+ * @since 2016.09.09
  */
 public interface ContextSensitiveBenchmarkDetectMixin
   extends BenchmarkDetectMixin
@@ -64,9 +64,9 @@ public interface ContextSensitiveBenchmarkDetectMixin
   {
     // Modify the strings in the input words.
     List<Word> procWords = words.stream()
-        .map(w -> w.mapTo(processDetectionString()))
-        .collect(Collectors.toList());
-
+      .map(w -> w.mapTo(processDetectionString()))
+      .collect(Collectors.toList());
+    
     // Construct a mapping from word to ngram contexts start with such word.
     Map<String, TObjectByteMap<Context>> wordContextMap = new HashMap<>();
     procWords.forEach(w -> {
@@ -87,20 +87,21 @@ public interface ContextSensitiveBenchmarkDetectMixin
       TObjectByteMap<Context> newMap = detect(str, wordContextMap.get(str));
       wordContextMap.put(str, newMap);
     });
-
+    
     // Collect the results.
     List<Boolean> results = procWords.stream()
-        .map(w -> w.getContexts(detectionContextSize()))
-        .map(contexts -> {
-          List<Boolean> detected = contexts.stream()
-              .map(c -> {
-                String first = c.words()[0];
-                byte result = wordContextMap.get(first).get(c);
-                return result == (byte) 1;
-              }).collect(Collectors.toList());
-          return detectByContextResult(detected);
-        })
-        .collect(Collectors.toList());
+      .map(w -> w.getContexts(detectionContextSize()))
+      .map(contexts -> {
+        List<Boolean> detected = contexts.stream()
+          .map(c -> {
+            String first = c.words()[0];
+            byte result = wordContextMap.get(first).get(c);
+            return result == (byte) 1;
+          })
+          .collect(Collectors.toList());
+        return detectByContextResult(detected);
+      })
+      .collect(Collectors.toList());
     
     return results;
   }

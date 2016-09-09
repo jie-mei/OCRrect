@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,35 +33,40 @@ public class ExactContextFeaturesTest
         ResourceUtils.getResource("5gm-0000.seg"),
         ResourceUtils.getResource("5gm-0098.seg"));
     searcher = new NgramBoundedReaderSearcher(ngrams);
-    feature = new ExactContextFeature(searcher);
+    feature = new ExactContextFeature(searcher, 5);
   }
 
   @Test
   public void testDetect()
     throws Exception
   {
+    // Construct a mapping from all existing n-gram first words to their
+    // according n-grams.
     Map<String, TObjectByteMap<Context>> firstContextMap = new HashMap<>();
     try (BufferedReader br = IOUtils.newBufferedReader(ngrams.get(0))) {
       for (String line = br.readLine(); line != null; line = br.readLine()) {
+        line = feature.processDetectionString().apply(line);
         String[] grams = line.split("\t")[0].split(" ");
+        String first = grams[0];
 
-        // Add a context with random word position.
-        int pos = new Random().nextInt(grams.length);
+        Context ctxt = new Context(1, -1, grams);
 
         TObjectByteMap<Context> contexts = null;
-        String first = grams[0];
         if ((contexts = firstContextMap.get(first)) == null) {
           contexts = new TObjectByteHashMap<>();
           firstContextMap.put(grams[0], contexts);
         }
-        contexts.put(new Context(-1, pos, grams), (byte) 0);
+        contexts.put(ctxt, (byte) 0);
       }
     }
     for (String first : firstContextMap.keySet()) {
       TObjectByteMap<Context> contexts = firstContextMap.get(first);
       TObjectByteMap<Context> results = feature.detect(first, contexts);
+      results.keySet().forEach(k -> {
+        System.out.println(k.toNgram() + " " + Byte.toString(results.get(k)));
+      });
       results.keySet().forEach(c -> {
-        assertEquals(results.get(c), (byte) 1);
+        assertEquals(c.toNgram(), results.get(c), (byte) 1);
       });
     }
   }
@@ -72,7 +76,7 @@ public class ExactContextFeaturesTest
     throws Exception
   {
     String[] words = {"recent", "strip", "available", "is", "01/12/06."};
-    Context context = new Context(-1, 4, words);
+    Context context = new Context(4, -1, words);
     TObjectFloatMap<String> candidateMap = feature.suggest(context);
     candidateMap.keySet().forEach(k -> {
       System.out.println(k + ":" + candidateMap.get(k));
@@ -84,7 +88,7 @@ public class ExactContextFeaturesTest
     throws Exception
   {
     String[] words = {"recent", "strip", "available", "is", "01/12/06."};
-    Context context = new Context(-1, 4, words);
+    Context context = new Context(4, -1, words);
     List<TObjectFloatMap<String>> candidateMaps = feature.suggest(words[0], Arrays.asList(context));
     TObjectFloatMap<String> map = candidateMaps.get(0);
     List<String> candidates = Arrays.asList("01/17/06.", "01/16/06.", "01/14/06.", "01/13/06.", "01/12/06.");

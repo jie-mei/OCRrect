@@ -41,10 +41,15 @@ public class Word
    */
   public Word(int position, String... context)
   {
-    super(context[4], position);
+    super(checkAndGetPivot(context), position);
+    this.context = context;
+  }
+  
+  private static String checkAndGetPivot(String[] context)
+  {
     if (context.length != 8)
       throw new IllegalArgumentException("Incorrect context is given.");
-    this.context = context;
+    return context[4];
   }
   
   /**
@@ -56,7 +61,7 @@ public class Word
    */
   private Context newContext(int size, int index) {
     int rangeStr = 4 - index;
-    return new Context(position(), index,
+    return new Context(index, position(),
         Arrays.copyOfRange(context, rangeStr, rangeStr + size));
   }
   
