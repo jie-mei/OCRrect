@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -192,20 +193,27 @@ public class Suggestions
 
     for (Class<? extends Feature> type : suggest.types()) {
       Stream.of(candidates)
-        .sorted((c1, c2) -> {
-          double diff = c1.score(type) - c2.score(type);
-          if (diff == 0) {
-            diff = StringSimilarityScorer.lcs(c1.text(), word)
-                 - StringSimilarityScorer.lcs(c2.text(), word);
-          }
-          return diff == 0 ? 0 : diff > 0 ? -1 : 1;
-        })
+        .sorted(sortByScore(word, type))
         .limit(top)
         .forEach(c -> selected.add(c));
     }
 
     return new Suggestion(suggest.text(), suggest.position(), suggest.types(),
         selected.toArray(new Candidate[selected.size()]));
+  }
+  
+  static Comparator<Candidate> sortByScore(
+      String errorWord,
+      Class<? extends Feature> type)
+  {
+    return (c1, c2) -> {
+      double diff = c1.score(type) - c2.score(type);
+      if (diff == 0) {
+        diff = StringSimilarityScorer.lcs(c1.text(), errorWord)
+             - StringSimilarityScorer.lcs(c2.text(), errorWord);
+      }
+      return diff == 0 ? 0 : diff > 0 ? -1 : 1;
+    };
   }
   
   public static void rewriteTop(Path in, Path out, int top)
