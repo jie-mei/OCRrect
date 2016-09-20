@@ -3,13 +3,21 @@ package edu.dal.corr.suggest;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
 
+import edu.dal.corr.eval.GroundTruthErrors;
+import edu.dal.corr.util.PathUtils;
 import edu.dal.corr.util.ResourceUtils;
+import edu.stanford.nlp.io.IOUtils;
 
 public class SuggestionTest {
   
@@ -54,19 +62,8 @@ public class SuggestionTest {
       {
         limit++;
       }
-//      sorted.stream().limit(limit).forEach(selected::add);
-      System.out.println(types.get(i).getSimpleName());
-      int tidx = i;
-      sorted.stream().limit(limit).forEach(cand -> {
-        float[] s = cand.score();
-        System.out.println(String.format("%12s (%d) %6f %6f %6f %6f %6f %6f %6f %6f",
-            cand.text(), tidx, s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7]));
-      });
       sorted.stream().limit(limit + 1).forEach(selected::add);
-      selected.forEach(c -> System.out.print(c + " "));
-      System.out.println();
     }
-
 
     for (Candidate top3Cand : topCandidates) {
       assertThat(selected.contains(top3Cand), is(true));
@@ -74,23 +71,48 @@ public class SuggestionTest {
   }
   
   @Test
-  public void printTop() {
-    print(top10);
-    print(top3);
+  public void testWriteText()
+    throws Exception
+  {
+    Path out = PathUtils.getTempPath();
+    Suggestions.writeText(
+        Arrays.asList(top3, top10, top100),
+        GroundTruthErrors.read(ResourceUtils.GT_ERROR),
+        out);
+    try (BufferedReader br = IOUtils.getBufferedFileReader(out.toString())) {
+      Iterator<Class<? extends Feature>> typeIter = top3.types().iterator();
+      for (String line = br.readLine(); br != null; line = br.readLine()) {
+        if (line.length() != 0) {
+          assertThat(typeIter.hasNext(), is(true));
+          assertThat(typeIter.next().getName(), is(line));
+        } else {
+          assertThat(typeIter.hasNext(), is(false));
+          checkSuggestInText(br, top3);
+          checkSuggestInText(br, top10);
+          checkSuggestInText(br, top100);
+          break;
+        }
+      }
+    }
+    Files.delete(out);
   }
   
-  private void print(Suggestion suggest) {
-    System.out.println(suggest.text());
-
-    suggest.types()
-      .stream()
-      .map(t -> t.getSimpleName())
-      .forEach(System.out::println);
-
-    for (Candidate cand : suggest.candidates()) {
-      float[] s = cand.score();
-      System.out.println(String.format("%12s %6f %6f %6f %6f %6f %6f %6f %6f",
-          cand.text(), s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7]));
+  public void checkSuggestInText(BufferedReader br, Suggestion suggest)
+      throws IOException
+  {
+    assertThat(br.readLine(), is(suggest.text()));
+    float[][] scores = suggest.score(suggest.types());
+    Candidate[] candidates = suggest.candidates();
+    for (int i = 0; i < candidates.length; i++) {
+      String[] fields = br.readLine().split("\t");
+      System.out.println(Arrays.toString(fields));
+      assertThat(fields[0], is(candidates[i].text()));
+      int fidx = 1;
+      for (float s : scores[i]) {
+        assertThat(Float.parseFloat(fields[fidx++]), is(s));
+      }
+      assertThat(Integer.parseInt(fields[fidx]), is(0));
     }
+    assertThat(br.readLine(), anyOf(is(""), is(nullValue())));
   }
 }

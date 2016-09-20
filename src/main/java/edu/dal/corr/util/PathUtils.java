@@ -14,7 +14,8 @@ public class PathUtils
 
   private PathUtils() {}
   
-  public static Path getTempPath(String pathname) {
+  public static Path getTempPath(String pathname)
+  {
     Path path = TEMP_DIR.resolve(pathname);
     try {
       Files.createDirectories(path.getParent());
@@ -22,6 +23,12 @@ public class PathUtils
       throw new RuntimeException(e);
     }
     return path;
+  }
+  
+  public static Path getTempPath()
+      throws IOException
+  {
+    return Files.createTempFile(TEMP_DIR, null, ".tmp");
   }
 
   /**

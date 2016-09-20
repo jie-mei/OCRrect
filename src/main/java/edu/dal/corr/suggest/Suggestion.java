@@ -3,6 +3,7 @@ package edu.dal.corr.suggest;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -35,29 +36,36 @@ public class Suggestion
   
   public Candidate[] candidates() { return candidates; }
   
-  public float[][] score(List<Feature> features)
+  public float[][] score(List<Class<? extends Feature>> types)
   {
     // Create a mapping for types to the new position in the output array.
-    int[] map = new int[features.size()];
+    int[] map = new int[types.size()];
     Arrays.fill(map, NON_MAPPING);
     for (int i = 0; i < types.size(); i++) {
-      for (int j = 0; j < features.size(); j++) {
-        if (types.get(i) == features.get(j).getClass()) {
+      for (int j = 0; j < types.size(); j++) {
+        if (types.get(i) == types.get(j)) {
           map[i] = j;
           break;
         }
       }
     }
-    float[][] scores = new float[candidates.length][features.size()];
+    float[][] scores = new float[candidates.length][types.size()];
     for (int i = 0; i < candidates.length; i++) {
       float[] candScore = candidates[i].score();
-      for (int j = 0; j < features.size(); j++) {
+      for (int j = 0; j < types.size(); j++) {
         if (map[j] != NON_MAPPING) {
           scores[i][map[j]] = candScore[j];
         }
       }
     }
     return scores;
+  }
+  
+  public float[][] scoreByFeature(List<Feature> features)
+  {
+    return score(features.stream()
+        .map(f -> f.getClass())
+        .collect(Collectors.toList()));
   }
 
   public List<Class<? extends Feature>> types() {

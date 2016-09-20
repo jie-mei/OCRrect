@@ -1,5 +1,6 @@
 package edu.dal.corr.suggest;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,12 +19,15 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import edu.dal.corr.eval.GroundTruthError;
+import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.util.PathUtils;
 import edu.dal.corr.word.Word;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
- * @since 2016.08.23
+ * @since 2016.09.19
  */
 public class Suggestions
 {
@@ -53,6 +57,103 @@ public class Suggestions
           })
           .collect(Collectors.toList());
     });
+  }
+  
+  /**
+   * Write suggestions to a text file.
+   * 
+   * A valid data file should formated follows:
+   *
+   * -  the file starts with a list of feature names, which are separated by a
+   *    newline character. Features follow by an empty line.
+   * -  each error starts with one line containing its name, following by its
+   *    candidates.
+   * -  each error candidate uses one line, containing the following fields:
+   *    candidate name, a list of candidate values, and a label. Fields are
+   *    separated by a tab characters.
+   * -  there is an empty line between each errors.
+   * 
+   * @param  suggestions  A list of suggestions.
+   * @param  out  The folder of the output files.
+   */
+  public static void writeText(
+      List<Suggestion> suggestions,
+      List<GroundTruthError> gtErrors,
+      Path out)
+  {
+    LogUtils.logMethodTime(1, () ->
+    {
+      try {
+        Files.createDirectories(out.getParent());
+        try (BufferedWriter bw = IOUtils.newBufferedWriter(out)) {
+          TIntObjectHashMap<GroundTruthError> errMap =
+              new TIntObjectHashMap<>();
+          for (GroundTruthError err : gtErrors) {
+            errMap.put(err.position(), err);
+          }
+          List<Class<? extends Feature>> types = suggestions.get(0).types();
+
+          // Write features.
+          for (Class<? extends Feature> type : types) {
+            bw.write(type.getName() + "\n");
+          }
+          bw.write("\n");
+
+          // Write suggestions.
+          for (Suggestion suggest : suggestions) {
+
+            // Write suggestion name.
+            bw.write(suggest.text() + "\n");
+
+            // Write candidates.
+            float[][] scores = suggest.score(types);
+            for (int i = 0; i < suggest.candidates().length; i++) {
+              StringBuilder candScores = new StringBuilder();
+              for (float s : scores[i]) {
+                candScores.append(s).append('\t');
+              }
+              candScores.deleteCharAt(candScores.length() - 1);
+
+              GroundTruthError err = errMap.get(suggest.position());
+              Candidate candidate = suggest.candidates()[i];
+              boolean match = (err == null
+                  ? false
+                  : match(err.gtText(), candidate.text()));
+
+              bw.write(String.format("%s\t%s\t%s\n",
+                  candidate.text(),
+                  candScores.toString(),
+                  match ? "1" : "0"));
+            }
+            bw.write("\n");
+          }
+        }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    });
+  }
+  
+  private static boolean match(String gtName, String str)
+  {
+    if (gtName.toLowerCase().equals(str.toLowerCase()) ||
+        stripTail(gtName.toLowerCase()).equals(str.toLowerCase())) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
+  private static String stripTail(String str)
+  {
+    // Remove the tailing non-English characters.
+    for (int i = str.length() - 1; i > 0; i--) {
+      char c = str.charAt(i);
+      if (Character.isLetter(c)) {
+        return str.substring(0, i + 1);
+      }
+    }
+    return "";
   }
   
   /**

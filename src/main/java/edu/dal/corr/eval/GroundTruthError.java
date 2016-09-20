@@ -23,7 +23,7 @@ public class GroundTruthError
 {
   private static final long serialVersionUID = 480517897613831371L;
 
-  private String errText;
+  private String gtText;
   private String info;
   
   /**
@@ -34,13 +34,14 @@ public class GroundTruthError
    *                          error word.
    * @param  information      addition notes of this error.
    */
-  GroundTruthError(String groundTruthText,
-                   String errorText,
-                   int position,
-                   String information)
+  GroundTruthError(
+      int position,
+      String errorText,
+      String groundTruthText,
+      String information)
   {
-    super(groundTruthText, position);
-    errText = errorText;
+    super(errorText, position);
+    gtText = groundTruthText;
     info = information;
   }
   
@@ -50,7 +51,16 @@ public class GroundTruthError
    * @return the string representation of the error word.
    */
   public String errorText() {
-    return errText;
+    return text();
+  }
+  
+  /**
+   * Get the string representation of the error word.
+   *
+   * @return the string representation of the error word.
+   */
+  public String gtText() {
+    return gtText;
   }
 
   /**
@@ -65,15 +75,15 @@ public class GroundTruthError
   @Override
   public String toString()
   {
-    return String.format("<%s>",
-        String.join(", ", text(), errText, Integer.toString(position()), info));
+    return String.format("<%s>", String.join(", ",
+        Integer.toString(position()), text(), gtText, info));
   }
   
   @Override
   protected HashCodeBuilder buildHash()
   {
     return super.buildHash()
-        .append(errText)
+        .append(gtText)
         .append(info);
   }
 }
