@@ -44,6 +44,12 @@ public class ExactContextFeature
   }
 
   @Override
+  public NormalizationOption normalize()
+  {
+    return NormalizationOption.MAX;
+  }
+
+  @Override
   public int detectionContextSize() {
     return ngramSize;
   }
@@ -85,6 +91,21 @@ public class ExactContextFeature
   @Override
   public int suggestionContextSize() {
     return ngramSize;
+  }
+  
+  static final int MAX_LD_DISTANCE = 3;
+
+  protected TObjectFloatMap<String> filterCandidates(
+      String word,
+      TObjectFloatMap<String> candSuggest)
+  {
+      TObjectFloatMap<String> result = new TObjectFloatHashMap<>();
+      for (String cand : candSuggest.keySet()) {
+        if (LevenshteinDistance.compute(word, cand) <= MAX_LD_DISTANCE) {
+          result.put(cand, candSuggest.get(cand));
+        }
+      }
+      return result;
   }
 
   @Override
@@ -145,11 +166,11 @@ public class ExactContextFeature
 
     return IntStream.range(0, contexts.size())
         .mapToObj(i -> {
-          // Merge candidates from different skip-grams to construct the final
-          // result.
           Context context = contexts.get(i);
           int pos = context.index();
-          return skipNgramMaps.get(pos).get(skipNgram(context.words(), pos));
+          return filterCandidates(
+              context.text(),
+              skipNgramMaps.get(pos).get(skipNgram(context.words(), pos)));
         })
         .collect(Collectors.toList());
   }

@@ -98,11 +98,13 @@ public class RelaxContextFeature
           Context context = contexts.get(i);
           int pos = context.index();
           HashMap<String, TObjectFloatMap<String>> map = rsNgramMaps.get(pos);
-          return relaxedSkipNgrams(context.words(), pos).stream()
-              .map(map::get)
-              .reduce(new TObjectFloatHashMap<String>(), (a, b) -> {
-                return mergeContextSuggests(a, b);
-              });
+          return filterCandidates(
+              context.text(),
+              relaxedSkipNgrams(context.words(), pos).stream()
+                .map(map::get)
+                .reduce(new TObjectFloatHashMap<String>(), (a, b) -> {
+                  return mergeContextSuggests(a, b);
+              }));
         })
         .collect(Collectors.toList());
   }
