@@ -102,12 +102,6 @@ public class Suggestions
           // Write suggestions.
           for (Suggestion suggest : suggestions) {
             GroundTruthError err = errMap.get(suggest.position());
-            System.out.print(suggest.text() + "\t");
-            if (err != null) {
-              System.out.println(err.gtText());
-            } else {
-              System.out.println();
-            }
 
             // Write suggestion name.
             bw.write(suggest.text() + "\n");
