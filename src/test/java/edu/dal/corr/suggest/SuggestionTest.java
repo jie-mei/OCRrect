@@ -87,9 +87,9 @@ public class SuggestionTest {
           assertThat(typeIter.next().getName(), is(line));
         } else {
           assertThat(typeIter.hasNext(), is(false));
-          checkSuggestInText(br, top3);
-          checkSuggestInText(br, top10);
-          checkSuggestInText(br, top100);
+          checkSuggestFormatInText(br, top3);
+          checkSuggestFormatInText(br, top10);
+          checkSuggestFormatInText(br, top100);
           break;
         }
       }
@@ -97,8 +97,8 @@ public class SuggestionTest {
     Files.delete(out);
   }
   
-  public void checkSuggestInText(BufferedReader br, Suggestion suggest)
-      throws IOException
+  public void checkSuggestFormatInText(BufferedReader br, Suggestion suggest)
+    throws IOException
   {
     assertThat(br.readLine(), is(suggest.text()));
     float[][] scores = suggest.score(suggest.types());

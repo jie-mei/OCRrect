@@ -116,9 +116,12 @@ public class Suggestions
 
               GroundTruthError err = errMap.get(suggest.position());
               Candidate candidate = suggest.candidates()[i];
-              boolean match = (err == null
-                  ? false
-                  : match(err.gtText(), candidate.text()));
+              boolean match = false;
+              if (err != null) {
+                match = match(err.gtText(), candidate.text());
+              } else {
+                match = suggest.text().toLowerCase().equals(candidate.text().toLowerCase());
+              }
 
               bw.write(String.format("%s\t%s\t%s\n",
                   candidate.text(),
