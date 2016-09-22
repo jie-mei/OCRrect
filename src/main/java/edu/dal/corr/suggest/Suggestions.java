@@ -101,6 +101,13 @@ public class Suggestions
 
           // Write suggestions.
           for (Suggestion suggest : suggestions) {
+            GroundTruthError err = errMap.get(suggest.position());
+            System.out.print(suggest.text() + "\t");
+            if (err != null) {
+              System.out.println(err.gtText());
+            } else {
+              System.out.println();
+            }
 
             // Write suggestion name.
             bw.write(suggest.text() + "\n");
@@ -113,14 +120,15 @@ public class Suggestions
                 candScores.append(s).append('\t');
               }
               candScores.deleteCharAt(candScores.length() - 1);
-
-              GroundTruthError err = errMap.get(suggest.position());
               Candidate candidate = suggest.candidates()[i];
               boolean match = false;
               if (err != null) {
                 match = match(err.gtText(), candidate.text());
               } else {
-                match = suggest.text().toLowerCase().equals(candidate.text().toLowerCase());
+                // If the suggestion does not match with any GT error, also trim
+                // the tailing non-English characters.
+                match = match(suggest.text(), candidate.text());
+                // match = suggest.text().toLowerCase().equals(candidate.text().toLowerCase());
               }
 
               bw.write(String.format("%s\t%s\t%s\n",
