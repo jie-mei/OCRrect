@@ -113,7 +113,7 @@ public class Suggestions
             
             // Check the detection type.
             String type = "F";  // False-positive
-            if (suggest.text().equals(err.text())) {
+            if (err != null && suggest.text().equals(err.text())) {
               type = "B";  // Bounded
             } else {
               int strPos = suggest.position();
