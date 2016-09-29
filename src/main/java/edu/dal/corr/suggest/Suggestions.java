@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -86,11 +87,18 @@ public class Suggestions
       try {
         Files.createDirectories(out.getParent());
         try (BufferedWriter bw = IOUtils.newBufferedWriter(out)) {
+
           TIntObjectHashMap<GroundTruthError> errMap =
               new TIntObjectHashMap<>();
+          BitSet errCov = new BitSet();
           for (GroundTruthError err : gtErrors) {
-            errMap.put(err.position(), err);
+            int strPos = err.position();
+            int endPos = strPos + err.errorText().length();
+            errMap.put(strPos, err);
+            errCov.set(strPos, endPos);
           }
+
+
           List<Class<? extends Feature>> types = suggestions.get(0).types();
 
           // Write features.
@@ -102,9 +110,23 @@ public class Suggestions
           // Write suggestions.
           for (Suggestion suggest : suggestions) {
             GroundTruthError err = errMap.get(suggest.position());
+            
+            // Check the detection type.
+            String type = "F";  // False-positive
+            if (suggest.text().equals(err.text())) {
+              type = "B";  // Bounded
+            } else {
+              int strPos = suggest.position();
+              for (int offset = 0; offset < suggest.text().length(); offset++) {
+                if (errCov.get(strPos + offset)) {
+                  type = "U"; // Unbounded
+                  break;
+                }
+              }
+            }
 
-            // Write suggestion name.
-            bw.write(suggest.text() + "\n");
+            // Write suggestion name and detection type.
+            bw.write(suggest.text() + "\t" + type + "\n");
 
             // Write candidates.
             float[][] scores = suggest.score(types);
