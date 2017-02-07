@@ -12,7 +12,7 @@ import edu.dal.corr.word.Word;
 /**
  * This class defines the static procedures used for evaluation.
  *
- * @since 2016.09.07
+ * @since 2017.01.18
  */
 public class Evaluations
 {
@@ -36,10 +36,11 @@ public class Evaluations
    * @param  words   a list of error words, i.e. words will be sending to
    *                 further correction process.
    */
-  public static void evalDetection(String prefix,
-                                   List<GroundTruthError> errors,
-                                   List<Word> words)
-  {
+  public static void evalDetection(
+    String prefix,
+    List<GroundTruthError> errors,
+    List<Word> words
+  ){
     Map<GroundTruthError, Word> bounded = new HashMap<>();
     Map<GroundTruthError, List<Word>> unbounded = new HashMap<>();
     List<GroundTruthError> undetected = new ArrayList<>();

@@ -10,7 +10,7 @@ import edu.stanford.nlp.process.PTBTokenizer;
  * @since 2016.08.10
  */
 public class PennTreebankTokenizer
-  implements Tokenizer
+  implements WordTokenizer
 {
   private PTBTokenizer<CoreLabel> ptbt;
   

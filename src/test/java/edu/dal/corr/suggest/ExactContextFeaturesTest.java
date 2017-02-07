@@ -12,6 +12,7 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.dal.corr.suggest.feature.ContextCoherenceFeature;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.ResourceUtils;
 import edu.dal.corr.word.Context;
@@ -22,8 +23,8 @@ import gnu.trove.map.hash.TObjectByteHashMap;
 public class ExactContextFeaturesTest
 {
   private static List<Path> ngrams;
-  private static NgramBoundedReaderSearcher searcher;
-  private static ExactContextFeature feature;
+  private static NgramBoundedReader searcher;
+  private static ContextCoherenceFeature feature;
 
   @BeforeClass
   public static void setUpBeforeClass()
@@ -32,8 +33,8 @@ public class ExactContextFeaturesTest
     ngrams = Arrays.asList(
         ResourceUtils.getResource("5gm-0000.seg"),
         ResourceUtils.getResource("5gm-0098.seg"));
-    searcher = new NgramBoundedReaderSearcher(ngrams);
-    feature = new ExactContextFeature(searcher, 5);
+    searcher = new NgramBoundedReader(ngrams);
+    feature = new ContextCoherenceFeature(searcher, 5);
   }
 
   @Test
@@ -63,10 +64,10 @@ public class ExactContextFeaturesTest
       TObjectByteMap<Context> contexts = firstContextMap.get(first);
       TObjectByteMap<Context> results = feature.detect(first, contexts);
       results.keySet().forEach(k -> {
-        System.out.println(k.toNgram() + " " + Byte.toString(results.get(k)));
+        System.out.println(k + " " + Byte.toString(results.get(k)));
       });
       results.keySet().forEach(c -> {
-        assertEquals(c.toNgram(), results.get(c), (byte) 1);
+        assertEquals(c.toString(), results.get(c), (byte) 1);
       });
     }
   }

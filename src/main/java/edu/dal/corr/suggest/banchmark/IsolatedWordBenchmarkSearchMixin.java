@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import edu.dal.corr.suggest.Features;
 import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.util.Timer;
 import edu.dal.corr.word.Word;
@@ -24,13 +23,11 @@ public interface IsolatedWordBenchmarkSearchMixin
         .map(w -> {
           List<String> result = null;
           if ((result = cache.get(w.text())) == null) {
-            if (Features.getLogger().isTraceEnabled()) {
+            if (LogUtils.isTraceEnabled()) {
               Timer t = new Timer();
               result = search(w);
-              if (LogUtils.isTraceEnabled()) {
-                LogUtils.trace(String.format("%10s: %-7d [%6.2f seconds]",
-                    w.text(), result.size(), t.interval()));
-              }
+              LogUtils.trace(String.format("%10s: %-7d [%6.2f seconds]",
+                  w.text(), result.size(), t.interval()));
             } else {
               result = search(w);
             }

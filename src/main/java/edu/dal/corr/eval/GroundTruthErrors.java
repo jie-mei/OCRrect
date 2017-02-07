@@ -18,7 +18,7 @@ import gnu.trove.map.hash.TLongObjectHashMap;
  * This class defines the static procedures for operating {@code
  * GroundTruthError} objects.
  *
- * @since 2016.09.07
+ * @since 2017.01.18
  */
 public class GroundTruthErrors
 {
@@ -112,6 +112,7 @@ public class GroundTruthErrors
    * Read a list of ground truth errors from file.
    *
    * @param  path  path to file containing the ground truth error records.
+   * @return A list of groud truth errors.
    */
   public static List<GroundTruthError> read(Path path)
   {
@@ -126,7 +127,7 @@ public class GroundTruthErrors
             continue;
           }
           String[] splits = line.split("\t", 4);
-//          String gtName = stripTail(toAsciiRep(splits[0]));
+          // String gtName = stripTail(toAsciiRep(splits[0]));
           String gtName = toAsciiRep(splits[0]);
           String errName = splits[1];
           int pos = Integer.parseInt(splits[2]);

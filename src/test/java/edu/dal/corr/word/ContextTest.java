@@ -74,7 +74,7 @@ public class ContextTest
 
   @Test
   public void testToNgram() {
-    assertThat(instance().toNgram(), is(String.join(" ", contextWords)));
+    assertThat(instance().toString(), is(String.join(" ", contextWords)));
   }
 
   @Test

@@ -2,6 +2,7 @@ package edu.dal.corr.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -14,7 +15,10 @@ import gnu.trove.map.hash.TObjectLongHashMap;
  * @since 2016.07.26
  */
 public class Unigram
+  implements Serializable
 {
+  private static final long serialVersionUID = -1614121007280050705L;
+
   private static Unigram instance = null;
 
   public static synchronized Unigram getInstance()
@@ -32,7 +36,12 @@ public class Unigram
     this(ResourceUtils.UNIGRAM);
   }
   
-  private Unigram(Path unigram)
+  /**
+   * Construct a unigram with file.
+   * 
+   * @param unigram  a path to the unigram file.
+   */
+  public Unigram(Path unigram)
   {
     map = new TObjectLongHashMap<String>();
     try (
@@ -47,6 +56,16 @@ public class Unigram
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+  
+  /**
+   * Register an instance as the default for {@link #getInstance()}.
+   * 
+   * @param  unigram  an unigram instance.
+   */
+  public static void register(Unigram unigram)
+  {
+    instance = unigram;
   }
   
   /**

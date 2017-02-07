@@ -56,7 +56,8 @@ public interface ContextSensitiveBenchmarkDetectMixin
    * @return A normalized representation of a string.
    */
   default Function<String, String> processDetectionString() {
-    return String::toLowerCase;
+    // return String::toLowerCase;
+    return String::toString;
   }
 
   @Override

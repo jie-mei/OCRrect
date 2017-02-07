@@ -25,10 +25,12 @@ public class PathUtils
     return path;
   }
   
-  public static Path getTempPath()
+  public static Path getTempFile()
       throws IOException
   {
-    return Files.createTempFile(TEMP_DIR, null, ".tmp");
+    Path temp = Files.createTempFile(TEMP_DIR, null, ".tmp");
+    temp.toFile().deleteOnExit();
+    return temp;
   }
 
   /**

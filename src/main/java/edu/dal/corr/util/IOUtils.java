@@ -50,9 +50,7 @@ public class IOUtils
     throws IOException
   {
     StringBuilder sb = new StringBuilder();
-    try (
-      BufferedReader br = newBufferedReader(path)
-    ){
+    try (BufferedReader br = newBufferedReader(path)){
       for (String line; (line = br.readLine()) != null;) {
         sb.append(line).append('\n');
       }

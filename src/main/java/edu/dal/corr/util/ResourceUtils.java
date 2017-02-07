@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * The utility class for declaring resource path.
  *
- * @since 2016.09.07
+ * @since 2017.01.18
  */
 public class ResourceUtils
 {
@@ -104,10 +104,9 @@ public class ResourceUtils
    * #getPathsInDir(String, String)}. The given directories are
    * tried in order.
    * 
-   * @param  pathname   a list of pathname.
+   * @param  pathnames  a list of pathname.
    * @return a path from the first valid pathname in the list.
-   * @throws ResourceNotFoundException  if none of the given pathname is
-   *                                    valid.
+   * @throws ResourceNotFoundException  if none of the given pathname is valid.
    */
   public static Path tryAndGetPath(String... pathnames)
   {
@@ -121,11 +120,13 @@ public class ResourceUtils
   }
 
   /**
-   * Retrieve all subpaths in the given pathname and filter by a wildcard.
+   * Retrieve all subpaths in the given pathname that have been filtered by a
+   * wildcard.
    * 
    * @param  glob  a wildcard pattern for filtering the retrieved subpaths.
    * @param  dir   a folder pathname in the file system.
-   * @return
+   * @return all pathnames in the given pathname  have been filtered by a
+   *    wildcard.
    */
   public static List<Path> getPathsInDir(String glob, String dir) {
     try {

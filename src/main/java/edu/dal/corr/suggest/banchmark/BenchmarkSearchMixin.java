@@ -3,7 +3,7 @@ package edu.dal.corr.suggest.banchmark;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import edu.dal.corr.suggest.Searchable;
+import edu.dal.corr.suggest.feature.Searchable;
 import edu.dal.corr.word.Word;
 
 /**

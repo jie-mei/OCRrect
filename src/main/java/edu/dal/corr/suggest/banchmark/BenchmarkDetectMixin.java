@@ -3,7 +3,7 @@ package edu.dal.corr.suggest.banchmark;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import edu.dal.corr.suggest.Detectable;
+import edu.dal.corr.suggest.feature.Detectable;
 import edu.dal.corr.word.Word;
 
 /**

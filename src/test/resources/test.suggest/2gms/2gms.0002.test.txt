@@ -1,0 +1,8 @@
+xdefx a2af	10
+xdefx a2f	10
+xdefx a2xaf	10
+xdefx axaf	10
+xdfx a2af	10
+xdfx a2f	10
+xdfx a2xaf	10
+xdfx axaf	10

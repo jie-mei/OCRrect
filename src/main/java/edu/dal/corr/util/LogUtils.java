@@ -100,14 +100,26 @@ public class LogUtils
 	
 	public static void logMethodTime(Timer timer, int level)
 	{
-	  logMethodTime(timer, level, 3);
+	  logMethodTime(timer, level, 4);
 	}
 	
 	public static <T> T logMethodTime(int level, CodeReturnRunner<T> mt)
 	{
     Timer t = new Timer();
     T result = mt.run();
-	  logMethodTime(t, level, 3);
+	  logMethodTime(t, level);
+    return result;
+	}
+	
+	public static <T> T logMethodTimeWithIOException(
+    int level,
+    CodeReturnRunnerWithIOException<T> mt
+  )
+    throws IOException
+	{
+    Timer t = new Timer();
+    T result = mt.run();
+	  logMethodTime(t, level);
     return result;
 	}
 
@@ -129,8 +141,11 @@ public class LogUtils
 	}
 	
 	
-	public interface CodeReturnRunner<T>
-	{
+	public interface CodeReturnRunnerWithIOException<T> {
+	   T run() throws IOException;
+	}
+	
+	public interface CodeReturnRunner<T> {
 	   T run();
 	}
 	
@@ -141,8 +156,7 @@ public class LogUtils
 	  logMethodTime(t, level, 3);
 	}
 	
-	public interface CodeRunner
-	{
+	public interface CodeRunner {
 	   void run();
 	}
 	

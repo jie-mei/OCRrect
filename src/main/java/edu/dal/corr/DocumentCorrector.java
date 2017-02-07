@@ -1,18 +1,17 @@
 package edu.dal.corr;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.dal.corr.suggest.Feature;
 import edu.dal.corr.suggest.Suggestion;
-import edu.dal.corr.suggest.Suggestions;
+import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.util.Timer;
-import edu.dal.corr.word.Tokenizer;
 import edu.dal.corr.word.Word;
-import edu.dal.corr.word.WordFilter;
-import edu.dal.corr.word.Words;
+import edu.dal.corr.word.WordTokenizer;
+import edu.dal.corr.word.filter.WordFilter;
 
 /**
  * The {@code DocumentCorrector} class detect the natural language errors in
@@ -24,13 +23,14 @@ public class DocumentCorrector
 {
   private static final Logger LOG = Logger.getLogger(DocumentCorrector.class);
 
-  public List<Suggestion> correct(Tokenizer tokenizer,
+  public List<Suggestion> correct(WordTokenizer tokenizer,
                                   List<WordFilter> filters,
                                   List<Feature> features,
                                   String content)
+    throws IOException
   {
     Timer t = new Timer();
-    List<Word> words = Words.get(content, tokenizer,
+    List<Word> words = Word.get(content, tokenizer,
         filters.toArray(new WordFilter[filters.size()]));
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
@@ -42,7 +42,7 @@ public class DocumentCorrector
     }
     
     t.start();
-    List<Suggestion> suggestions = Suggestions.suggest(words, features);
+    List<Suggestion> suggestions = Suggestion.suggest(words, features);
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
           "Suggesting candidates using features...\n" +
@@ -55,7 +55,7 @@ public class DocumentCorrector
     }
     
     t.start();
-    Suggestions.write(suggestions, Paths.get("tmp/suggestion"), "suggest");
+    Suggestion.write(suggestions, Paths.get("tmp/suggestion"), "suggest");
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
           "Writing to file...\n" +
@@ -63,19 +63,23 @@ public class DocumentCorrector
           t.interval()));
     }
     
-    Suggestions.rewriteTop(
+    Suggestion.rewriteTop(
         Paths.get("tmp/suggestion"),
         Paths.get("tmp/suggestion.top.1000"), 1000);
     
-    Suggestions.rewriteTop(
+    Suggestion.rewriteTop(
         Paths.get("tmp/suggestion"),
         Paths.get("tmp/suggestion.top.100"), 100);
     
-    Suggestions.rewriteTop(
+    Suggestion.rewriteTop(
         Paths.get("tmp/suggestion"),
-        Paths.get("tmp/suggestion.top.10"), 100);
+        Paths.get("tmp/suggestion.top.50"), 50);
     
-    Suggestions.rewriteTop(
+    Suggestion.rewriteTop(
+        Paths.get("tmp/suggestion"),
+        Paths.get("tmp/suggestion.top.10"), 10);
+    
+    Suggestion.rewriteTop(
         Paths.get("tmp/suggestion"),
         Paths.get("tmp/suggestion.top.3"), 3);
     

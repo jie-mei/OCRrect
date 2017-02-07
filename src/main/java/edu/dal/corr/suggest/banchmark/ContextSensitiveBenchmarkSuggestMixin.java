@@ -64,7 +64,8 @@ public interface ContextSensitiveBenchmarkSuggestMixin
    * @return a normalized representation of a string.
    */
   default Function<String, String> processSuggestionString() {
-    return String::toLowerCase;
+    // return String::toLowerCase;
+    return String::toString;
   }
   
   /**
@@ -104,12 +105,14 @@ public interface ContextSensitiveBenchmarkSuggestMixin
     procWords.forEach(w -> {
       w.getContexts(suggestionContextSize()).forEach(c -> {
         String first = c.words()[0];
-        List<Context> contexts = null;
-        if ((contexts = wordContextMap.get(first)) == null) {
-          contexts = new ArrayList<>();
-          wordContextMap.put(first, contexts);
+        if (first.length() != 0) {  // Omit n-grams with an empty first gram.
+          List<Context> contexts = null;
+          if ((contexts = wordContextMap.get(first)) == null) {
+            contexts = new ArrayList<>();
+            wordContextMap.put(first, contexts);
+          }
+          contexts.add(c);
         }
-        contexts.add(c);
       });
     });
     
@@ -130,8 +133,7 @@ public interface ContextSensitiveBenchmarkSuggestMixin
         .map(suggestMap::get)
         .reduce(new TObjectFloatHashMap<String>(), (a, b) -> {
           return mergeContextSuggests(a, b);
-        })
-      )
+        }))
       .collect(Collectors.toList());
   }
 

@@ -1,6 +1,7 @@
 package edu.dal.corr.word;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -8,8 +9,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.log4j.Logger;
 
 import edu.dal.corr.util.LocatedTextualUnit;
+import edu.dal.corr.word.filter.WordFilter;
 
 /**
  * An abstract representation of word.
@@ -28,6 +31,7 @@ public class Word
   implements Serializable
 {
   private static final long serialVersionUID = 1201174127991744048L;
+  private static final Logger LOG = Logger.getLogger(Word.class);
 
   private String[] context;
 
@@ -91,7 +95,7 @@ public class Word
     checkContextSize(size);
     // Note that we omit the n-gram context starting with pivot word for
     // efficiency reason in future computation.
-    return IntStream.range(1, size - 1)
+    return IntStream.range(1, size)
       .mapToObj(i -> newContext(size, i))
       .collect(Collectors.toList());
   }
@@ -113,11 +117,14 @@ public class Word
   }
   
   /**
-   * Construct a new word, where all context words are transformed by a mapper
-   * function.
+   * Construct a new word with a new pivot word string.
+   * <p>
+   * The pivot word string is provided by the given mapper function. Position
+   * and all context words and remain unchanged in the generated word.
    * 
-   * @param  mapper  a mapper function.
-   * @return a new word, where .
+   * @param  mapper  a mapper function that changes the string representation of
+   *    the pivot word.
+   * @return a new word object with a different text name.
    */
   public Word mapTo(Function<String, String> mapper)
   {
@@ -133,8 +140,12 @@ public class Word
    *
    * @return the string representation of the context words.
    */
-  String contextToString() {
+  private String contextToString() {
     return " <\"" + String.join("\",\"", context) + "\">";
+  }
+  
+  public String toString(int formatLen) {
+    return String.format("%" + formatLen + "s %s", text(), contextToString());
   }
   
   @Override
@@ -146,5 +157,80 @@ public class Word
   protected HashCodeBuilder buildHash()
   {
     return super.buildHash().append(context);
+  }
+
+  /*
+   * Generate words from tokens.
+   */
+  private static List<Word> getImpl(List<Word> words, WordFilter... filters)
+  {
+    WordFilter.filter(words, filters);
+
+    if (LOG.isTraceEnabled()) {
+      int lenMax = words.stream()
+          .mapToInt(w -> w.text().length())
+          .max()
+          .getAsInt();
+      words.stream()
+          .map(w -> w.toString(lenMax))
+          .forEach(LOG::trace);
+    }
+    return words;
+  }
+  
+  /**
+   * Generate words from tokens.
+   * 
+   * @param  tokens  a list of tokens, sorted by their positions in text.
+   * @param  filters  an array of word filters.
+   * @return a list of words.
+   */
+  public static List<Word> get(List<Token> tokens, WordFilter... filters)
+  {
+    List<Token> expend = new ArrayList<>();
+
+    for (int i = 0; i < 4; i++) expend.add(Token.EMPTY);
+    expend.addAll(tokens);
+    for (int i = 0; i < 3; i++) expend.add(Token.EMPTY);
+
+    List<Word> words = new ArrayList<>();
+    for (int i = 0; i < tokens.size(); i++) {
+      words.add(new Word(expend.get(i + 4).position(),
+          expend.get(i).text(),
+          expend.get(i + 1).text(),
+          expend.get(i + 2).text(),
+          expend.get(i + 3).text(),
+          expend.get(i + 4).text(),
+          expend.get(i + 5).text(),
+          expend.get(i + 6).text(),
+          expend.get(i + 7).text()
+          ));
+    }
+    return getImpl(words, filters);
+  }
+
+  /**
+   * Generate words from text.
+   * 
+   * @param  content  a text string.
+   * @param  tokenizer  a tokenizer.
+   * @param  filters  an array of word filters.
+   * @return a list of words.
+   */
+  public static List<Word> get(String content, WordTokenizer tokenizer, WordFilter... filters)
+  {
+    List<Word> words = WordTokenizer.tokenize(content, tokenizer);
+    return getImpl(words, filters);
+  }
+  
+  /**
+   * Generate words from text.
+   * 
+   * @param  content  a text string.
+   * @param  tokenizer  a tokenizer.
+   * @return a list of words.
+   */
+  public static List<Word> get(String content, WordTokenizer tokenizer) {
+    return get(content, tokenizer, new WordFilter[0]);
   }
 }

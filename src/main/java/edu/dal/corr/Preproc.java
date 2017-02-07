@@ -6,13 +6,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
-import edu.dal.corr.suggest.NgramBoundedReaderSearchers;
+import edu.dal.corr.suggest.NgramBoundedReader;
+import edu.dal.corr.suggest.NgramBoundedReaders;
 import edu.dal.corr.util.PathUtils;
 import edu.dal.corr.util.ResourceUtils;
 
 /**
- * @since 2016.09.07
+ * @since 2017.01.18
  */
 public class Preproc
 {
@@ -22,7 +22,7 @@ public class Preproc
   private static Path FIVEGRAM_SEARCHER_FILE = PathUtils.getTempPath("5gm.search");
   
   /**
-   * Generate n-gram searchers using n-gram resources (n > 1).
+   * Generate n-gram searchers using n-gram resources (n &gt; 1).
    * 
    * @param  ngramData  path to a list of n-gram data files.
    * @param  preproc    path to the pre-processed searcher object file.
@@ -32,8 +32,8 @@ public class Preproc
   public static void genNgramSearcher(List<Path> ngramData, Path preproc)
       throws FileNotFoundException, IOException
   {
-    NgramBoundedReaderSearcher searcher = new NgramBoundedReaderSearcher(ngramData);
-    NgramBoundedReaderSearchers.write(searcher, preproc);
+    NgramBoundedReader searcher = new NgramBoundedReader(ngramData);
+    NgramBoundedReaders.write(searcher, preproc);
   }
   
   public static void main(String[] args)

@@ -7,12 +7,13 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import edu.dal.corr.util.LocatedTextualUnit;
 
 /**
- * An abstract representation of n-gram context. A n-gram is a sequence of
- * consecutive words appearing in a text. There is one pivot word in this
- * abstract n-gram representation, the rest words are the context word of this
- * pivot words. This object allows to generate more relaxed n-grams
- * representation, where some context words can be omitted. The pivot word
- * cannot be omitted in this process.
+ * An abstract representation of n-gram context.
+ * <p>
+ * A n-gram is a sequence of consecutive words appearing in a text. There is one
+ * pivot word in this abstract n-gram representation, the rest words are the
+ * context word of this pivot words. This object allows to generate more relaxed
+ * n-grams representation, where some context words can be omitted. The pivot
+ * word cannot be omitted in this process.
  *
  * @since 2016.09.07
  */
@@ -60,16 +61,6 @@ public class Context
     return index;
   }
 
-  /**
-   * Get a string representation, where grams are separated by an whitespace
-   * character.
-   *
-   * @return a string representation of n-gram.
-   */
-  public String toNgram() {
-    return String.join(" ", words);
-  }
-
   @Override
   public boolean equals(Object obj)
   {
@@ -89,14 +80,21 @@ public class Context
   }
   
   @Override
-  public HashCodeBuilder buildHash() {
+  protected HashCodeBuilder buildHash() {
     return super.buildHash()
         .append(index)
         .append(words);
   }
   
+  /**
+   * Concatenate words into a n-gram.
+   * <p>
+   * Every two words are separated by an whitespace character.
+   *
+   * @return a n-gram string.
+   */
   @Override
   public String toString() {
-    return toNgram();
+     return String.join(" ", words);
   }
 }
