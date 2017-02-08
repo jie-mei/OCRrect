@@ -18,7 +18,7 @@ import edu.stanford.nlp.io.IOUtils;
 public class NgramBoundedReaderSearcherTest
 {
   private static List<Path> ngrams;
-  private static NgramBoundedReader searcher;
+  private static NgramBoundedReaderSearcher searcher;
 
   @BeforeClass
   public static void setUpBeforeClass()
@@ -27,7 +27,7 @@ public class NgramBoundedReaderSearcherTest
     ngrams = Arrays.asList(
         ResourceUtils.getResource("5gm-0000.seg"),
         ResourceUtils.getResource("5gm-0098.seg"));
-    searcher = new NgramBoundedReader(ngrams);
+    searcher = new NgramBoundedReaderSearcher(ngrams);
   }
 
   @Test
@@ -107,7 +107,7 @@ public class NgramBoundedReaderSearcherTest
   {
     Path tmpFile = Files.createTempFile(PathUtils.TEMP_DIR, "tmp", ".tmp");
     NgramBoundedReaders.write(searcher, tmpFile);
-    NgramBoundedReader newSearcher = NgramBoundedReaders.read(tmpFile);
+    NgramBoundedReaderSearcher newSearcher = NgramBoundedReaders.read(tmpFile);
     assertEquals(searcher, newSearcher);
     Files.delete(tmpFile);
   }

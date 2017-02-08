@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.dal.corr.metric.EditDistance;
 import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.Word;
 import gnu.trove.map.hash.TObjectByteHashMap;
+import info.debatty.java.stringsimilarity.Levenshtein;
 
 /**
  * This object support searching candidates within maximum levenshtein distance.
@@ -29,6 +29,7 @@ class ReverseLevenshteinDistanceSearcher
    */
   private static String[][] unigramInLen;
   
+  private Levenshtein lev;
   private Unigram unigram;
   private int maxDistance;
 
@@ -69,6 +70,7 @@ class ReverseLevenshteinDistanceSearcher
         unigramInLen[i] = lenList.toArray(new String[lenList.size()]);
       }
     }
+    lev = new Levenshtein();
   }
 
   @Override
@@ -101,7 +103,7 @@ class ReverseLevenshteinDistanceSearcher
          i <= len + maxDistance; i++) {
       try {
         for (String gram : unigramInLen[i]) {
-          if (EditDistance.levDist(gram, word) <= maxDistance) {
+          if (lev.distance(gram, word) <= maxDistance) {
             candidates.add(gram);
           }
         }

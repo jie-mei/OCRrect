@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import edu.dal.corr.suggest.NgramBoundedReader;
+import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
 import edu.dal.corr.suggest.NgramBoundedReaders;
 import edu.dal.corr.util.PathUtils;
 import edu.dal.corr.util.ResourceUtils;
@@ -32,7 +32,7 @@ public class Preproc
   public static void genNgramSearcher(List<Path> ngramData, Path preproc)
       throws FileNotFoundException, IOException
   {
-    NgramBoundedReader searcher = new NgramBoundedReader(ngramData);
+    NgramBoundedReaderSearcher searcher = new NgramBoundedReaderSearcher(ngramData);
     NgramBoundedReaders.write(searcher, preproc);
   }
   

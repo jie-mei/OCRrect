@@ -6,14 +6,12 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.dal.corr.suggest.NgramBoundedReader;
-import edu.dal.corr.suggest.NgramBoundedReaders;
+import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
 import edu.dal.corr.suggest.Suggestion;
 import edu.dal.corr.suggest.feature.ContextCoherenceFeature;
 import edu.dal.corr.suggest.feature.DistanceFeature;
 import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.suggest.feature.LanguagePopularityFeature;
-import edu.dal.corr.suggest.feature.LevenshteinDistanceFeature;
 import edu.dal.corr.suggest.feature.LexiconExistenceFeature;
 import edu.dal.corr.suggest.feature.Scoreable;
 import edu.dal.corr.suggest.feature.ApproximateContextCoherenceFeature;
@@ -32,12 +30,12 @@ import edu.dal.corr.word.filter.WordFilter;
  */
 public class Main
 {
-  public static NgramBoundedReader getNgramSearch(
+  public static NgramBoundedReaderSearcher getNgramSearch(
       String pathname,
       List<Path> dataPath)
   {
     try {
-      NgramBoundedReader ngramSearch = NgramBoundedReaders.read(
+      NgramBoundedReaderSearcher ngramSearch = NgramBoundedReaderSearcher.read(
           PathUtils.TEMP_DIR.resolve(Paths.get(pathname)));
       ngramSearch.setNgramPath(dataPath);
       return ngramSearch;
@@ -55,10 +53,10 @@ public class Main
     Unigram unigram = Unigram.getInstance();
 
     // Read pre-processed 5-gram search indexing.
-    NgramBoundedReader bigram   = getNgramSearch("2gm.search", ResourceUtils.BIGRAM);
-    NgramBoundedReader trigram  = getNgramSearch("3gm.search", ResourceUtils.TRIGRAM);
-    NgramBoundedReader fourgram = getNgramSearch("4gm.search", ResourceUtils.FOURGRAM);
-    NgramBoundedReader fivegram = getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM);
+    NgramBoundedReaderSearcher bigram   = getNgramSearch("2gm.search", ResourceUtils.BIGRAM);
+    NgramBoundedReaderSearcher trigram  = getNgramSearch("3gm.search", ResourceUtils.TRIGRAM);
+    NgramBoundedReaderSearcher fourgram = getNgramSearch("4gm.search", ResourceUtils.FOURGRAM);
+    NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM);
 
     // Construct features.
     Feature[] features = new Feature[]{
@@ -131,7 +129,6 @@ public class Main
         };
 
     // Generate suggestions.
-    @SuppressWarnings("unused")
     List<Suggestion> suggestions = new DocumentCorrector().correct(
         new GoogleTokenizer(),
         Arrays.asList(new WordFilter[] {

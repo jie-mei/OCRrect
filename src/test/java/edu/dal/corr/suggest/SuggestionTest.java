@@ -21,9 +21,10 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import edu.dal.corr.suggest.feature.ContextCoherenceFeature;
+import edu.dal.corr.suggest.feature.DistanceFeature;
 import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.suggest.feature.LanguagePopularityFeature;
-import edu.dal.corr.suggest.feature.LevenshteinDistanceFeature;
+import edu.dal.corr.suggest.feature.Scoreable;
 import edu.dal.corr.suggest.feature.ApproximateContextCoherenceFeature;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.PathUtils;
@@ -65,15 +66,16 @@ public class SuggestionTest {
     List<Suggestion> suggests = Suggestion.suggest(
         Word.get(IOUtils.read(TXT_PATH), new GoogleTokenizer()),
         Arrays.asList(new Feature[] {
-            new LevenshteinDistanceFeature(),
+            new DistanceFeature("Levenstein",
+                Scoreable.levenshteinDist(), true),
             new LanguagePopularityFeature("GoogleWebUnigram",
                 Unigram.getInstance()),
             new ContextCoherenceFeature("GoogleWebBigram",
-                new NgramBoundedReader(BIGRAM_PATH),  2),
+                new NgramBoundedReaderSearcher(BIGRAM_PATH),  2),
             new ContextCoherenceFeature("GoogleWebTrigram",
-                new NgramBoundedReader(TRIGRAM_PATH),  3),
+                new NgramBoundedReaderSearcher(TRIGRAM_PATH),  3),
             new ApproximateContextCoherenceFeature("GoogleWebTrigram",
-                new NgramBoundedReader(TRIGRAM_PATH),  3),
+                new NgramBoundedReaderSearcher(TRIGRAM_PATH),  3),
         })
     );
 
@@ -117,40 +119,40 @@ public class SuggestionTest {
       float[] scores = cand.score();
       System.out.println(cand.text());
       switch (cand.text()) {
-        case "word":    assertThat(scores, is(array(1.0f, 0.01f, 0.1f, 1.0f, 0.2f))); break;
-        case "worde1":  assertThat(scores, is(array(1/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
-        case "worde2":  assertThat(scores, is(array(1/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
-        case "worde3":  assertThat(scores, is(array(1/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
-        case "worde4":  assertThat(scores, is(array(1/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
-        case "worde5":  assertThat(scores, is(array(1/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf1k": assertThat(scores, is(array(0.0f, 0.10f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf2k": assertThat(scores, is(array(0.0f, 0.20f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf3k": assertThat(scores, is(array(0.0f, 0.30f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf4k": assertThat(scores, is(array(0.0f, 0.40f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf5k": assertThat(scores, is(array(0.0f, 0.50f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf6k": assertThat(scores, is(array(0.0f, 0.60f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf7k": assertThat(scores, is(array(0.0f, 0.70f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf8k": assertThat(scores, is(array(0.0f, 0.80f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf9k": assertThat(scores, is(array(0.0f, 0.90f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf+k": assertThat(scores, is(array(0.0f, 1.00f, 0.0f, 0.0f, 0.0f))); break;
-        case "word2e1": assertThat(scores, is(array(0.0f, 0.01f, 0.2f, 0.0f, 0.0f))); break;
-        case "word2e2": assertThat(scores, is(array(0.0f, 0.02f, 0.4f, 0.0f, 0.0f))); break;
-        case "word2e3": assertThat(scores, is(array(0.0f, 0.03f, 0.6f, 0.0f, 0.0f))); break;
-        case "word2e4": assertThat(scores, is(array(0.0f, 0.04f, 0.8f, 0.0f, 0.0f))); break;
-        case "word2e5": assertThat(scores, is(array(0.0f, 0.05f, 1.0f, 0.0f, 0.0f))); break;
-        case "word2e6": assertThat(scores, is(array(0.0f, 0.06f, 0.0f, 0.0f, 0.0f))); break;
-        case "word2e7": assertThat(scores, is(array(0.0f, 0.07f, 0.0f, 0.0f, 0.0f))); break;
-        case "word2e8": assertThat(scores, is(array(0.0f, 0.08f, 0.0f, 0.0f, 0.0f))); break;
-        case "word3e1": assertThat(scores, is(array(0.0f, 0.01f, 0.0f, 0.1f, 0.02f))); break;
-        case "word3e2": assertThat(scores, is(array(0.0f, 0.02f, 0.0f, 0.2f, 0.04f))); break;
-        case "word3e3": assertThat(scores, is(array(0.0f, 0.03f, 0.0f, 0.3f, 0.06f))); break;
-        case "word3e4": assertThat(scores, is(array(0.0f, 0.04f, 0.0f, 0.4f, 0.08f))); break;
-        case "word3r1": assertThat(scores, is(array(0.0f, 0.01f, 0.0f, 0.0f, 0.2f))); break;
-        case "word3r2": assertThat(scores, is(array(0.0f, 0.02f, 0.0f, 0.0f, 0.4f))); break;
-        case "word3r3": assertThat(scores, is(array(0.0f, 0.03f, 0.0f, 0.0f, 0.6f))); break;
-        case "word3r4": assertThat(scores, is(array(0.0f, 0.04f, 0.0f, 0.0f, 0.8f))); break;
+        case "word":    assertThat(scores, is(array(0.0f, 0.01f, 0.1f, 1.0f, 0.2f))); break;
+        case "worde1":  assertThat(scores, is(array(2/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
+        case "worde2":  assertThat(scores, is(array(2/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
+        case "worde3":  assertThat(scores, is(array(2/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
+        case "worde4":  assertThat(scores, is(array(2/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
+        case "worde5":  assertThat(scores, is(array(2/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
+        case "wordf1k": assertThat(scores, is(array(1.0f, 0.10f, 0.0f, 0.0f, 0.0f))); break;
+        case "wordf2k": assertThat(scores, is(array(1.0f, 0.20f, 0.0f, 0.0f, 0.0f))); break;
+        case "wordf3k": assertThat(scores, is(array(1.0f, 0.30f, 0.0f, 0.0f, 0.0f))); break;
+        case "wordf4k": assertThat(scores, is(array(1.0f, 0.40f, 0.0f, 0.0f, 0.0f))); break;
+        case "wordf5k": assertThat(scores, is(array(1.0f, 0.50f, 0.0f, 0.0f, 0.0f))); break;
+        case "wordf6k": assertThat(scores, is(array(1.0f, 0.60f, 0.0f, 0.0f, 0.0f))); break;
+        case "wordf7k": assertThat(scores, is(array(1.0f, 0.70f, 0.0f, 0.0f, 0.0f))); break;
+        case "wordf8k": assertThat(scores, is(array(1.0f, 0.80f, 0.0f, 0.0f, 0.0f))); break;
+        case "wordf9k": assertThat(scores, is(array(1.0f, 0.90f, 0.0f, 0.0f, 0.0f))); break;
+        case "wordf+k": assertThat(scores, is(array(1.0f, 1.00f, 0.0f, 0.0f, 0.0f))); break;
+        case "word2e1": assertThat(scores, is(array(1.0f, 0.01f, 0.2f, 0.0f, 0.0f))); break;
+        case "word2e2": assertThat(scores, is(array(1.0f, 0.02f, 0.4f, 0.0f, 0.0f))); break;
+        case "word2e3": assertThat(scores, is(array(1.0f, 0.03f, 0.6f, 0.0f, 0.0f))); break;
+        case "word2e4": assertThat(scores, is(array(1.0f, 0.04f, 0.8f, 0.0f, 0.0f))); break;
+        case "word2e5": assertThat(scores, is(array(1.0f, 0.05f, 1.0f, 0.0f, 0.0f))); break;
+        case "word2e6": assertThat(scores, is(array(1.0f, 0.06f, 0.0f, 0.0f, 0.0f))); break;
+        case "word2e7": assertThat(scores, is(array(1.0f, 0.07f, 0.0f, 0.0f, 0.0f))); break;
+        case "word2e8": assertThat(scores, is(array(1.0f, 0.08f, 0.0f, 0.0f, 0.0f))); break;
+        case "word3e1": assertThat(scores, is(array(1.0f, 0.01f, 0.0f, 0.1f, 0.02f))); break;
+        case "word3e2": assertThat(scores, is(array(1.0f, 0.02f, 0.0f, 0.2f, 0.04f))); break;
+        case "word3e3": assertThat(scores, is(array(1.0f, 0.03f, 0.0f, 0.3f, 0.06f))); break;
+        case "word3e4": assertThat(scores, is(array(1.0f, 0.04f, 0.0f, 0.4f, 0.08f))); break;
+        case "word3r1": assertThat(scores, is(array(1.0f, 0.01f, 0.0f, 0.0f, 0.2f))); break;
+        case "word3r2": assertThat(scores, is(array(1.0f, 0.02f, 0.0f, 0.0f, 0.4f))); break;
+        case "word3r3": assertThat(scores, is(array(1.0f, 0.03f, 0.0f, 0.0f, 0.6f))); break;
+        case "word3r4": assertThat(scores, is(array(1.0f, 0.04f, 0.0f, 0.0f, 0.8f))); break;
         case "word3r5": assertThat(scores, is(array(0.0f, 0.00f, 0.0f, 0.0f, 1.0f))); break;
-        default:        assertThat(scores, is(array(0.0f, 0.00f, 0.0f, 0.0f, 0.0f))); break;
+        default:        assertThat(scores, is(array(1.0f, 0.00f, 0.0f, 0.0f, 0.0f))); break;
       }
     }
   }

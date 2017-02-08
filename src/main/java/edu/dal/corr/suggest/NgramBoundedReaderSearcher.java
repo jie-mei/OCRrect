@@ -25,7 +25,7 @@ import gnu.trove.list.array.TLongArrayList;
 /**
  * @since 2016.08.10
  */
-public class NgramBoundedReader
+public class NgramBoundedReaderSearcher
   implements Serializable
 {
   private static final long serialVersionUID = -2835908801171656852L;
@@ -54,7 +54,7 @@ public class NgramBoundedReader
    * @param ngrams  the path to ngram folder.
    * @throws IOException  if I/O error occurs.
    */
-  public NgramBoundedReader(List<Path> ngrams)
+  public NgramBoundedReaderSearcher(List<Path> ngrams)
       throws FileNotFoundException, IOException
   {
     ngramPaths = ngrams.stream()
@@ -206,8 +206,8 @@ public class NgramBoundedReader
   @Override
   public boolean equals(Object obj)
   {
-    if (obj instanceof NgramBoundedReader) {
-      NgramBoundedReader another = (NgramBoundedReader) obj;
+    if (obj instanceof NgramBoundedReaderSearcher) {
+      NgramBoundedReaderSearcher another = (NgramBoundedReaderSearcher) obj;
 
       for (int i = 0; i < ngramPaths.length; i++) {
         if (! ngramPaths[i].equals((another.ngramPaths[i]))) {
@@ -230,7 +230,7 @@ public class NgramBoundedReader
     return true;
   }
 
-  public static void write(NgramBoundedReader searcher, Path out)
+  public static void write(NgramBoundedReaderSearcher searcher, Path out)
     throws IOException
   {
     Files.createDirectories(out.getParent());
@@ -249,14 +249,14 @@ public class NgramBoundedReader
    *    reading path in the constructed object.
    * @throws IOException  if I/O error occurs.
    */
-  public static NgramBoundedReader read(Path path)
+  public static NgramBoundedReaderSearcher read(Path path)
       throws IOException
   {
     try (ObjectInputStream ois = new ObjectInputStream(
         Channels.newInputStream(FileChannel.open(path)))
     ){
-      NgramBoundedReader searcher =
-          (NgramBoundedReader) ois.readObject();
+      NgramBoundedReaderSearcher searcher =
+          (NgramBoundedReaderSearcher) ois.readObject();
       return searcher;
     } catch (ClassNotFoundException e) {
       throw new RuntimeException(e);

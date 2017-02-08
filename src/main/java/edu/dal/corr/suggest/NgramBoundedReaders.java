@@ -16,7 +16,7 @@ public class NgramBoundedReaders
 {
   private NgramBoundedReaders() {}
 
-  public static void write(NgramBoundedReader searcher, Path out)
+  public static void write(NgramBoundedReaderSearcher searcher, Path out)
     throws IOException
   {
     Timer t = new Timer();
@@ -38,15 +38,15 @@ public class NgramBoundedReaders
    *                    reading path in the constructed object.
    * @throws IOException  If I/O error occurs.
    */
-  public static NgramBoundedReader read(Path in)
+  public static NgramBoundedReaderSearcher read(Path in)
       throws IOException
   {
     Timer t = new Timer();
 
     try (ObjectInputStream ois = new ObjectInputStream(
         Channels.newInputStream(FileChannel.open(in)))) {
-      NgramBoundedReader searcher =
-          (NgramBoundedReader) ois.readObject();
+      NgramBoundedReaderSearcher searcher =
+          (NgramBoundedReaderSearcher) ois.readObject();
       LogUtils.logMethodTime(t, 2);
       return searcher;
     } catch (ClassNotFoundException e) {

@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import edu.dal.corr.metric.EditDistance;
-import edu.dal.corr.suggest.NgramBoundedReader;
+import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
 import edu.dal.corr.suggest.NormalizationOption;
 import edu.dal.corr.suggest.banchmark.ContextSensitiveBenchmarkDetectMixin;
 import edu.dal.corr.suggest.banchmark.ContextSensitiveBenchmarkSuggestMixin;
@@ -20,6 +19,7 @@ import gnu.trove.map.TObjectByteMap;
 import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.map.hash.TObjectByteHashMap;
 import gnu.trove.map.hash.TObjectFloatHashMap;
+import info.debatty.java.stringsimilarity.Levenshtein;
 
 /**
  * @since 2016.09.09
@@ -31,10 +31,10 @@ public class ContextCoherenceFeature
 {
   private static final long serialVersionUID = 2494420734403021365L;
 
-  protected NgramBoundedReader reader;
+  protected NgramBoundedReaderSearcher reader;
   private int ngramSize;
   
-  public ContextCoherenceFeature(String name, NgramBoundedReader reader,
+  public ContextCoherenceFeature(String name, NgramBoundedReaderSearcher reader,
       int ngramSize)
   {
     setName(name);
@@ -42,7 +42,7 @@ public class ContextCoherenceFeature
     this.ngramSize = ngramSize;
   }
   
-  public ContextCoherenceFeature(NgramBoundedReader reader, int ngramSize) {
+  public ContextCoherenceFeature(NgramBoundedReaderSearcher reader, int ngramSize) {
     this(null, reader, ngramSize);
   }
 
@@ -104,13 +104,14 @@ public class ContextCoherenceFeature
       String word,
       TObjectFloatMap<String> candSuggest)
   {
-      TObjectFloatMap<String> result = new TObjectFloatHashMap<>();
-      for (String cand : candSuggest.keySet()) {
-        if (EditDistance.levDist(word, cand) <= MAX_LD_DISTANCE) {
-          result.put(cand, candSuggest.get(cand));
-        }
+    Levenshtein lev = new Levenshtein();
+    TObjectFloatMap<String> result = new TObjectFloatHashMap<>();
+    for (String cand : candSuggest.keySet()) {
+      if (lev.distance(word, cand) <= MAX_LD_DISTANCE) {
+        result.put(cand, candSuggest.get(cand));
       }
-      return result;
+    }
+    return result;
   }
 
   @Override

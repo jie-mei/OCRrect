@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import edu.dal.corr.suggest.NgramBoundedReader;
+import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
 import edu.dal.corr.suggest.banchmark.ContextSensitiveBenchmarkDetectMixin;
 import edu.dal.corr.suggest.banchmark.ContextSensitiveBenchmarkSuggestMixin;
 import edu.dal.corr.word.Context;
@@ -29,7 +29,7 @@ public class ApproximateContextCoherenceFeature
   public static final String MATCH_WORD_SUB = " ";
   public static final String RELAX_WORD_SUB = "\t";
   
-  public ApproximateContextCoherenceFeature(String name, NgramBoundedReader reader,
+  public ApproximateContextCoherenceFeature(String name, NgramBoundedReaderSearcher reader,
       int ngramSize)
   {
     super(name, reader, ngramSize);

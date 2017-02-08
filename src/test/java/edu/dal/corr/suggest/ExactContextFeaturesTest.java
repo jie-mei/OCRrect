@@ -23,7 +23,7 @@ import gnu.trove.map.hash.TObjectByteHashMap;
 public class ExactContextFeaturesTest
 {
   private static List<Path> ngrams;
-  private static NgramBoundedReader searcher;
+  private static NgramBoundedReaderSearcher searcher;
   private static ContextCoherenceFeature feature;
 
   @BeforeClass
@@ -33,7 +33,7 @@ public class ExactContextFeaturesTest
     ngrams = Arrays.asList(
         ResourceUtils.getResource("5gm-0000.seg"),
         ResourceUtils.getResource("5gm-0098.seg"));
-    searcher = new NgramBoundedReader(ngrams);
+    searcher = new NgramBoundedReaderSearcher(ngrams);
     feature = new ContextCoherenceFeature(searcher, 5);
   }
 
