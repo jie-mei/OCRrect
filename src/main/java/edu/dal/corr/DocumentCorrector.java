@@ -61,6 +61,12 @@ public class DocumentCorrector
       top1000.add(Suggestion.top(sug, 1000));
     }
     Suggestion.write(top1000, Paths.get("tmp/suggestion.top.1000"));
+    if (LOG.isInfoEnabled()) {
+      LOG.info(String.format(
+          "Writing top 1000 to file...\n" +
+          "  - time taken:  %4.2f seconds",
+          t.interval()));
+    }
 
     /*
     Suggestion.write(suggestions, Paths.get("tmp/suggestion"), "suggest");

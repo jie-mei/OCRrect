@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
@@ -107,6 +106,16 @@ public class Main
                 Scoreable.cmphNgramDist(4), false),
             new DistanceFeature("ngram-comprehensive-fivegram",
                 Scoreable.cmphNgramDist(5), false),
+
+            new DistanceFeature("qgram-bigram",
+                Scoreable.qgramDist(2), false),
+            new DistanceFeature("qgram-trigram",
+                Scoreable.qgramDist(3), false),
+            new DistanceFeature("qgram-fourgram",
+                Scoreable.qgramDist(4), false),
+            new DistanceFeature("qgram-fivegram",
+                Scoreable.qgramDist(5), false),
+
 
             new StringSimilarityFeature(unigram),
             new LanguagePopularityFeature(unigram),
