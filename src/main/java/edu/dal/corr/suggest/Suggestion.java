@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
 
-import edu.dal.corr.metric.LCS;
 import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.LocatedTextualUnit;
@@ -33,6 +32,7 @@ import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.util.PathUtils;
 import edu.dal.corr.word.Word;
 import gnu.trove.map.TObjectFloatMap;
+import info.debatty.java.stringsimilarity.Jaccard;
 
 
 /**
@@ -446,7 +446,7 @@ public class Suggestion
    * 
    * @param  errorWord  the error word that candidates are suggested for. It is
    *    the {@link Suggestion#text()} for the candidates belongs to.
-   * @param  type  the feature that two candidates are comparing.
+   * @param  feature  the feature that two candidates are comparing.
    * @return an integer value used for sorting.
    * 
    * @see Comparator#compare(Object, Object)
@@ -455,9 +455,10 @@ public class Suggestion
   {
     return (c1, c2) -> {
       double diff = c1.score(feature) - c2.score(feature);
+      Jaccard metric = new Jaccard();
       if (diff == 0) {
-        diff = LCS.lcs(c1.text(), errorWord)
-             - LCS.lcs(c2.text(), errorWord);
+        diff = metric.similarity(c1.text(), errorWord)
+             - metric.similarity(c2.text(), errorWord);
       }
       return diff == 0 ? 0 : diff > 0 ? -1 : 1;
     };
