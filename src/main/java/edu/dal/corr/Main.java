@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
@@ -26,7 +27,7 @@ import edu.dal.corr.word.filter.CommonWordFilter;
 import edu.dal.corr.word.filter.WordFilter;
 
 /**
- * @since 2017.01.25
+ * @since 2017.02.14
  */
 public class Main
 {
@@ -138,8 +139,6 @@ public class Main
         Arrays.asList(features),
         IOUtils.read(ResourceUtils.INPUT)
     );
-    
-    Suggestion.write(suggestions, Paths.get("tmp/suggestion.Feb.7"));
   }
   
   public static void runRewrite()

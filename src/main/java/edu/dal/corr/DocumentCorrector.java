@@ -3,6 +3,7 @@ package edu.dal.corr;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -17,7 +18,7 @@ import edu.dal.corr.word.filter.WordFilter;
  * The {@code DocumentCorrector} class detect the natural language errors in
  * document and provides a list of candidates for each detected errors.
  * 
- * @since 2016.09.07
+ * @since 2017.02.14
  */
 public class DocumentCorrector
 {
@@ -55,6 +56,13 @@ public class DocumentCorrector
     }
     
     t.start();
+    List<Suggestion> top1000 = new ArrayList<>();
+    for (Suggestion sug : suggestions) {
+      top1000.add(Suggestion.top(sug, 1000));
+    }
+    Suggestion.write(top1000, Paths.get("tmp/suggestion.top.1000"));
+
+    /*
     Suggestion.write(suggestions, Paths.get("tmp/suggestion"), "suggest");
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
@@ -62,25 +70,22 @@ public class DocumentCorrector
           "  - time taken:  %4.2f seconds",
           t.interval()));
     }
+    */
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion"),
-        Paths.get("tmp/suggestion.top.1000"), 1000);
-    
-    Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion"),
+        Paths.get("tmp/suggestion.top.1000"),
         Paths.get("tmp/suggestion.top.100"), 100);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion"),
+        Paths.get("tmp/suggestion.top.1000"),
         Paths.get("tmp/suggestion.top.50"), 50);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion"),
+        Paths.get("tmp/suggestion.top.1000"),
         Paths.get("tmp/suggestion.top.10"), 10);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion"),
+        Paths.get("tmp/suggestion.top.1000"),
         Paths.get("tmp/suggestion.top.3"), 3);
     
     return suggestions;

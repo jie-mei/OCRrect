@@ -25,10 +25,7 @@ public interface Scoreable
   float score(Word word, String candidate);
   
   static Scoreable levenshteinDist() {
-    return (w, c) -> {
-      System.out.println(w.text() + ", " + c + ": " + (float)new Levenshtein().distance(w.text(), c));
-      return (float)new Levenshtein().distance(w.text(), c);
-    };
+    return (w, c) -> (float)new Levenshtein().distance(w.text(), c);
   }
 
   static Scoreable damerauLevDist() {
