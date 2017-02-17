@@ -18,7 +18,7 @@ import edu.dal.corr.word.filter.WordFilter;
  * The {@code DocumentCorrector} class detect the natural language errors in
  * document and provides a list of candidates for each detected errors.
  * 
- * @since 2017.02.14
+ * @since 2017.02.15
  */
 public class DocumentCorrector
 {
@@ -56,42 +56,36 @@ public class DocumentCorrector
     }
     
     t.start();
-    List<Suggestion> top1000 = new ArrayList<>();
+    List<Suggestion> top100 = new ArrayList<>();
     for (Suggestion sug : suggestions) {
-      top1000.add(Suggestion.top(sug, 1000));
+      top100.add(Suggestion.top(sug, 100));
     }
-    Suggestion.write(top1000, Paths.get("tmp/suggestion.top.1000"));
+    Suggestion.write(top100, Paths.get("tmp/suggestion.top.100"), "suggest");
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
-          "Writing top 1000 to file...\n" +
+          "Writing top 100 to file...\n" +
           "  - time taken:  %4.2f seconds",
           t.interval()));
     }
-
-    /*
-    Suggestion.write(suggestions, Paths.get("tmp/suggestion"), "suggest");
-    if (LOG.isInfoEnabled()) {
-      LOG.info(String.format(
-          "Writing to file...\n" +
-          "  - time taken:  %4.2f seconds",
-          t.interval()));
-    }
-    */
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion.top.1000"),
-        Paths.get("tmp/suggestion.top.100"), 100);
-    
-    Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion.top.1000"),
+        Paths.get("tmp/suggestion.top.100"),
         Paths.get("tmp/suggestion.top.50"), 50);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion.top.1000"),
+        Paths.get("tmp/suggestion.top.100"),
+        Paths.get("tmp/suggestion.top.20"), 20);
+    
+    Suggestion.rewriteTop(
+        Paths.get("tmp/suggestion.top.100"),
         Paths.get("tmp/suggestion.top.10"), 10);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion.top.1000"),
+        Paths.get("tmp/suggestion.top.100"),
+        Paths.get("tmp/suggestion.top.5"), 5);
+    
+    Suggestion.rewriteTop(
+        Paths.get("tmp/suggestion.top.100"),
         Paths.get("tmp/suggestion.top.3"), 3);
     
     return suggestions;

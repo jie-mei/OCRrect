@@ -36,7 +36,7 @@ import info.debatty.java.stringsimilarity.Jaccard;
 
 
 /**
- * @since 2017.01.18
+ * @since 2017.02.15
  */
 public class Suggestion
   extends LocatedTextualUnit
@@ -50,11 +50,10 @@ public class Suggestion
   private final List<Feature> features;
   private final Candidate[] candidates;
 
-  Suggestion(
-      String name,
-      int position,
-      List<Feature> features,
-      Candidate[] candidates)
+  Suggestion(String name,
+             int position,
+             List<Feature> features,
+             Candidate[] candidates)
   {
     super(name, position);
     this.features = features;
@@ -324,7 +323,7 @@ public class Suggestion
    * Write suggestions to one file.
    * 
    * @param  suggestions  a list of suggestions.
-   * @param  out  the folder of the output files.
+   * @param  out  the path to the output files.
    * @throws IOException  if I/O error occurs. 
    */
   public static void write(List<Suggestion> suggestions, Path out)
@@ -341,9 +340,8 @@ public class Suggestion
     }
   }
 
-  public static void write(
-    List<Suggestion> suggestions, Path folder, String prefix
-  )
+  public static void write(List<Suggestion> suggestions,
+                           Path folder, String prefix)
     throws IOException
   {
     int numLen = Integer.toString(suggestions.size()).length();
@@ -451,15 +449,20 @@ public class Suggestion
    * 
    * @see Comparator#compare(Object, Object)
    */
-  static Comparator<Candidate> sortByScore(String errorWord, Feature feature)
+  static Comparator<Candidate> sortByScore(Feature feature)
   {
     return (c1, c2) -> {
       double diff = c1.score(feature) - c2.score(feature);
+      return diff == 0 ? 0 : diff > 0 ? -1 : 1;
+    };
+  }
+
+  static Comparator<Candidate> sortByJaccard(String errorWord, Feature feature)
+  {
+    return (c1, c2) -> {
       Jaccard metric = new Jaccard();
-      if (diff == 0) {
-        diff = metric.similarity(c1.text(), errorWord)
-             - metric.similarity(c2.text(), errorWord);
-      }
+      double diff = metric.similarity(c1.text(), errorWord)
+                  - metric.similarity(c2.text(), errorWord);
       return diff == 0 ? 0 : diff > 0 ? -1 : 1;
     };
   }
@@ -490,7 +493,8 @@ public class Suggestion
 
     for (Feature feature: suggest.features()) {
       Stream.of(candidates)
-        .sorted(sortByScore(word, feature))
+        .sorted(sortByJaccard(word, feature))
+        .sorted(sortByScore(feature))
         .limit(top)
         .forEach(c -> selected.add(c));
     }
