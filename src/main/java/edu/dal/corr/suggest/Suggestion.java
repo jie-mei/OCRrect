@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
 
+import edu.dal.corr.metric.NGram;
 import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.LocatedTextualUnit;
@@ -32,7 +33,6 @@ import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.util.PathUtils;
 import edu.dal.corr.word.Word;
 import gnu.trove.map.TObjectFloatMap;
-import info.debatty.java.stringsimilarity.Jaccard;
 
 
 /**
@@ -457,13 +457,13 @@ public class Suggestion
     };
   }
 
-  static Comparator<Candidate> sortByJaccard(String errorWord)
+  static Comparator<Candidate> sortByMetric(String errorWord)
   {
     return (c1, c2) -> {
-      Jaccard metric = new Jaccard();
-      double diff = metric.similarity(c1.text(), errorWord)
-                  - metric.similarity(c2.text(), errorWord);
-      return diff == 0 ? 0 : diff > 0 ? -1 : 1;
+      NGram metric = new NGram(2, NGram.COMPREHENSIVE_COST);
+      double diff = metric.distance(c1.text(), errorWord)
+                  - metric.distance(c2.text(), errorWord);
+      return diff == 0 ? 0 : diff < 0 ? -1 : 1;
     };
   }
   
@@ -493,7 +493,7 @@ public class Suggestion
 
     for (Feature feature: suggest.features()) {
       Stream.of(candidates)
-        //.sorted(sortByJaccard(word))
+        .sorted(sortByMetric(word))
         .sorted(sortByScore(feature))
         .limit(top)
         .forEach(c -> selected.add(c));
@@ -506,7 +506,7 @@ public class Suggestion
   public static List<Suggestion> top(List<Suggestion> suggests, int top)
   {
     return suggests
-        .stream()
+        .parallelStream()
         .map(s -> top(s, top))
         .collect(Collectors.toList());
   }

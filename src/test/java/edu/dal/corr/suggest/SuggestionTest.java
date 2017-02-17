@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -191,7 +190,7 @@ public class SuggestionTest {
   private int compareCandidates(String error, Feature feat, Candidate c1, Candidate c2) {
     int diff = Suggestion.sortByScore(feat).compare(c1, c2);
     if (diff == 0) {
-      return Suggestion.sortByJaccard(error).compare(c1, c2);
+      return Suggestion.sortByMetric(error).compare(c1, c2);
     }
     return diff;
   }
@@ -210,7 +209,7 @@ public class SuggestionTest {
     HashSet<Candidate> selected = new HashSet<Candidate>();
     for (int i = 0; i < features.size(); i++) {
       List<Candidate> sorted = Arrays.asList(from.candidates());
-      sorted.sort(Suggestion.sortByJaccard(errorWord));
+      sorted.sort(Suggestion.sortByMetric(errorWord));
       sorted.sort(Suggestion.sortByScore(features.get(i)));
       
       // Add all possible candidate selections, i.e., add candidate that equals

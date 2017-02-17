@@ -55,12 +55,6 @@ public class DocumentCorrector
     }
     
     t.start();
-    if (LOG.isInfoEnabled()) {
-      LOG.info(String.format(
-          "Writing top 100 to file...\n" +
-          "  - time taken:  %4.2f seconds",
-          t.interval()));
-    }
     List<Suggestion> top100 = Suggestion.top(suggestions, 100);
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(

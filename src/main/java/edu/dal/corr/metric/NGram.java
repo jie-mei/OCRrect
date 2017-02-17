@@ -11,6 +11,12 @@ public class NGram
   private int n;
   private CostFunction cf;
   
+  /**
+   * Unnormalized n-gram distance with different cost functions.
+   * 
+   * @param size
+   * @param func
+   */
   public NGram(int size, CostFunction func) {
     n = size;
     cf = func;
