@@ -352,6 +352,9 @@ public class Suggestion
           Channels.newOutputStream(FileChannel.open(
               outPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE)))
       ){
+        System.out.println(String.format("%s: %d candidates",
+            outPath.getFileName(),
+            suggestions.get(i).candidates.length));
         oos.writeObject(suggestions.get(i));
       } catch (IOException e) {
         throw new RuntimeException(e);
