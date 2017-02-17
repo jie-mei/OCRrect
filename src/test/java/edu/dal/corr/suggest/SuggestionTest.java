@@ -191,6 +191,17 @@ public class SuggestionTest {
     Suggestion.write(data, file);
     assertEquals(data, Suggestion.readList(file));
   }
+  
+  /*
+   * 
+   */
+  private int compareCandidates(String error, Feature feat, Candidate c1, Candidate c2) {
+    int diff = Suggestion.sortByScore(feat).compare(c1, c2);
+    if (diff == 0) {
+      return Suggestion.sortByJaccard(error).compare(c1, c2);
+    }
+    return diff;
+  }
 
   /*
    * Test the correctness of rewriting serialized suggestion data.
@@ -206,15 +217,16 @@ public class SuggestionTest {
     HashSet<Candidate> selected = new HashSet<Candidate>();
     for (int i = 0; i < features.size(); i++) {
       List<Candidate> sorted = Arrays.asList(from.candidates());
-      sorted.sort(Suggestion.sortByScore(errorWord, features.get(i)));
+      sorted.sort(Suggestion.sortByJaccard(errorWord));
+      sorted.sort(Suggestion.sortByScore(features.get(i)));
       
       // Add all possible candidate selections, i.e., add candidate that equals
       // to the 3rd sorted candidate but ranks lower.
       int total = sorted.size();
       int limit = rewriteSize;
       while (limit <= total - 2
-          && Suggestion.sortByScore(errorWord, features.get(i))
-              .compare(sorted.get(limit), sorted.get(limit + 1)) == 0) 
+          && compareCandidates(errorWord, features.get(i), sorted.get(limit),
+                sorted.get(limit + 1)) == 0)
       {
         limit++;
       }

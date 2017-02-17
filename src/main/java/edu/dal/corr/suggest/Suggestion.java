@@ -457,7 +457,7 @@ public class Suggestion
     };
   }
 
-  static Comparator<Candidate> sortByJaccard(String errorWord, Feature feature)
+  static Comparator<Candidate> sortByJaccard(String errorWord)
   {
     return (c1, c2) -> {
       Jaccard metric = new Jaccard();
@@ -493,7 +493,6 @@ public class Suggestion
 
     for (Feature feature: suggest.features()) {
       Stream.of(candidates)
-        .sorted(sortByJaccard(word, feature))
         .sorted(sortByScore(feature))
         .limit(top)
         .forEach(c -> selected.add(c));
