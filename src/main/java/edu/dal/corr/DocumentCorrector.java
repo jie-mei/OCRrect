@@ -3,7 +3,6 @@ package edu.dal.corr;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -56,10 +55,21 @@ public class DocumentCorrector
     }
     
     t.start();
-    List<Suggestion> top100 = new ArrayList<>();
-    for (Suggestion sug : suggestions) {
-      top100.add(Suggestion.top(sug, 100));
+    if (LOG.isInfoEnabled()) {
+      LOG.info(String.format(
+          "Writing top 100 to file...\n" +
+          "  - time taken:  %4.2f seconds",
+          t.interval()));
     }
+    List<Suggestion> top100 = Suggestion.top(suggestions, 100);
+    if (LOG.isInfoEnabled()) {
+      LOG.info(String.format(
+          "Get top 100...\n" +
+          "  - time taken:  %4.2f seconds",
+          t.interval()));
+    }
+
+    t.start();
     Suggestion.write(top100, Paths.get("tmp/suggestion.top.100"), "suggest");
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(

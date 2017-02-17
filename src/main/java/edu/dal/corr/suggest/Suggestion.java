@@ -493,6 +493,7 @@ public class Suggestion
 
     for (Feature feature: suggest.features()) {
       Stream.of(candidates)
+        //.sorted(sortByJaccard(word))
         .sorted(sortByScore(feature))
         .limit(top)
         .forEach(c -> selected.add(c));
@@ -500,6 +501,14 @@ public class Suggestion
 
     return new Suggestion(suggest.text(), suggest.position(),
         suggest.features(), selected.toArray(new Candidate[selected.size()]));
+  }
+  
+  public static List<Suggestion> top(List<Suggestion> suggests, int top)
+  {
+    return suggests
+        .stream()
+        .map(s -> top(s, top))
+        .collect(Collectors.toList());
   }
   
   /**

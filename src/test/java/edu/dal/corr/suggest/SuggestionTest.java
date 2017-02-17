@@ -109,15 +109,8 @@ public class SuggestionTest {
   public void testSuggest()
     throws IOException
   {
-    System.out.println(all.candidates().length);
-    Stream.of(all.candidates()).forEach(c -> {
-      System.out.println(String.format("%20s %s",
-          c.text(), Arrays.toString(c.score())));
-    });
-
     for (Candidate cand: all.candidates()) {
       float[] scores = cand.score();
-      System.out.println(cand.text());
       switch (cand.text()) {
         case "word":    assertThat(scores, is(array(0.0f, 0.01f, 0.1f, 1.0f, 0.2f))); break;
         case "worde1":  assertThat(scores, is(array(2/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
