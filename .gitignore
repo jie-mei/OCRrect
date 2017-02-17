@@ -3,8 +3,8 @@
 **/data
 **/etc
 **/target
-**/tmp
-**/log
+**/tmp*
+**/log*
 
 # Temp Files
 
