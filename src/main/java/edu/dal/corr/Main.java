@@ -60,7 +60,6 @@ public class Main
 
     // Construct features.
     Feature[] features = new Feature[]{
-      /*
             new DistanceFeature("Levenstein",
                 Scoreable.levenshteinDist(), true),
             new DistanceFeature("Damerau-Levnstein",
@@ -120,7 +119,6 @@ public class Main
 
             new StringSimilarityFeature(unigram),
             new LanguagePopularityFeature(unigram),
-            */
 
             new LexiconExistenceFeature("Lexical",
                 IOUtils.readList(ResourceUtils.LEXI_LEXICON)),
@@ -134,12 +132,10 @@ public class Main
             new ContextCoherenceFeature("Fourgram", fourgram, 4),
             new ContextCoherenceFeature("Fivegram", fivegram, 5),
 
-            /*
             new ApproximateContextCoherenceFeature("Bigram", bigram, 2),
             new ApproximateContextCoherenceFeature("Trigram", trigram, 3),
             new ApproximateContextCoherenceFeature("Fourgram", fourgram, 4),
             new ApproximateContextCoherenceFeature("Fivegram", fivegram, 5),
-            */
         };
 
     // Generate suggestions.
