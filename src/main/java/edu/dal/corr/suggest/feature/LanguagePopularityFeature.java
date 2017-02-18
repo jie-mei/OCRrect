@@ -18,7 +18,6 @@ public class LanguagePopularityFeature
   
   public LanguagePopularityFeature(String name, Unigram unigram) {
     this.unigram = unigram;
-    setName(name);
   }
 
   public LanguagePopularityFeature(Unigram unigram) {

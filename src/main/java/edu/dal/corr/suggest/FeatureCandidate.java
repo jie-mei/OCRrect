@@ -1,6 +1,7 @@
 package edu.dal.corr.suggest;
 
 import edu.dal.corr.suggest.feature.Feature;
+import edu.dal.corr.suggest.feature.FeatureType;
 import edu.dal.corr.util.TextualUnit;
 
 /**
@@ -14,22 +15,23 @@ public class FeatureCandidate
   private static final long serialVersionUID = 5951851015043707671L;
 
   private final float score;
-  private final Feature feature;
+  private final FeatureType type;
   
-  FeatureCandidate(Feature feature, String name, float score)
-  {
+  FeatureCandidate(FeatureType type, String name, float score) {
     super(name);
-    this.feature = feature;
+    this.type = type;
     this.score = score;
   }
+
+  FeatureCandidate(Feature feature, String name, float score) {
+    this(feature.type(), name, score);
+  }
   
-  public Feature feature()
-  {
-    return feature;
+  public FeatureType type() {
+    return type;
   }
 
-  public float score()
-  {
+  public float score() {
     return score;
   }
 }

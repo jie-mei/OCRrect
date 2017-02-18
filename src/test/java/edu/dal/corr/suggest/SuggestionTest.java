@@ -22,6 +22,7 @@ import org.junit.rules.TemporaryFolder;
 import edu.dal.corr.suggest.feature.ContextCoherenceFeature;
 import edu.dal.corr.suggest.feature.DistanceFeature;
 import edu.dal.corr.suggest.feature.Feature;
+import edu.dal.corr.suggest.feature.FeatureType;
 import edu.dal.corr.suggest.feature.LanguagePopularityFeature;
 import edu.dal.corr.suggest.feature.Scoreable;
 import edu.dal.corr.suggest.feature.ApproximateContextCoherenceFeature;
@@ -96,7 +97,7 @@ public class SuggestionTest {
   {
     for (Suggestion sug: Arrays.asList(top3, top10, top100)) {
       Suggestion copy = new Suggestion(
-          sug.text(), sug.position(), sug.features(), sug.candidates());
+          sug.text(), sug.position(), sug.types(), sug.candidates());
       assertThat(copy, is(sug));
       assertThat(copy.hashCode(), is(sug.hashCode()));
     }
@@ -187,8 +188,8 @@ public class SuggestionTest {
   /*
    * 
    */
-  private int compareCandidates(String error, Feature feat, Candidate c1, Candidate c2) {
-    int diff = Suggestion.sortByScore(feat).compare(c1, c2);
+  private int compareCandidates(String error, FeatureType type, Candidate c1, Candidate c2) {
+    int diff = Suggestion.sortByScore(type).compare(c1, c2);
     if (diff == 0) {
       return Suggestion.sortByMetric(error).compare(c1, c2);
     }
@@ -205,7 +206,7 @@ public class SuggestionTest {
 
     // Check the existence of top candidates in the rewritten candidates.
     String errorWord = from.text();
-    List<Feature> features = from.features();
+    List<FeatureType> features = from.types();
     HashSet<Candidate> selected = new HashSet<Candidate>();
     for (int i = 0; i < features.size(); i++) {
       List<Candidate> sorted = Arrays.asList(from.candidates());
@@ -252,7 +253,7 @@ public class SuggestionTest {
     assertThat(suggestName, is(suggest.text()));
 
     // Check error corrections.
-    float[][] scores = suggest.score(suggest.features());
+    float[][] scores = suggest.score(suggest.types());
     Candidate[] candidates = suggest.candidates();
     for (int i = 0; i < candidates.length; i++) {
       String[] fields = br.readLine().split("\t");
@@ -282,17 +283,17 @@ public class SuggestionTest {
     Path out = PathUtils.getTempFile();
     Suggestion.writeText(Arrays.asList(top3, top10, top100), out);
     try (BufferedReader br = IOUtils.newBufferedReader(out)) {
-      Iterator<Feature> featIter = top3.features().iterator();
+      Iterator<FeatureType> typeIter = top3.types().iterator();
       for (String line = br.readLine(); br != null; line = br.readLine()) {
         if (line.length() != 0) {
 
           // Check feature names.
-          assertThat(featIter.hasNext(), is(true));
-          assertThat(featIter.next().toString(), is(line));
+          assertThat(typeIter.hasNext(), is(true));
+          assertThat(typeIter.next().toString(), is(line));
         } else {
 
           // Check the empty line between feature names and errors.
-          assertThat(featIter.hasNext(), is(false));
+          assertThat(typeIter.hasNext(), is(false));
 
           // Check the format of the recorded three errors.
           testSuggestFormatInText(br, top3);

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.dal.corr.suggest.feature.Feature;
+import edu.dal.corr.suggest.feature.FeatureType;
 import gnu.trove.list.array.TFloatArrayList;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
@@ -16,14 +16,14 @@ class SuggestionBuilder
 {
   private String name;
   private int position;
-  private List<Feature> features;
+  private List<FeatureType> types;
   private Map<String, TFloatArrayList> scoreMap;
 
   SuggestionBuilder(String name, int position)
   {
     this.name = name;
     this.position = position;
-    features = new ArrayList<>();
+    types = new ArrayList<>();
     scoreMap = new HashMap<>();
   }
   
@@ -35,7 +35,7 @@ class SuggestionBuilder
    */
   SuggestionBuilder add(FeatureSuggestion fs)
   {
-    if (features.contains(fs.feature())) {
+    if (types.contains(fs.type())) {
       throw new IllegalArgumentException("duplicate feature suggestion type.");
     }
     for (FeatureCandidate fc : fs.candidates()) {
@@ -47,12 +47,12 @@ class SuggestionBuilder
         scoreMap.put(fc.text(), cScores);
       }
       // Fill missing values.
-      if (cScores.size() < features.size()) {
-        cScores.fill(cScores.size(), features.size(), 0);
+      if (cScores.size() < types.size()) {
+        cScores.fill(cScores.size(), types.size(), 0);
       }
       cScores.add(fc.score());
     }
-    features.add(fs.feature());
+    types.add(fs.type());
     return this;
   }
   
@@ -60,22 +60,22 @@ class SuggestionBuilder
   {
     // Build candidates.
     List<Candidate> cList = new ArrayList<>();
-    TObjectIntHashMap<Feature> featMap = new TObjectIntHashMap<>();
-    for (int i = 0; i < features.size(); i++) {
-      featMap.put(features.get(i), i);
+    TObjectIntHashMap<FeatureType> typeMap = new TObjectIntHashMap<>();
+    for (int i = 0; i < types.size(); i++) {
+      typeMap.put(types.get(i), i);
     }
     scoreMap.forEach((k, v) -> {
       // Pad 0s to the tail of score arrays.
       try {
-        v.fill(v.size(), features.size(), 0);
+        v.fill(v.size(), types.size(), 0);
       } catch (IllegalArgumentException e) {
         throw new RuntimeException(e);
       }
-      Candidate c = new Candidate(k, featMap, v.toArray());
+      Candidate c = new Candidate(k, typeMap, v.toArray());
       cList.add(c);
     });
     Candidate[] candidates = cList.toArray(new Candidate[cList.size()]);
     
-    return new Suggestion(name, position, features, candidates);
+    return new Suggestion(name, position, types, candidates);
   }
 }

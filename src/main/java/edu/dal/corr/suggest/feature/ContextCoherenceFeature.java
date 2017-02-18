@@ -29,8 +29,6 @@ public class ContextCoherenceFeature
   implements ContextSensitiveBenchmarkDetectMixin,
     ContextSensitiveBenchmarkSuggestMixin
 {
-  private static final long serialVersionUID = 2494420734403021365L;
-
   protected NgramBoundedReaderSearcher reader;
   private int ngramSize;
   

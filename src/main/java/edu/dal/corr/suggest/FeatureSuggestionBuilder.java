@@ -38,9 +38,9 @@ class FeatureSuggestionBuilder
   
   FeatureSuggestionBuilder add(FeatureCandidate fc)
   {
-    if (! fc.feature().equals(feature)) {
+    if (! fc.type().equals(feature)) {
       throw new RuntimeException(String.join(" ", 
-          "Invalid candidate type given:", fc.feature().toString(),
+          "Invalid candidate type given:", fc.type().toString(),
           "expect:", feature.toString()));
     }
     return add(fc.text(), fc.score());

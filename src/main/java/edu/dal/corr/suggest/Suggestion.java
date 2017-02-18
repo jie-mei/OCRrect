@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 
 import edu.dal.corr.metric.NGram;
 import edu.dal.corr.suggest.feature.Feature;
+import edu.dal.corr.suggest.feature.FeatureType;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.LocatedTextualUnit;
 import edu.dal.corr.util.LogUtils;
@@ -47,16 +48,16 @@ public class Suggestion
 
   private static final int NON_MAPPING = -1;
 
-  private final List<Feature> features;
+  private final List<FeatureType> types;
   private final Candidate[] candidates;
 
   Suggestion(String name,
              int position,
-             List<Feature> features,
+             List<FeatureType> types,
              Candidate[] candidates)
   {
     super(name, position);
-    this.features = features;
+    this.types = types;
     this.candidates = candidates;
   }
   
@@ -77,23 +78,23 @@ public class Suggestion
    *    dimension represents the score for each feature sorted by the give type
    *    list.
    */
-  public float[][] score(List<Feature> features)
+  public float[][] score(List<FeatureType> types)
   {
     // Create a mapping for types to the new position in the output array.
-    int[] map = new int[features.size()];
+    int[] map = new int[types.size()];
     Arrays.fill(map, NON_MAPPING);
-    for (int i = 0; i < features.size(); i++) {
-      for (int j = 0; j < features.size(); j++) {
-        if (features.get(i) == features.get(j)) {
+    for (int i = 0; i < types.size(); i++) {
+      for (int j = 0; j < types.size(); j++) {
+        if (types.get(i) == types.get(j)) {
           map[i] = j;
           break;
         }
       }
     }
-    float[][] scores = new float[candidates.length][features.size()];
+    float[][] scores = new float[candidates.length][types.size()];
     for (int i = 0; i < candidates.length; i++) {
       float[] candScore = candidates[i].score();
-      for (int j = 0; j < features.size(); j++) {
+      for (int j = 0; j < types.size(); j++) {
         if (map[j] != NON_MAPPING) {
           scores[i][map[j]] = candScore[j];
         }
@@ -102,15 +103,15 @@ public class Suggestion
     return scores;
   }
 
-  public List<Feature> features() {
-    return features;
+  public List<FeatureType> types() {
+    return types;
   }
   
   @Override
   protected HashCodeBuilder buildHash() {
     return super.buildHash()
         .append(candidates)
-        .append(features);
+        .append(types);
   }
 
   /**
@@ -142,7 +143,7 @@ public class Suggestion
       List<List<Boolean>> decisions = features.stream()
           .map(feat -> LogUtils.logTime(3, () -> feat.detect(words),
               feat.getClass().getName() + ".detect()" +
-              (feat.name() == null ? "": " [" + feat.name() + "]")))
+              (feat.type().name() == null ? "": " [" + feat.type().name() + "]")))
           .collect(Collectors.toList());
 
       // Make final decision for each word.
@@ -168,7 +169,7 @@ public class Suggestion
 
             // Perform benchmark suggestion for all words.
             String logInfo = feat.getClass().getName() + ".suggest()"
-                + (feat.name() == null ? "": " [" + feat.name() + "]");
+                + (feat.type().name() == null ? "": " [" + feat.type().name() + "]");
             List<TObjectFloatMap<String>> mapList = LogUtils.logTime(3, () -> {
               if (LOG.isInfoEnabled()) { LOG.info(logInfo); }
               return feat.suggest(words);
@@ -256,11 +257,11 @@ public class Suggestion
     Files.createDirectories(out.getParent());
     try (BufferedWriter bw = IOUtils.newBufferedWriter(out)) {
 
-      List<Feature> features = suggestions.get(0).features();
+      List<FeatureType> types = suggestions.get(0).types();
 
       // Write features.
-      for (Feature feature : features) {
-        bw.write(feature.toString() + "\n");
+      for (FeatureType type : types) {
+        bw.write(type.toString() + "\n");
       }
       bw.write("\n");
 
@@ -271,7 +272,7 @@ public class Suggestion
         bw.write(suggest.text() + "\n");
 
         // Write candidates.
-        float[][] scores = suggest.score(features);
+        float[][] scores = suggest.score(types);
         for (int i = 0; i < suggest.candidates().length; i++) {
           StringBuilder candScores = new StringBuilder();
           for (float s : scores[i]) {
@@ -452,10 +453,10 @@ public class Suggestion
    * 
    * @see Comparator#compare(Object, Object)
    */
-  static Comparator<Candidate> sortByScore(Feature feature)
+  static Comparator<Candidate> sortByScore(FeatureType type)
   {
     return (c1, c2) -> {
-      double diff = c1.score(feature) - c2.score(feature);
+      double diff = c1.score(type) - c2.score(type);
       return diff == 0 ? 0 : diff > 0 ? -1 : 1;
     };
   }
@@ -494,16 +495,16 @@ public class Suggestion
     }
     Set<Candidate> selected = new HashSet<>();
 
-    for (Feature feature: suggest.features()) {
+    for (FeatureType type: suggest.types()) {
       Stream.of(candidates)
         .sorted(sortByMetric(word))
-        .sorted(sortByScore(feature))
+        .sorted(sortByScore(type))
         .limit(top)
         .forEach(c -> selected.add(c));
     }
 
     return new Suggestion(suggest.text(), suggest.position(),
-        suggest.features(), selected.toArray(new Candidate[selected.size()]));
+        suggest.types(), selected.toArray(new Candidate[selected.size()]));
   }
   
   public static List<Suggestion> top(List<Suggestion> suggests, int top)

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import edu.dal.corr.suggest.feature.Feature;
+import edu.dal.corr.suggest.feature.FeatureType;
 import edu.dal.corr.util.TextualUnit;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
@@ -19,25 +20,27 @@ public class Candidate
 {
   private static final long serialVersionUID = 1741530240536667097L;
 
-  private final TObjectIntHashMap<Feature> featMap;
+  private final TObjectIntHashMap<FeatureType> featMap;
   private final float[] scores;
   
-  Candidate(String name, TObjectIntHashMap<Feature> featMap,
-      float[] scores)
-  {
+  Candidate(String name,
+            TObjectIntHashMap<FeatureType> featMap,
+            float[] scores) {
   	super(name);
   	this.featMap = featMap;
   	this.scores = scores;
   }
   
-  public float[] score()
-  {
+  public float[] score() {
     return scores;
   }
   
-  public float score(Feature feature)
-  {
-    return scores[featMap.get(feature)];
+  public float score(FeatureType type) {
+    return scores[featMap.get(type)];
+  }
+  
+  public float score(Feature feature) {
+    return score(feature.type());
   }
   
   @Override

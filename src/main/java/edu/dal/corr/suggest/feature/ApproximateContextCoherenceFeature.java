@@ -24,8 +24,6 @@ public class ApproximateContextCoherenceFeature
   implements ContextSensitiveBenchmarkDetectMixin,
              ContextSensitiveBenchmarkSuggestMixin
 {
-  private static final long serialVersionUID = 524392471145725670L;
-
   public static final String MATCH_WORD_SUB = " ";
   public static final String RELAX_WORD_SUB = "\t";
   
