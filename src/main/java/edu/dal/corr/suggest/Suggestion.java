@@ -524,20 +524,16 @@ public class Suggestion
    * @param  out the output path.
    * @param  top the number of candidates with the top feature scores remains
    *    in the output suggestion.
+   * @throws IOException if I/O error occurs. 
    */
-  public static void rewriteTop(Path in, Path out, int top)
-  {
+  public static void rewriteTop(Path in, Path out, int top) throws IOException {
     List<Path> paths = null;
-    try {
-      paths = PathUtils.listPaths(in, "*");
-    } catch (IOException e) {
-      new RuntimeException(e);
-    }
+    paths = PathUtils.listPaths(in, "*");
     paths.parallelStream().forEach(p -> {
       String fname = p.getFileName().toString();
       Suggestion suggest = top(read(p), top);
       try {
-        write(suggest, out.getParent().resolve(fname));
+        write(suggest, out.resolve(fname));
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
