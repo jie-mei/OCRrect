@@ -113,7 +113,6 @@
             <goals>
               <goal>exec</goal>
             </goals>
-            <phase>generate-sources</phase>
             <configuration>
               <arguments>
                 <argument>main.py</argument>

@@ -6,6 +6,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.dal.corr.eval.GroundTruthError;
+import edu.dal.corr.eval.GroundTruthErrors;
 import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
 import edu.dal.corr.suggest.Suggestion;
 import edu.dal.corr.suggest.feature.ContextCoherenceFeature;
@@ -153,25 +155,32 @@ public class Main
   public static void runRewrite()
     throws IOException
   {
+    List<GroundTruthError> errors = GroundTruthErrors.read(Paths.get("data/error.gt.txt"));
+
     Suggestion.writeText(
         Suggestion.readList(Paths.get("tmp/suggestion.top.100")),
+        errors,
         Paths.get("tmp/suggestion.top.100.txt"));
 
     Suggestion.writeText(
         Suggestion.readList(Paths.get("tmp/suggestion.top.20")),
+        errors,
         Paths.get("tmp/suggestion.top.20.txt"));
 
     Suggestion.writeText(
+        Suggestion.readList(Paths.get("tmp/suggestion.top.10")),
+        errors,
+        Paths.get("tmp/suggestion.top.10.txt"));
+
+    Suggestion.writeText(
         Suggestion.readList(Paths.get("tmp/suggestion.top.5")),
+        errors,
         Paths.get("tmp/suggestion.top.5.txt"));
 
     Suggestion.writeText(
         Suggestion.readList(Paths.get("tmp/suggestion.top.3")),
+        errors,
         Paths.get("tmp/suggestion.top.3.txt"));
-
-//      GroundTruthErrors.read(ResourceUtils.GT_ERROR).forEach(err -> {
-//        System.out.println(err.errorText() + "\t" + err.gtText());
-//      });
   }
 
   public static void main(String[] args)

@@ -18,7 +18,7 @@ import gnu.trove.map.hash.TLongObjectHashMap;
  * This class defines the static procedures for operating {@code
  * GroundTruthError} objects.
  *
- * @since 2017.01.18
+ * @since 2017.02.22
  */
 public class GroundTruthErrors
 {
@@ -128,9 +128,9 @@ public class GroundTruthErrors
           }
           String[] splits = line.split("\t", 4);
           // String gtName = stripTail(toAsciiRep(splits[0]));
-          String gtName = toAsciiRep(splits[0]);
+          int pos = Integer.parseInt(splits[0]);
           String errName = splits[1];
-          int pos = Integer.parseInt(splits[2]);
+          String gtName = toAsciiRep(splits[2]);
           String info = splits[3];
           errors.add(new GroundTruthError(pos, errName, gtName, info));
         }
