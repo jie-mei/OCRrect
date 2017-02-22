@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
 
+import edu.dal.corr.eval.GroundTruthError;
 import edu.dal.corr.metric.NGram;
 import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.suggest.feature.FeatureType;
@@ -34,6 +35,7 @@ import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.util.PathUtils;
 import edu.dal.corr.word.Word;
 import gnu.trove.map.TObjectFloatMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 
 /**
@@ -247,16 +249,23 @@ public class Suggestion
    * -  there is an empty line between each errors.
    * 
    * @param  suggestions  A list of suggestions.
+   * @param  gtErrs  A list of ground truth errors.
    * @param  out  The folder of the output files.
    * 
    * @throws IOException  If I/O error occurs.
    */
-  public static void writeText(List<Suggestion> suggestions, Path out)
+  public static void writeText(List<Suggestion> suggestions,
+                               List<GroundTruthError> gtErrs,
+                               Path out)
     throws IOException
   {
+    TIntObjectHashMap<GroundTruthError> errMap = new TIntObjectHashMap<>();
+    for (GroundTruthError err: gtErrs) {
+      errMap.put(err.position(), err);
+    }
+
     Files.createDirectories(out.getParent());
     try (BufferedWriter bw = IOUtils.newBufferedWriter(out)) {
-
       List<FeatureType> types = suggestions.get(0).types();
 
       // Write features.
@@ -281,10 +290,14 @@ public class Suggestion
           candScores.deleteCharAt(candScores.length() - 1);
           Candidate candidate = suggest.candidates()[i];
 
-          // TODO matching requires normalization?
-          boolean match = match(suggest.text(), candidate.text());
-          // boolean match = suggest.text().toLowerCase()
-          //    .equals(candidate.text().toLowerCase());
+          GroundTruthError err = errMap.get(suggest.position());
+          boolean match = false;
+          if (err != null && err.text().equals(suggest.text())) {
+            match = match(err.gtText(), candidate.text());
+            // TODO matching requires normalization?
+            // boolean match = suggest.text().toLowerCase()
+            //    .equals(candidate.text().toLowerCase());
+          }
 
           bw.write(String.format("%s\t%s\t%s\n",
               candidate.text(),

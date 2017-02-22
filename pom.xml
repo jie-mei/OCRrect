@@ -98,6 +98,30 @@
           <finalName>${project.artifactId}-${project.version}</finalName>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.2.1</version>
+        <configuration>
+          <executable>python</executable>
+          <workingDirectory>src/main/python/</workingDirectory>
+        </configuration>
+        <executions>
+          <!-- Run python script. -->
+          <execution>
+            <id>Correction model generation</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>generate-sources</phase>
+            <configuration>
+              <arguments>
+                <argument>main.py</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <!-- Generate javadoc. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
