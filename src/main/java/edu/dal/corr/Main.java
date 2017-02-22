@@ -26,7 +26,7 @@ import edu.dal.corr.word.filter.CommonWordFilter;
 import edu.dal.corr.word.filter.WordFilter;
 
 /**
- * @since 2017.02.17
+ * @since 2017.02.22
  */
 public class Main
 {
@@ -154,8 +154,20 @@ public class Main
     throws IOException
   {
     Suggestion.writeText(
+        Suggestion.readList(Paths.get("tmp/suggestion.top.100")),
+        Paths.get("tmp/suggestion.top.100.txt"));
+
+    Suggestion.writeText(
+        Suggestion.readList(Paths.get("tmp/suggestion.top.20")),
+        Paths.get("tmp/suggestion.top.20.txt"));
+
+    Suggestion.writeText(
+        Suggestion.readList(Paths.get("tmp/suggestion.top.5")),
+        Paths.get("tmp/suggestion.top.5.txt"));
+
+    Suggestion.writeText(
         Suggestion.readList(Paths.get("tmp/suggestion.top.3")),
-        Paths.get("tmp/test.top3.txt"));
+        Paths.get("tmp/suggestion.top.3.txt"));
 
 //      GroundTruthErrors.read(ResourceUtils.GT_ERROR).forEach(err -> {
 //        System.out.println(err.errorText() + "\t" + err.gtText());
@@ -165,6 +177,7 @@ public class Main
   public static void main(String[] args)
     throws IOException
   {
-    runCorrection();
+    //runCorrection();
+    runRewrite();
   }
 }
