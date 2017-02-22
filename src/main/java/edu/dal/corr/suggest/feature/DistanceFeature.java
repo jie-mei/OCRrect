@@ -1,5 +1,6 @@
 package edu.dal.corr.suggest.feature;
 
+import edu.dal.corr.suggest.NormalizationOption;
 import edu.dal.corr.suggest.banchmark.IsolatedWordBenchmarkDetectMixin;
 import edu.dal.corr.word.Word;
 
@@ -13,12 +14,16 @@ public class DistanceFeature
   private static final long serialVersionUID = -433050428364692186L;
   
   private Scoreable scoreable;
-  private boolean rescale;
+  private NormalizationOption norm;
   
-  public DistanceFeature(String name, Scoreable scoreable, boolean rescale) {
+  public DistanceFeature(String name, Scoreable scoreable, NormalizationOption norm) {
     setName(name);
     this.scoreable = scoreable;
-    this.rescale = rescale;
+    this.norm = norm;
+  }
+
+  public DistanceFeature(String name, Scoreable scoreable) {
+    this(name, scoreable, NormalizationOption.RESCALE);
   }
 
   @Override
@@ -33,8 +38,10 @@ public class DistanceFeature
    */
   @Override
   public float score(Word word, String candidate) {
-    return rescale
-        ? scoreable.score(word, candidate) / (float)DISTANCE_THRESHOLD
-        : scoreable.score(word, candidate);
+    return scoreable.score(word, candidate);
+  }
+
+  public NormalizationOption normalize() {
+    return norm;
   }
 }

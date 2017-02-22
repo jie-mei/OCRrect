@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,6 +26,7 @@ import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.suggest.feature.FeatureType;
 import edu.dal.corr.suggest.feature.LanguagePopularityFeature;
 import edu.dal.corr.suggest.feature.Scoreable;
+import edu.dal.corr.eval.GroundTruthError;
 import edu.dal.corr.suggest.feature.ApproximateContextCoherenceFeature;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.PathUtils;
@@ -67,7 +69,7 @@ public class SuggestionTest {
         Word.get(IOUtils.read(TXT_PATH), new GoogleTokenizer()),
         Arrays.asList(new Feature[] {
             new DistanceFeature("Levenstein",
-                Scoreable.levenshteinDist(), true),
+                Scoreable.levenshteinDist()),
             new LanguagePopularityFeature("GoogleWebUnigram",
                 Unigram.getInstance()),
             new ContextCoherenceFeature("GoogleWebBigram",
@@ -78,6 +80,11 @@ public class SuggestionTest {
                 new NgramBoundedReaderSearcher(TRIGRAM_PATH),  3),
         })
     );
+    suggests.forEach(suggest -> {
+      for (Candidate cand : suggest.candidates()) {
+        System.out.println(cand.text() + "\t" + Arrays.toString(cand.score()));
+      }
+    });
 
     // Get suggestions for 'word'.
     all = null;
@@ -281,7 +288,8 @@ public class SuggestionTest {
     throws Exception
   {
     Path out = PathUtils.getTempFile();
-    Suggestion.writeText(Arrays.asList(top3, top10, top100), out);
+    Suggestion.writeText(Arrays.asList(top3, top10, top100),
+        new ArrayList<GroundTruthError>(), out);
     try (BufferedReader br = IOUtils.newBufferedReader(out)) {
       Iterator<FeatureType> typeIter = top3.types().iterator();
       for (String line = br.readLine(); br != null; line = br.readLine()) {

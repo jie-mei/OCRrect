@@ -8,7 +8,12 @@ DATA_PATH = 'tmp/suggestion.top.3.txt'
 
 
 def main():
-    dataset = data.Data.read(DATA_PATH)
+    dataset = data.Dataset.read(DATA_PATH)
+    cand = dataset.errors[0].candidates[0]
+    print(cand.name)
+    print(cand.feature_values)
+    print(cand.label)
+    print(cand.confidence)
 
 
 if __name__ == '__main__':

@@ -32,6 +32,10 @@
 **.settings
 **/eclipse-classes/
 
+# Python cache files.
+**/*.pyc
+**/__pycache__/
+
 # OS related
 
 **.DS_Store

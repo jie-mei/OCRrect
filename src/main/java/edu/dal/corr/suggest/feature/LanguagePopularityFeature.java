@@ -36,6 +36,6 @@ public class LanguagePopularityFeature
 
   @Override
   public NormalizationOption normalize() {
-    return NormalizationOption.MAX;
+    return NormalizationOption.LOG_AND_RESCALE;
   }
 }

@@ -315,6 +315,7 @@ class Dataset(WeightingMixin, object):
 
     def first(error_percentage):
         """ Generate a data subset. """
+        pass
 
     @staticmethod
     def read(pathname):
@@ -373,6 +374,7 @@ class Dataset(WeightingMixin, object):
                 errors.append(curr_error)
         
         return Dataset(errors, feature_registry)
+
 
     def precision_at(self, n=float('inf')):
         """ The percentage of correction ranked in top 'n' among all errors in

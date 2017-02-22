@@ -5,7 +5,6 @@ import java.util.List;
 
 import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.word.Word;
-import gnu.trove.function.TFloatFunction;
 import gnu.trove.list.array.TFloatArrayList;
 import gnu.trove.map.TObjectFloatMap;
 
@@ -56,20 +55,26 @@ class FeatureSuggestionBuilder
   {
     if (scores.size() == 0) return;
 
-    float factor = 0;
+    float normDenom = 0;
+    float normReduce = 0;
     switch (feature.normalize()) {
-      case NONE:  return;
-      case MAX:   factor = scores.max(); break;
-      case MIN:   factor = scores.min(); break;
-      case TOTAL: factor = scores.sum(); break;
+      case NONE:
+        return;
+      case DIVIDE_MAX:
+        normDenom = scores.max(); break;
+      case TO_PROB:
+        normDenom = scores.sum(); break;
+      case LOG_AND_RESCALE:
+        scores.transformValues(s -> (float)Math.log10(s + 1)); // add-one smooth
+        // continue
+      case RESCALE:
+        normReduce = scores.min();
+        normDenom = scores.max() - scores.min(); break;
     }
-    final float denorm = factor;
-    scores.transformValues(new TFloatFunction() {
-      @Override
-      public float execute(float score) {
-        return score / denorm;
-      }
-    });
+    final float reduce = normReduce;
+    final float denorm = normDenom;
+    scores.transformValues(s -> (s - reduce) / denorm);
+    System.out.println(feature.toString() + " " + normDenom + " " + normReduce);
   }
   
   FeatureSuggestion build()

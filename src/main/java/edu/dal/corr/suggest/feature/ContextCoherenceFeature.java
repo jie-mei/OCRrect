@@ -44,14 +44,6 @@ public class ContextCoherenceFeature
     this(null, reader, ngramSize);
   }
 
-  /**
-   * Normalize by the maximum frequency value among candidates.
-   */
-  @Override
-  public NormalizationOption normalize() {
-    return NormalizationOption.MAX;
-  }
-
   @Override
   public int detectionContextSize() {
     return ngramSize;
@@ -194,5 +186,10 @@ public class ContextCoherenceFeature
     String[] copy = ngram.clone();
     copy[position] = " ";
     return String.join(" ", copy);
+  }
+
+  @Override
+  public NormalizationOption normalize() {
+    return NormalizationOption.LOG_AND_RESCALE;
   }
 }

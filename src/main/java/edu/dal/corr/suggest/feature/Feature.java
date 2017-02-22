@@ -35,6 +35,6 @@ public abstract class Feature
    * @return a normalization option.
    */
   public NormalizationOption normalize() {
-    return NormalizationOption.NONE;
+    return NormalizationOption.RESCALE;
   }
 }

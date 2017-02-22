@@ -6,7 +6,8 @@ package edu.dal.corr.suggest;
 public enum NormalizationOption
 {
   NONE,
-  MAX,
-  MIN,
-  TOTAL
+  DIVIDE_MAX,
+  RESCALE,
+  LOG_AND_RESCALE,
+  TO_PROB
 }
