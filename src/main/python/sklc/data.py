@@ -1,3 +1,6 @@
+import functools
+
+
 class ConfidenceRankError(Exception):
     """ Raise if errors occurs in confidence ranking.
     """
@@ -129,6 +132,7 @@ class Error(WeightingMixin, object):
 
     Attributes:
         name: a string indicates the error text.
+        position: a integer indicates the position in the original text.
         candidates: a list of candidates objects suggested for correcting this
             error.
         feature_value: a two-dimensional list of float, which indicates the
@@ -137,8 +141,9 @@ class Error(WeightingMixin, object):
             error candidate.
     """
 
-    def __init__(self, name, candidates=None):
+    def __init__(self, name, position=None, candidates=None):
         self.name = name
+        self.position = position
         self.candidates = [] if candidates == None else candidates
 
     @property
@@ -234,7 +239,7 @@ class Dataset(WeightingMixin, object):
             A two dimensional list of floats. The feature value of each candidate
             stores in a nested list.
         """
-        return reduce(lambda x, y: x + y,
+        return functools.reduce(lambda x, y: x + y,
                 [e.feature_values for e in self.errors])
 
     @property
@@ -244,7 +249,7 @@ class Dataset(WeightingMixin, object):
         Returns:
             A list of integers, which element is the feature value of a candidate.
         """
-        return reduce(lambda x, y: x + y, [e.labels for e in self.errors])
+        return functools.reduce(lambda x, y: x + y, [e.labels for e in self.errors])
 
     @property
     def confidences(self):
@@ -253,7 +258,7 @@ class Dataset(WeightingMixin, object):
         Returns:
             A list of floats, which element is the confidence of a candidate.
         """
-        return reduce(lambda x, y: x + y, [e.confidences for e in self.errors])
+        return functools.reduce(lambda x, y: x + y, [e.confidences for e in self.errors])
 
     @confidences.setter
     def confidences(self, values):
@@ -295,7 +300,7 @@ class Dataset(WeightingMixin, object):
             raise ValueError
 
         if filt is not None:
-            sub = Dataset(filter(filt, self.errors), self.feature_registry)
+            sub = Dataset(list(filter(filt, self.errors)), self.feature_registry)
         elif first is not None:
             size = int(first * len(self.errors)) if first < 1 else first
             sub = Dataset(self.errors[: size], self.feature_registry)
@@ -307,7 +312,7 @@ class Dataset(WeightingMixin, object):
 
         if return_complement:
             complement = Dataset(
-                    filter(lambda err: err not in sub.errors, self.errors),
+                    list(filter(lambda err: err not in sub.errors, self.errors)),
                     self.feature_registry)
             return sub, complement
         else:
@@ -361,8 +366,8 @@ class Dataset(WeightingMixin, object):
                         errors.append(curr_error)
                     else:
                         fields = line.split('\t')
-                        if len(fields) == 1:
-                            curr_error = Error(fields[0])
+                        if len(fields) == 2:
+                            curr_error = Error(fields[0], int(fields[1]))
                         else:
                             curr_error.add(Candidate(
                                 fields[0],

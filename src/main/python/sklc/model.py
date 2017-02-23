@@ -138,7 +138,7 @@ class RandomForestModel(SKLModel):
 
     DEFAULT_PARAM_GRID = dict(
             n_estimators = np.arange(50, 500, 50),
-            min_samples_split = np.arange(1, 3, 1),
+            min_samples_split = np.arange(2, 10, 2),
             )
 
     def __init__(self, train_data, **kwargs):
