@@ -65,14 +65,14 @@ class FeatureSuggestionBuilder
       case TO_PROB:
         normDenom = scores.sum(); break;
       case LOG_AND_RESCALE:
-        scores.transformValues(s -> (float)Math.log10(s + 1)); // add-one smooth
+        scores.transformValues(s -> (float)Math.log10(s + 1));  // add-one smooth
         // continue
       case RESCALE:
         normReduce = scores.min();
         normDenom = scores.max() - scores.min(); break;
     }
     final float reduce = normReduce;
-    final float denorm = normDenom;
+    final float denorm = (normDenom == 0 ? 1 : normDenom);  // avoid 0 division
     scores.transformValues(s -> (s - reduce) / denorm);
     System.out.println(feature.toString() + " " + normDenom + " " + normReduce);
   }
