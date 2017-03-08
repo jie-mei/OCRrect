@@ -16,7 +16,7 @@ import edu.dal.corr.util.LocatedTextualUnit;
  *  <li> Addition note of this errors.
  * </ul>
  *
- * @since 2016.09.07
+ * @since 2017.03.02
  */
 public class GroundTruthError
   extends LocatedTextualUnit
@@ -24,6 +24,7 @@ public class GroundTruthError
   private static final long serialVersionUID = 480517897613831371L;
 
   private String gtText;
+  private String gtTextAscii;
   private String info;
   
   /**
@@ -38,10 +39,12 @@ public class GroundTruthError
       int position,
       String errorText,
       String groundTruthText,
+      String groundTruthAscii,
       String information)
   {
     super(errorText, position);
     gtText = groundTruthText;
+    gtTextAscii = groundTruthAscii;
     info = information;
   }
   
@@ -61,6 +64,10 @@ public class GroundTruthError
    */
   public String gtText() {
     return gtText;
+  }
+
+  public String gtTextAscii() {
+    return gtTextAscii;
   }
 
   /**

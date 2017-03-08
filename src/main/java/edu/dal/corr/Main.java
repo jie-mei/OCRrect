@@ -28,7 +28,7 @@ import edu.dal.corr.word.filter.CommonWordFilter;
 import edu.dal.corr.word.filter.WordFilter;
 
 /**
- * @since 2017.02.22
+ * @since 2017.03.07
  */
 public class Main
 {
@@ -73,6 +73,11 @@ public class Main
             new DistanceFeature("ngram-Jaccard-trigram", Scoreable.jaccardDist(3)),
             new DistanceFeature("ngram-Jaccard-fourgram", Scoreable.jaccardDist(4)),
             new DistanceFeature("ngram-Jaccard-fivegram", Scoreable.jaccardDist(5)),
+
+            new DistanceFeature("qgram-bigram", Scoreable.qgramDist(2)),
+            new DistanceFeature("qgram-trigram", Scoreable.qgramDist(3)),
+            new DistanceFeature("qgram-fourgram", Scoreable.qgramDist(4)),
+            new DistanceFeature("qgram-fivegram", Scoreable.qgramDist(5)),
 
             new DistanceFeature("ngram-binary-bigram", Scoreable.binNgramDist(2)),
             new DistanceFeature("ngram-binary-trigram", Scoreable.binNgramDist(3)),
@@ -158,7 +163,7 @@ public class Main
   public static void main(String[] args)
     throws IOException
   {
-    //runCorrection();
+    runCorrection();
     runRewrite();
   }
 }
