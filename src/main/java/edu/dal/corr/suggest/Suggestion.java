@@ -277,8 +277,8 @@ public class Suggestion
       // Write suggestions.
       for (Suggestion suggest : suggestions) {
 
-        // Write suggestion name and detection type.
-        bw.write(suggest.text() + "\n");
+        // Write suggestion name and position.
+        bw.write(suggest.text() + "\t" + suggest.position() + "\n");
 
         // Write candidates.
         float[][] scores = suggest.score(types);
@@ -293,7 +293,8 @@ public class Suggestion
           GroundTruthError err = errMap.get(suggest.position());
           boolean match = false;
           if (err != null && err.text().equals(suggest.text())) {
-            match = match(err.gtText(), candidate.text());
+            match = (err.gtText().equals(candidate.text())
+                || err.gtTextAscii().equals(candidate.text()));
             // TODO matching requires normalization?
             // boolean match = suggest.text().toLowerCase()
             //    .equals(candidate.text().toLowerCase());
@@ -540,6 +541,7 @@ public class Suggestion
    * @throws IOException if I/O error occurs. 
    */
   public static void rewriteTop(Path in, Path out, int top) throws IOException {
+    Files.createDirectories(out);
     List<Path> paths = null;
     paths = PathUtils.listPaths(in, "*");
     paths.parallelStream().forEach(p -> {

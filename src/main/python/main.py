@@ -4,25 +4,28 @@ import codecs
 from sklc import data
 from sklc import model
 
+
 TEMP_DIR = 'tmp/model/'
 
 # The pathname to the generated suggestion data.
 DATA_PATH = 'tmp/suggestion.top.3.txt'
 
 # The pathname to the ground truth error list.
-GT_PATH = 'data/ocr/error.gt.txt'
+GT_PATH = 'data/error.gt.txt'
 
 # The splitting ratio of the training, validation and testing set.
 TRAIN_SPLITS_RATIO = 0.8
 TEST_SPLITS_RATIO  = 0.2
 
+SUFFIX = 'top3'
+
 # Models:       model class                   override weighted  seralization path  customized grid
-MODEL_CONFIG = {model.RandomForestModel     :(False,   True,     TEMP_DIR + 'rf',   None)
-               ,model.KernelRidgeModel      :(False,   True,     TEMP_DIR + 'kr',   None)
-               ,model.ExtraTreesModel       :(False,   True,     TEMP_DIR + 'et',   None)
-               ,model.AdaBoostModel         :(False,   True,     TEMP_DIR + 'ab',   None)
-               ,model.GradientBoostingModel :(False,   True,     TEMP_DIR + 'gb',   None)
-               ,model.SupportVectorModel    :(False,   True,     TEMP_DIR + 'svm',  None)
+MODEL_CONFIG = {model.RandomForestModel     :(False,   True,     TEMP_DIR + 'rf.' + SUFFIX,   None)
+               #,model.KernelRidgeModel      :(False,   True,     TEMP_DIR + 'kr' + SUFFIX,   None)
+               ,model.ExtraTreesModel       :(False,   True,     TEMP_DIR + 'et.' + SUFFIX,   None)
+               ,model.AdaBoostModel         :(False,   True,     TEMP_DIR + 'ab.' + SUFFIX,   None)
+               ,model.GradientBoostingModel :(False,   True,     TEMP_DIR + 'gb.' + SUFFIX,   None)
+               #,model.SupportVectorModel    :(False,   True,     TEMP_DIR + 'svm.' + SUFFIX,  None)
                }
 
 
@@ -46,7 +49,26 @@ def main():
     train_data, test_data = data_split(DATA_PATH, GT_PATH,
             TRAIN_SPLITS_RATIO, TEST_SPLITS_RATIO)
 
+    #import numpy as np
+    #len_count={}
+    #for l in train_data.feature_values:
+    #  llen = len(l)
+    #  if llen not in len_count:
+    #    len_count[llen] = 1
+    #  else:
+    #    len_count[llen] += 1
+    #for k, v in len_count.items():
+    #  print("{}:{}".format(k, v))
+    #for ei, e in enumerate(train_data.errors):
+    #  for ci, c in enumerate(e.candidates):
+    #    if len(c.feature_values) == 38:
+    #      print(str(ei) + ":" + str(ci) + ":" + c.name + ":" + e.name + ":bef:" + str(e.candidates[ci-1].name))
+    #print(type(train_data.feature_values[0][0]))
+    #print(np.array(train_data.feature_values, dtype=np.float32).size)
+    #print(np.array(train_data.labels, dtype=np.float32).size)
+
     for md, config in MODEL_CONFIG.items():
+        print(md)
         if config[3] != None:
             md(train_data, override=config[0], weighted=config[1],
                     pkl_path=config[2], para_grid=config[3])

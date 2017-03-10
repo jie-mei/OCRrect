@@ -1,3 +1,4 @@
+import codecs
 import functools
 
 
@@ -121,6 +122,8 @@ class WeightingMixin:
     @property
     def feature_weights(self):
         num_true = sum([1 if l else 0 for l in self.labels])
+        if num_true == 0:
+            raise ValueError('No record labeled 1.')
         true_weight = float(len(self.labels) - num_true) / num_true
         return [true_weight if l else 1 for l in self.labels]
 
@@ -345,11 +348,13 @@ class Dataset(WeightingMixin, object):
         feature_registry = FeatureRegistry()
         errors = []
         
-        with open(pathname, 'r') as file:
+        with codecs.open(pathname, 'r', 'utf-8') as file:
             is_feature_line = True
             curr_error = None
          
-            for line in file:
+            for line in file.read().split('\n'):
+                # explictly split by '\n', in order to aviod to be accidentially
+                # break by some special characters.
                 line = line.strip()
                 
                 if is_feature_line:
@@ -363,11 +368,17 @@ class Dataset(WeightingMixin, object):
                 else:
                     # Read data lines.
                     if len(line) == 0:
-                        errors.append(curr_error)
+                        if curr_error != None:
+                            errors.append(curr_error)
+                            curr_error = None
                     else:
                         fields = line.split('\t')
                         if len(fields) == 2:
                             curr_error = Error(fields[0], int(fields[1]))
+                        elif len(fields) == 40:
+                            # TODO: skip for now. Deal with special candidate
+                            # issue.
+                            pass
                         else:
                             curr_error.add(Candidate(
                                 fields[0],

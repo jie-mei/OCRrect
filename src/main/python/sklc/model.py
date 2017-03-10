@@ -182,7 +182,7 @@ class ExtraTreesModel(SKLModel):
 
     DEFAULT_PARAM_GRID = dict(
             n_estimators = np.arange(10, 200, 10),
-            min_samples_split = np.arange(1, 10, 1),
+            min_samples_split = np.arange(2, 10, 1),
             bootstrap=[True],
             )
 
@@ -228,7 +228,7 @@ class GradientBoostingModel(SKLModel):
     DEFAULT_PARAM_GRID = dict(
             loss = ['ls', 'lad', 'huber', 'quantile'],
             n_estimators = np.arange(100, 500, 100),
-            min_samples_split = np.arange(1, 3, 1),
+            min_samples_split = np.arange(2, 5, 1),
             max_depth = np.arange(1, 5, 1),
             )
 
