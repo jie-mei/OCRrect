@@ -19,8 +19,10 @@ public class ResourceUtils
    * Input error texts.
    */
   public static Path TEST_INPUT_SEGMENT = getResource("test.in.seg.txt");
-  public static List<Path> INPUT = getResourceInDir("*.txt", "input");
-  public static List<Path> GT = getResourceInDir("*.txt", "gt");
+  //public static List<Path> INPUT = getResourceInDir("*.txt", "input");
+  //public static List<Path> GT = getResourceInDir("*.txt", "gt");
+  public static List<Path> INPUT = getPathsInDir("*.txt", "data/ocr");
+  public static List<Path> GT = getPathsInDir("*.txt", "data/gt");
 
   /*
    * Lexicons.

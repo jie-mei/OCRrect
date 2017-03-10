@@ -49,6 +49,7 @@ public class IOUtils
   public static String read(Path path)
     throws IOException
   {
+    /*
     StringBuilder sb = new StringBuilder();
     try (BufferedReader br = newBufferedReader(path)){
       for (String line; (line = br.readLine()) != null;) {
@@ -56,6 +57,8 @@ public class IOUtils
       }
     }
     return sb.toString();
+    */
+    return new String(Files.readAllBytes(path));
   }
 
   public static String read(List<Path> paths)
