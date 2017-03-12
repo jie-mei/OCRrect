@@ -28,7 +28,7 @@ import edu.dal.corr.word.filter.CommonWordFilter;
 import edu.dal.corr.word.filter.WordFilter;
 
 /**
- * @since 2017.03.07
+ * @since 2017.03.09
  */
 public class Main
 {
@@ -163,7 +163,7 @@ public class Main
   public static void main(String[] args)
     throws IOException
   {
-    runCorrection();
+    //runCorrection();
     runRewrite();
   }
 }

@@ -109,7 +109,6 @@ class Candidate(object):
             this candidate to be a correction. If the confidence is unset, it
             has the default value -1.
     """
-
     def __init__(self, name, feature_values, label):
         self.name = name
         self.feature_values = feature_values
@@ -143,11 +142,11 @@ class Error(WeightingMixin, object):
         labels: a list of integers, which indicates the labels of each
             error candidate.
     """
-
     def __init__(self, name, position=None, candidates=None):
         self.name = name
         self.position = position
         self.candidates = [] if candidates == None else candidates
+
 
     @property
     def feature_values(self):
@@ -158,6 +157,7 @@ class Error(WeightingMixin, object):
             stores in a nested list.
         """
         return [c.feature_values for c in self.candidates]
+
 
     @property
     def labels(self):
@@ -207,8 +207,31 @@ class Error(WeightingMixin, object):
             raise ConfidenceRankError
         if min(self.confidences) == -1:
             raise ConfidenceUnsetError
+        #if sum(self.labels) == 0: print(self.name) #return float('inf')
         conf = max([c.confidence if c.label else 0 for c in self.candidates])
         pos = sum([1 if c.confidence > conf else 0 for c in self.candidates])
+        #sort = sorted(self.candidates, key=lambda c: c.confidence, reverse=True)
+        #if len(sort) >=3:
+        #  print('{}({}): {}({}), {}({}), {}({})'
+        #      .format(self.name, pos+1
+        #          , sort[0].name, sort[0].confidence
+        #          , sort[1].name, sort[1].confidence
+        #          , sort[2].name, sort[2].confidence
+        #        ))
+        #elif len(sort) ==2:
+        #  print('{}({}): {}({}), {}({})'
+        #      .format(self.name, pos+1
+        #          , sort[0].name, sort[0].confidence
+        #          , sort[1].name, sort[1].confidence
+        #        ))
+        #elif len(sort) ==1:
+        #  print('{}({}): {}({})'
+        #      .format(self.name, pos+1
+        #          , sort[0].name, sort[0].confidence
+        #        ))
+        #else:
+        #  print('{}({})'
+        #      .format(self.name, pos+1))
         return pos + 1
 
     def add(self, candidate):
@@ -229,7 +252,6 @@ class Dataset(WeightingMixin, object):
         feature_registry: a feature registry.
         errors: a list of errors.
     """
-
     def __init__(self, errors, feature_registry):
         self.feature_registry = feature_registry
         self.errors = errors
@@ -244,6 +266,15 @@ class Dataset(WeightingMixin, object):
         """
         return functools.reduce(lambda x, y: x + y,
                 [e.feature_values for e in self.errors])
+
+
+    def feature_values_sub(self, features):
+        """ Get the feature values of all candidates of specific features.
+        """
+        def select(lst, features):
+            return [lst[self.feature_registry.get(f)] for f in features]
+        return [select(c.feature_values, features) for c in self.candidates]
+
 
     @property
     def labels(self):

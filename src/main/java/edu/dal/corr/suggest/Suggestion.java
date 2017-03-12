@@ -17,6 +17,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -276,9 +278,14 @@ public class Suggestion
 
       // Write suggestions.
       for (Suggestion suggest : suggestions) {
+        int pos = suggest.position();
+        // TODO: ad-hoc modification, to be removed.
+        if (pos > 160007) pos += 1;
+        if (pos > 173572) pos -= 3;
+        GroundTruthError err = errMap.get(pos);
 
         // Write suggestion name and position.
-        bw.write(suggest.text() + "\t" + suggest.position() + "\n");
+        bw.write(suggest.text() + "\t" + pos + "\n");
 
         // Write candidates.
         float[][] scores = suggest.score(types);
@@ -290,9 +297,15 @@ public class Suggestion
           candScores.deleteCharAt(candScores.length() - 1);
           Candidate candidate = suggest.candidates()[i];
 
-          GroundTruthError err = errMap.get(suggest.position());
           boolean match = false;
-          if (err != null && err.text().equals(suggest.text())) {
+          if (err == null) {
+            // Full match.
+            match = suggest.text().equals(candidate.text());
+            if (! match) {
+              match = enPrefixMatch(suggest.text(), candidate.text());
+            }
+          } else {
+            // TODO: check if bounded detection, the exact GT match is required.
             match = (err.gtText().equals(candidate.text())
                 || err.gtTextAscii().equals(candidate.text()));
             // TODO matching requires normalization?
@@ -308,6 +321,18 @@ public class Suggestion
         bw.write("\n");
       }
     }
+  }
+
+  private static Pattern EN_PREFIX = Pattern.compile("^\\w+");
+
+  private static boolean enPrefixMatch(String s1, String s2) {
+      Matcher m1 = EN_PREFIX.matcher(s1);
+      Matcher m2 = EN_PREFIX.matcher(s2);
+      if (m1.find() && m2.find()) {
+        return m1.group().equals(m2.group());
+      } else {
+        return false;
+      }
   }
   
   private static boolean match(String gtName, String str)

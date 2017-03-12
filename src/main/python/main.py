@@ -3,6 +3,8 @@
 import codecs
 from sklc import data
 from sklc import model
+from sklearn import feature_selection
+import sys
 
 
 TEMP_DIR = 'tmp/model/'
@@ -19,14 +21,37 @@ TEST_SPLITS_RATIO  = 0.2
 
 SUFFIX = 'top3'
 
-# Models:       model class                   override weighted  seralization path  customized grid
-MODEL_CONFIG = {model.RandomForestModel     :(False,   True,     TEMP_DIR + 'rf.' + SUFFIX,   None)
-               #,model.KernelRidgeModel      :(False,   True,     TEMP_DIR + 'kr' + SUFFIX,   None)
-               ,model.ExtraTreesModel       :(False,   True,     TEMP_DIR + 'et.' + SUFFIX,   None)
-               ,model.AdaBoostModel         :(False,   True,     TEMP_DIR + 'ab.' + SUFFIX,   None)
-               ,model.GradientBoostingModel :(False,   True,     TEMP_DIR + 'gb.' + SUFFIX,   None)
-               #,model.SupportVectorModel    :(False,   True,     TEMP_DIR + 'svm.' + SUFFIX,  None)
-               }
+
+# The default settings.
+DEFAULT_CONFIG = lambda name: \
+        (False,                          # override
+         True,                           # weighted 
+         TEMP_DIR + name + '.' + SUFFIX, # seralization path
+         None,                           # customized grid
+         None)                           # selector
+DEFAULT_SK_CONFIG = lambda name, sk_model_class: \
+        (False,
+         True,
+         TEMP_DIR + name + '.' + SUFFIX,
+         {'estimator__' + k: v for k, v in sk_model_class.DEFAULT_PARAM_GRID.items()},
+         feature_selection.RFECV(sk_model_class.ESTIMATOR, step=1, cv=10))
+
+
+TRAIN_SETTINGS = [
+        (model.SKLModel              , DEFAULT_SK_CONFIG('rf.refcv', model.RandomForestModel)),
+        (model.SKLModel              , DEFAULT_SK_CONFIG('et.refcv', model.ExtraTreesModel)),
+        (model.SKLModel              , DEFAULT_SK_CONFIG('ab.refcv', model.AdaBoostModel)),
+        (model.SKLModel              , DEFAULT_SK_CONFIG('gb.refcv', model.GradientBoostingModel)),
+        (model.SKLModel              , DEFAULT_SK_CONFIG('mlp.refcv', model.MLPModel)),
+        (model.RandomForestModel     , DEFAULT_CONFIG('rf')),
+        (model.ExtraTreesModel       , DEFAULT_CONFIG('et')),
+        (model.AdaBoostModel         , DEFAULT_CONFIG('ab')),
+        (model.GradientBoostingModel , DEFAULT_CONFIG('gb')),
+        (model.MLPModel              , DEFAULT_CONFIG('mlp')),
+        (model.RandomForestModel     , (False, False, TEMP_DIR + 'rf.unweight.' + SUFFIX, None, None)),
+        (model.SupportVectorModel    , DEFAULT_CONFIG('svr')),
+        (model.SKLModel              , DEFAULT_SK_CONFIG('svr.refcv', model.SupportVectorModel))
+       ]
 
 
 def data_split(data_path, gt_path, train_ratio, test_ratio):
@@ -49,35 +74,37 @@ def main():
     train_data, test_data = data_split(DATA_PATH, GT_PATH,
             TRAIN_SPLITS_RATIO, TEST_SPLITS_RATIO)
 
-    #import numpy as np
-    #len_count={}
-    #for l in train_data.feature_values:
-    #  llen = len(l)
-    #  if llen not in len_count:
-    #    len_count[llen] = 1
-    #  else:
-    #    len_count[llen] += 1
-    #for k, v in len_count.items():
-    #  print("{}:{}".format(k, v))
-    #for ei, e in enumerate(train_data.errors):
-    #  for ci, c in enumerate(e.candidates):
-    #    if len(c.feature_values) == 38:
-    #      print(str(ei) + ":" + str(ci) + ":" + c.name + ":" + e.name + ":bef:" + str(e.candidates[ci-1].name))
-    #print(type(train_data.feature_values[0][0]))
-    #print(np.array(train_data.feature_values, dtype=np.float32).size)
-    #print(np.array(train_data.labels, dtype=np.float32).size)
+    for md, (_override, _weighted, _path, _grid, _estimator) in TRAIN_SETTINGS:
+        try:
+            if md == model.SKLModel:
+                md(_estimator, _grid, train_data, override=_override,
+                        weighted=_weighted, pkl_path=_path)
+            elif _grid != None:
+                md(train_data, override=_override, weighted=_weighted,
+                        pkl_path=_path, para_grid=_grid)
+            else:
+                md(train_data, override=_override, weighted=_weighted,
+                        pkl_path=_path)
+        except Exception as e:
+            print('Error')
+            print(str(e))
+            print()
+            #sys.exit(1)
+            pass # skip error model
 
-    for md, config in MODEL_CONFIG.items():
+    for md, (_override, _weighted, _path, _grid, _estimator) in TRAIN_SETTINGS:
         print(md)
-        if config[3] != None:
-            md(train_data, override=config[0], weighted=config[1],
-                    pkl_path=config[2], para_grid=config[3])
-        else:
-            md(train_data, override=config[0], weighted=config[1],
-                    pkl_path=config[2])
+        lm = md(train_data, pkl_path=_path)
+        lm.predict(test_data)
+        print('1: {}\n3: {}\n5: {}\n10: {}\nA: {}\n'
+            .format(test_data.precision_at(1),
+                  test_data.precision_at(1),
+                  test_data.precision_at(3),
+                  test_data.precision_at(5),
+                  test_data.precision_at(10),
+                  test_data.precision_at()))
+        break
 
 
 if __name__ == '__main__':
     main()
-
-print("hello, world!")

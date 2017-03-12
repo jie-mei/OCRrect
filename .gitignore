@@ -39,3 +39,6 @@
 # OS related
 
 **.DS_Store
+
+*.log
+*.out
