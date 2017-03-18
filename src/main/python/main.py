@@ -74,36 +74,39 @@ def main():
     train_data, test_data = data_split(DATA_PATH, GT_PATH,
             TRAIN_SPLITS_RATIO, TEST_SPLITS_RATIO)
 
-    for md, (_override, _weighted, _path, _grid, _estimator) in TRAIN_SETTINGS:
-        try:
-            if md == model.SKLModel:
-                md(_estimator, _grid, train_data, override=_override,
-                        weighted=_weighted, pkl_path=_path)
-            elif _grid != None:
-                md(train_data, override=_override, weighted=_weighted,
-                        pkl_path=_path, para_grid=_grid)
-            else:
-                md(train_data, override=_override, weighted=_weighted,
-                        pkl_path=_path)
-        except Exception as e:
-            print('Error')
-            print(str(e))
-            print()
-            #sys.exit(1)
-            pass # skip error model
+    #for md, (_override, _weighted, _path, _grid, _estimator) in TRAIN_SETTINGS:
+    #    try:
+    #        if md == model.SKLModel:
+    #            md(_estimator, _grid, train_data, override=_override,
+    #                    weighted=_weighted, pkl_path=_path)
+    #        elif _grid != None:
+    #            md(train_data, override=_override, weighted=_weighted,
+    #                    pkl_path=_path, para_grid=_grid)
+    #        else:
+    #            md(train_data, override=_override, weighted=_weighted,
+    #                    pkl_path=_path)
+    #    except Exception as e:
+    #        #print('Error')
+    #        #print(str(e))
+    #        #print()
+    #        #sys.exit(1)
+    #        pass # skip error model
 
     for md, (_override, _weighted, _path, _grid, _estimator) in TRAIN_SETTINGS:
         print(md)
-        lm = md(train_data, pkl_path=_path)
-        lm.predict(test_data)
-        print('1: {}\n3: {}\n5: {}\n10: {}\nA: {}\n'
-            .format(test_data.precision_at(1),
-                  test_data.precision_at(1),
-                  test_data.precision_at(3),
-                  test_data.precision_at(5),
-                  test_data.precision_at(10),
-                  test_data.precision_at()))
-        break
+        
+        try:
+            lm = md(None, None, train_data, pkl_path=_path) if md == model.SKLModel else md(train_data, pkl_path=_path)
+            lm.predict(test_data)
+            print('1: {}\n3: {}\n5: {}\n10: {}\nA: {}\n'
+                .format(test_data.precision_at(1),
+                      test_data.precision_at(1),
+                      test_data.precision_at(3),
+                      test_data.precision_at(5),
+                      test_data.precision_at(10),
+                      test_data.precision_at()))
+        except Exception:
+            pass
 
 
 if __name__ == '__main__':

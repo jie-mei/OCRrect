@@ -28,7 +28,7 @@ import edu.dal.corr.word.filter.CommonWordFilter;
 import edu.dal.corr.word.filter.WordFilter;
 
 /**
- * @since 2017.03.09
+ * @since 2017.03.17
  */
 public class Main
 {
@@ -120,10 +120,7 @@ public class Main
     @SuppressWarnings("unused")
     List<Suggestion> suggestions = new DocumentCorrector().correct(
         new GoogleTokenizer(),
-        Arrays.asList(new WordFilter[] {
-            new CommonPatternFilter(),
-            new CommonWordFilter()
-        }),
+        null,
         Arrays.asList(features),
         IOUtils.read(ResourceUtils.INPUT)
     );
