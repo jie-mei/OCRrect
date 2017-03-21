@@ -9,7 +9,7 @@ import gnu.trove.list.array.TFloatArrayList;
 import gnu.trove.map.TObjectFloatMap;
 
 /**
- * @since 2016.08.10
+ * @since 2017.03.19
  */
 class FeatureSuggestionBuilder
 {
@@ -74,7 +74,6 @@ class FeatureSuggestionBuilder
     final float reduce = normReduce;
     final float denorm = (normDenom == 0 ? 1 : normDenom);  // avoid 0 division
     scores.transformValues(s -> (s - reduce) / denorm);
-    System.out.println(feature.toString() + " " + normDenom + " " + normReduce);
   }
   
   FeatureSuggestion build()

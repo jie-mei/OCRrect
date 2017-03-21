@@ -2,6 +2,7 @@ package edu.dal.corr;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -17,19 +18,22 @@ import edu.dal.corr.word.filter.WordFilter;
  * The {@code DocumentCorrector} class detect the natural language errors in
  * document and provides a list of candidates for each detected errors.
  * 
- * @since 2017.02.15
+ * @since 2017.03.21
  */
 public class DocumentCorrector
 {
   private static final Logger LOG = Logger.getLogger(DocumentCorrector.class);
 
-  public List<Suggestion> correct(WordTokenizer tokenizer,
+  public void correct(WordTokenizer tokenizer,
                                   List<WordFilter> filters,
                                   List<Feature> features,
                                   String content)
     throws IOException
   {
     Timer t = new Timer();
+    if (filters == null) {
+      filters = new ArrayList<>();
+    }
     List<Word> words = Word.get(content, tokenizer,
         filters.toArray(new WordFilter[filters.size()]));
     if (LOG.isInfoEnabled()) {
@@ -40,7 +44,27 @@ public class DocumentCorrector
           words.size(),
           t.interval()));
     }
-    
+
+    List<List<Word>> wordSubLists = split(words, 1000);
+    for (int i = 0; i < wordSubLists.size(); i++) {
+      correctImpl(wordSubLists.get(i), features, String.format("part%03d", i));
+    }
+  }
+
+  static <T> List<List<T>> split(List<T> list, final int L) {
+    List<List<T>> parts = new ArrayList<List<T>>();
+    final int N = list.size();
+    for (int i = 0; i < N; i += L) {
+      parts.add(new ArrayList<T>(list.subList(i, Math.min(N, i + L))));
+    }
+    return parts;
+  }
+
+  public List<Suggestion> correctImpl(List<Word> words, List<Feature> features, String sign)
+      throws IOException {
+    String name = "suggestion" + (sign.length() == 0 ? "" :  "." + sign);
+
+    Timer t = new Timer();
     t.start();
     List<Suggestion> suggestions = Suggestion.suggest(words, features);
     if (LOG.isInfoEnabled()) {
@@ -64,7 +88,7 @@ public class DocumentCorrector
     }
 
     t.start();
-    Suggestion.write(top1000, Paths.get("tmp/suggestion.top.1000"), "suggest");
+    Suggestion.write(top1000, Paths.get("tmp/" + name + ".top.1000"), "suggest");
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
           "Writing top 1000 to file...\n" +
@@ -73,28 +97,28 @@ public class DocumentCorrector
     }
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion.top.1000"),
-        Paths.get("tmp/suggestion.top.100"), 100);
+        Paths.get("tmp/" + name + ".top.1000"),
+        Paths.get("tmp/" + name + ".top.100"), 100);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion.top.1000"),
-        Paths.get("tmp/suggestion.top.50"), 50);
+        Paths.get("tmp/" + name + ".top.1000"),
+        Paths.get("tmp/" + name + ".top.50"), 50);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion.top.1000"),
-        Paths.get("tmp/suggestion.top.20"), 20);
+        Paths.get("tmp/" + name + ".top.1000"),
+        Paths.get("tmp/" + name + ".top.20"), 20);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion.top.1000"),
-        Paths.get("tmp/suggestion.top.10"), 10);
+        Paths.get("tmp/" + name + ".top.1000"),
+        Paths.get("tmp/" + name + ".top.10"), 10);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion.top.1000"),
-        Paths.get("tmp/suggestion.top.5"), 5);
+        Paths.get("tmp/" + name + ".top.1000"),
+        Paths.get("tmp/" + name + ".top.5"), 5);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/suggestion.top.1000"),
-        Paths.get("tmp/suggestion.top.3"), 3);
+        Paths.get("tmp/" + name + ".top.1000"),
+        Paths.get("tmp/" + name + ".top.3"), 3);
     
     return suggestions;
   }
