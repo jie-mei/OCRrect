@@ -131,6 +131,14 @@ public class LogUtils
     return result;
 	}
 
+	public static <T> T logTime(String info, int level, CodeReturnRunner<T> mt)
+	{
+    Timer t = new Timer();
+    T result = mt.run();
+	  logTime(t, level, info);
+    return result;
+	}
+
 	public static <T> T logToFile(Logger logger, String pathname, CodeReturnRunner<T> mt)
 	{
 	  FileAppender fa = newFileAppender(pathname);

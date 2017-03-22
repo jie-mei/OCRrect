@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.dal.corr.suggest.feature.FeatureType;
+import edu.dal.corr.word.Word;
 import gnu.trove.list.array.TFloatArrayList;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
@@ -19,12 +20,15 @@ class SuggestionBuilder
   private List<FeatureType> types;
   private Map<String, TFloatArrayList> scoreMap;
 
-  SuggestionBuilder(String name, int position)
-  {
+  SuggestionBuilder(String name, int position) {
     this.name = name;
     this.position = position;
     types = new ArrayList<>();
     scoreMap = new HashMap<>();
+  }
+  
+  SuggestionBuilder(Word word) {
+    this(word.text(), word.position());
   }
   
   /**

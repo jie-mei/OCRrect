@@ -23,6 +23,10 @@ import edu.dal.corr.word.filter.WordFilter;
 public class DocumentCorrector
 {
   private static final Logger LOG = Logger.getLogger(DocumentCorrector.class);
+  
+  private static final String GEN_WORD_FORMAT = "Generate words\n" +
+                                                "  - words:      %d\n" +
+                                                "  - time taken: %4.2f seconds";
 
   public void correct(WordTokenizer tokenizer,
                                   List<WordFilter> filters,
@@ -37,12 +41,7 @@ public class DocumentCorrector
     List<Word> words = Word.get(content, tokenizer,
         filters.toArray(new WordFilter[filters.size()]));
     if (LOG.isInfoEnabled()) {
-      LOG.info(String.format(
-          "Generate words\n" +
-          "  - words:      %d\n" +
-          "  - time taken: %4.2f seconds",
-          words.size(),
-          t.interval()));
+      LOG.info(String.format(GEN_WORD_FORMAT, words.size(), t.interval()));
     }
 
     List<List<Word>> wordSubLists = split(words, 1000);

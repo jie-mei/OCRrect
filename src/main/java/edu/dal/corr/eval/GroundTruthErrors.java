@@ -2,8 +2,6 @@ package edu.dal.corr.eval;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +10,6 @@ import java.util.regex.Pattern;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.util.ResourceUtils;
-import gnu.trove.map.hash.TLongObjectHashMap;
 
 /**
  * This class defines the static procedures for operating {@code
@@ -23,27 +20,12 @@ import gnu.trove.map.hash.TLongObjectHashMap;
 public class GroundTruthErrors
 {
   private GroundTruthErrors() {}
-  
-  /**
-   * Convert two integer value to a unique long value.
-   * 
-   * @return a long value.
-   */
-  private static long toLong(int val1, int val2) {
-    return Integer.MAX_VALUE * val1 + val2;
-  }
 
   /**
    * The regex pattern contains in the deprecated error records, which is
    * intended to be omitted in the reading procedure.
    */
   private static Pattern ERROR = Pattern.compile(".*ERROR.*");
-  
-  /**
-   * ASCII charset.
-   */
-  private static CharsetEncoder ASCII_ENCODER =
-      Charset.forName("US-ASCII").newEncoder();
 
   /**
    * Read a list of ground truth errors from file.

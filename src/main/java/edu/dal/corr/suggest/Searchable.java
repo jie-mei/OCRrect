@@ -1,6 +1,6 @@
-package edu.dal.corr.suggest.feature;
+package edu.dal.corr.suggest;
 
-import java.util.List;
+import java.util.Set;
 
 import edu.dal.corr.word.Word;
 
@@ -12,5 +12,5 @@ public interface Searchable
    * @param  word  A word.
    * @return A list of candidate string.
    */
-  List<String> search(Word word);
+  Set<String> search(Word word);
 }

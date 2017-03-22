@@ -1,4 +1,4 @@
-package edu.dal.corr.suggest.feature;
+package edu.dal.corr.suggest;
 
 import java.io.Serializable;
 

@@ -2,6 +2,8 @@ package edu.dal.corr.suggest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.word.Word;
@@ -82,5 +84,20 @@ class FeatureSuggestionBuilder
     return new FeatureSuggestion(feature, name, position,
         candidates.toArray(new String[candidates.size()]),
         scores.toArray());
+  }
+  
+  static FeatureSuggestion build(Feature feature, Word word,
+      TObjectFloatMap<String> scoreMap) {
+    return new FeatureSuggestionBuilder(feature, word)
+        .add(scoreMap)
+        .build();
+  }
+  
+  static List<FeatureSuggestion> build(Feature feature, List<Word> words,
+      List<TObjectFloatMap<String>> scoreMaps) {
+    return IntStream
+        .range(0, words.size())
+        .mapToObj(i -> build(feature, words.get(i), scoreMaps.get(i)))
+        .collect(Collectors.toList());
   }
 }

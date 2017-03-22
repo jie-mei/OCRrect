@@ -14,6 +14,8 @@ import org.apache.log4j.Logger;
 
 import edu.dal.corr.util.Dictionary;
 import edu.dal.corr.util.GoogleUnigramHuristicThresholdDictionary;
+import edu.dal.corr.util.IOUtils;
+import edu.dal.corr.util.ResourceUtils;
 
 /**
  * An object that implements the {@code Tokenizer} interface generates a series
@@ -51,6 +53,11 @@ public interface WordTokenizer
   static List<Word> tokenize(String text, WordTokenizer tokenizer) {
     return WordTokenizerImpl.tokenize(text, tokenizer);
   }
+  
+  static void test() throws IOException {
+    String txt = WordTokenizerImpl.fixLineBrokenWords(IOUtils.read(ResourceUtils.INPUT));
+    System.out.println(txt.substring(11900, 12100));
+  }
 }
 
 class WordTokenizerImpl
@@ -78,7 +85,7 @@ class WordTokenizerImpl
    * @return The input content without internal line-break and broken word
    *    fixed.
    */
-  private static String fixLineBrokenWords(String str)
+  public static String fixLineBrokenWords(String str)
   {
     StringBuilder sb = new StringBuilder();
     try (BufferedReader br = new BufferedReader(new StringReader(str))) {

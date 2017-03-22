@@ -25,7 +25,6 @@ import edu.dal.corr.suggest.feature.DistanceFeature;
 import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.suggest.feature.FeatureType;
 import edu.dal.corr.suggest.feature.LanguagePopularityFeature;
-import edu.dal.corr.suggest.feature.Scoreable;
 import edu.dal.corr.eval.GroundTruthError;
 import edu.dal.corr.suggest.feature.ApproximateContextCoherenceFeature;
 import edu.dal.corr.util.IOUtils;

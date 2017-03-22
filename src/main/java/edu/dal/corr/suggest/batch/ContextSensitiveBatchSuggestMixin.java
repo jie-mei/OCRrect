@@ -1,11 +1,10 @@
-package edu.dal.corr.suggest.banchmark;
+package edu.dal.corr.suggest.batch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import edu.dal.corr.word.Context;
@@ -16,8 +15,8 @@ import gnu.trove.map.hash.TObjectFloatHashMap;
 /**
  * @since 2016.09.07
  */
-public interface ContextSensitiveBenchmarkSuggestMixin
-  extends BenchmarkSuggestMixin
+public interface ContextSensitiveBatchSuggestMixin
+  extends BatchSuggestMixin
 {
   /**
    * Generate suggestions for a list of contexts with the same first gram.
@@ -52,21 +51,6 @@ public interface ContextSensitiveBenchmarkSuggestMixin
   default TObjectFloatMap<String> suggest(Context context) {
     return suggest(context.words()[0], Arrays.asList(context)).get(0);
   }
-
-  /**
-   * This method is applied as a post-processing step for getting string.
-   * <p>
-   * An implemented class can override this method to modify the post-processing
-   * behaviors.
-   * </p>
-   * 
-   * @param  str  a string.
-   * @return a normalized representation of a string.
-   */
-  default Function<String, String> processSuggestionString() {
-    // return String::toLowerCase;
-    return String::toString;
-  }
   
   /**
    * Merge the {@code <k, v>} pairs from two maps into one. Note that input map
@@ -93,16 +77,11 @@ public interface ContextSensitiveBenchmarkSuggestMixin
   }
   
   @Override
-  default List<TObjectFloatMap<String>> suggest(List<Word> words)
-  {
-    // Modify the strings in the input words.
-    List<Word> procWords = words.stream()
-      .map(w -> w.mapTo(processSuggestionString()))
-      .collect(Collectors.toList());
+  default List<TObjectFloatMap<String>> suggest(List<Word> words) {
     
     // Construct a mapping from word to ngram contexts start with such word.
     Map<String, List<Context>> wordContextMap = new HashMap<>();
-    procWords.forEach(w -> {
+    words.forEach(w -> {
       w.getContexts(suggestionContextSize()).forEach(c -> {
         String first = c.words()[0];
         if (first.length() != 0) {  // Omit n-grams with an empty first gram.
@@ -128,7 +107,7 @@ public interface ContextSensitiveBenchmarkSuggestMixin
     });
     
     // Collect the results.
-    return procWords.stream()
+    return words.stream()
       .map(w -> w.getContexts(suggestionContextSize()).stream()
         .map(suggestMap::get)
         .reduce(new TObjectFloatHashMap<String>(), (a, b) -> {

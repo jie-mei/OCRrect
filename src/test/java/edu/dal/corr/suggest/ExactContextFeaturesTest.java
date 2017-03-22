@@ -46,7 +46,6 @@ public class ExactContextFeaturesTest
     Map<String, TObjectByteMap<Context>> firstContextMap = new HashMap<>();
     try (BufferedReader br = IOUtils.newBufferedReader(ngrams.get(0))) {
       for (String line = br.readLine(); line != null; line = br.readLine()) {
-        line = feature.processDetectionString().apply(line);
         String[] grams = line.split("\t")[0].split(" ");
         String first = grams[0];
 

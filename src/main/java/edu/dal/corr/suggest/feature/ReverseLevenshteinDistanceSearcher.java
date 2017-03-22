@@ -2,8 +2,11 @@ package edu.dal.corr.suggest.feature;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import edu.dal.corr.suggest.Searchable;
 import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.Word;
 import gnu.trove.map.hash.TObjectByteHashMap;
@@ -16,7 +19,7 @@ import info.debatty.java.stringsimilarity.Levenshtein;
  * @since 2016.08.11
  */
 class ReverseLevenshteinDistanceSearcher
-  implements Searchable, Serializable
+    implements Searchable, Serializable
 {
   private static final long serialVersionUID = -693442884043428965L;
 
@@ -74,13 +77,12 @@ class ReverseLevenshteinDistanceSearcher
   }
 
   @Override
-  public List<String> search(Word word) {
+  public Set<String> search(Word word) {
     return search(word.text());
   }
   
-  private List<String> search(String word)
-  {
-    List<String> candidates = new ArrayList<String>();
+  private Set<String> search(String word) {
+    Set<String> candidates = new HashSet<String>();
     int len = word.length();
     
     // Add unigrams with `maxDistance` number of inserting into candidate list.

@@ -2,7 +2,6 @@ package edu.dal.corr.suggest.feature;
 
 import java.util.List;
 
-import edu.dal.corr.suggest.banchmark.IsolatedWordBenchmarkDetectMixin;
 import edu.dal.corr.word.Word;
 import gnu.trove.set.hash.THashSet;
 
@@ -10,9 +9,8 @@ import gnu.trove.set.hash.THashSet;
  * @since 2016.08.10
  */
 public class LexiconExistenceFeature
-  extends AbstractScoreableFeature
-  implements IsolatedWordBenchmarkDetectMixin
-{
+    extends WordIsolatedFeature {
+
   private static final long serialVersionUID = -1167737697256350689L;
 
   private THashSet<String> lexicon;

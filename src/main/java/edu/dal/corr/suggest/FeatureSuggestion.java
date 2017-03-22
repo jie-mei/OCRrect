@@ -23,8 +23,7 @@ public class FeatureSuggestion
   private final float[] scores;
 
   FeatureSuggestion(Feature feature, String name, int position, String[]
-  candidates, float[] scores)
-  {
+      candidates, float[] scores) {
     super(name, position);
     this.type = feature.type();
     this.candidates = candidates;

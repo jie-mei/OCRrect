@@ -1,4 +1,4 @@
-package edu.dal.corr.suggest.banchmark;
+package edu.dal.corr.suggest.batch;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,7 +9,7 @@ import edu.dal.corr.word.Word;
 /**
  * @since 2016.08.10
  */
-public interface BenchmarkDetectMixin
+public interface BatchDetectMixin
   extends Detectable
 {
   /**

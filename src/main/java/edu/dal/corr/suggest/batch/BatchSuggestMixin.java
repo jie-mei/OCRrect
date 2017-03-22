@@ -1,4 +1,4 @@
-package edu.dal.corr.suggest.banchmark;
+package edu.dal.corr.suggest.batch;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,11 +10,11 @@ import gnu.trove.map.TObjectFloatMap;
 /**
  * @since 2016.08.10
  */
-public interface BenchmarkSuggestMixin
+public interface BatchSuggestMixin
   extends Suggestable
 {
   /**
-   * Search correction candidates for a list of error words.
+   * Suggest correction candidates for a list of error words.
    * 
    * @param  words  A list of words.
    * @return A list of candidate string for each word.

@@ -1,5 +1,6 @@
 package edu.dal.corr.suggest.feature;
 
+import java.lang.UnsupportedOperationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,28 +8,27 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
 import edu.dal.corr.suggest.NormalizationOption;
-import edu.dal.corr.suggest.banchmark.ContextSensitiveBenchmarkDetectMixin;
-import edu.dal.corr.suggest.banchmark.ContextSensitiveBenchmarkSuggestMixin;
 import edu.dal.corr.word.Context;
+import edu.dal.corr.word.Word;
 import gnu.trove.map.TObjectByteMap;
 import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.map.hash.TObjectByteHashMap;
 import gnu.trove.map.hash.TObjectFloatHashMap;
-import info.debatty.java.stringsimilarity.Levenshtein;
 
 /**
  * @since 2016.09.09
  */
 public class ContextCoherenceFeature
-  extends Feature
-  implements ContextSensitiveBenchmarkDetectMixin,
-    ContextSensitiveBenchmarkSuggestMixin
-{
+    extends ContextSensitiveFeature {
+
+  private static final long serialVersionUID = -2869172417125408590L;
+
   protected NgramBoundedReaderSearcher reader;
   private int ngramSize;
   
@@ -45,8 +45,25 @@ public class ContextCoherenceFeature
   }
 
   @Override
-  public int detectionContextSize() {
-    return ngramSize;
+  public int detectionContextSize()  { return ngramSize; }
+  @Override
+  public int searchContextSize() { return ngramSize; }
+  @Override
+  public int suggestionContextSize() { return ngramSize; }
+  
+  /**
+   * Generate a skip ngram.
+   * 
+   * @param  ngram     A list of {@code n} gram strings.
+   * @param  position  The index of the skipped gram in ngram array.
+   * @return A concatenated skip-ngram, which skipped gram is replaced by an
+   *    space character.
+   */
+  private String skipNgram(String[] ngram, int position)
+  {
+    String[] copy = ngram.clone();
+    copy[position] = " ";
+    return String.join(" ", copy);
   }
 
   @Override
@@ -64,7 +81,7 @@ public class ContextCoherenceFeature
       if (br != null) {
         for (String line = br.readLine(); line != null; line = br.readLine()) {
           String[] splits = line.split("\t");
-          String ngram = processDetectionString().apply(splits[0]);
+          String ngram = splits[0];
           if (ngramMap.containsKey(ngram)) {
             ngramMap.put(ngram, (byte) 1);
           }
@@ -84,30 +101,8 @@ public class ContextCoherenceFeature
   }
 
   @Override
-  public int suggestionContextSize() {
-    return ngramSize;
-  }
-  
-  static final int MAX_LD_DISTANCE = 3;
-
-  protected TObjectFloatMap<String> filterCandidates(
-      String word,
-      TObjectFloatMap<String> candSuggest)
-  {
-    Levenshtein lev = new Levenshtein();
-    TObjectFloatMap<String> result = new TObjectFloatHashMap<>();
-    for (String cand : candSuggest.keySet()) {
-      if (lev.distance(word, cand) <= MAX_LD_DISTANCE) {
-        result.put(cand, candSuggest.get(cand));
-      }
-    }
-    return result;
-  }
-
-  @Override
-  public List<TObjectFloatMap<String>> suggest(
-      String first,
-      List<Context> contexts)
+  public List<TObjectFloatMap<String>> suggest(String first,
+                                               List<Context> contexts)
   {
     // Initialize a hash map storing mappings from skipped ngram context to all
     // its candidates. The map is separated by the position of the skipped gram
@@ -137,7 +132,6 @@ public class ContextCoherenceFeature
           
           // Post-process the reading grams.
           String[] procGrams = Arrays.stream(grams)
-              .map(processDetectionString())
               .collect(Collectors.toList())
               .toArray(new String[grams.length]);
 
@@ -162,34 +156,30 @@ public class ContextCoherenceFeature
       throw new RuntimeException();
     }
 
-    return IntStream.range(0, contexts.size())
-        .mapToObj(i -> {
-          Context context = contexts.get(i);
-          int pos = context.index();
-          return filterCandidates(
-              context.text(),
-              skipNgramMaps.get(pos).get(skipNgram(context.words(), pos)));
+    return contexts.stream()
+        .map(c -> {
+            int pos = c.index();
+            return skipNgramMaps.get(pos).get(skipNgram(c.words(), pos));
         })
         .collect(Collectors.toList());
   }
-  
-  /**
-   * Generate a skip ngram.
-   * 
-   * @param  ngram     A list of {@code n} gram strings.
-   * @param  position  The index of the skipped gram in ngram array.
-   * @return A concatenated skip-ngram, which skipped gram is replaced by an
-   *    space character.
-   */
-  private String skipNgram(String[] ngram, int position)
+
+  @Override
+  public List<Set<String>> search(String first, List<Context> contexts)
   {
-    String[] copy = ngram.clone();
-    copy[position] = " ";
-    return String.join(" ", copy);
+    return suggest(first, contexts).stream()
+        .map(map -> map.keySet())
+        .collect(Collectors.toList());
   }
 
   @Override
   public NormalizationOption normalize() {
     return NormalizationOption.LOG_AND_RESCALE;
+  }
+
+  @Override
+  public float score(Word word, String candidate) {
+    // TODO: to be implemented.
+    throw new UnsupportedOperationException();
   }
 }

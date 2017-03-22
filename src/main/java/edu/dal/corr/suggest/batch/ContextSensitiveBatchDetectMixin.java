@@ -1,10 +1,9 @@
-package edu.dal.corr.suggest.banchmark;
+package edu.dal.corr.suggest.batch;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import edu.dal.corr.word.Context;
@@ -15,8 +14,8 @@ import gnu.trove.map.hash.TObjectByteHashMap;
 /**
  * @since 2016.09.09
  */
-public interface ContextSensitiveBenchmarkDetectMixin
-  extends BenchmarkDetectMixin
+public interface ContextSensitiveBatchDetectMixin
+  extends BatchDetectMixin
 {
   /**
    * Generate detection result for contexts with the same first gram.
@@ -47,30 +46,12 @@ public interface ContextSensitiveBenchmarkDetectMixin
     return detected.stream().noneMatch(b -> b.booleanValue());
   }
 
-  /**
-   * This method is applied as a post-processing step for getting string. A
-   * implemented class can override this method to modify the post-processing
-   * behaviors.
-   * 
-   * @param  str  A string.
-   * @return A normalized representation of a string.
-   */
-  default Function<String, String> processDetectionString() {
-    // return String::toLowerCase;
-    return String::toString;
-  }
-
   @Override
   default List<Boolean> detect(List<Word> words)
   {
-    // Modify the strings in the input words.
-    List<Word> procWords = words.stream()
-      .map(w -> w.mapTo(processDetectionString()))
-      .collect(Collectors.toList());
-    
     // Construct a mapping from word to ngram contexts start with such word.
     Map<String, TObjectByteMap<Context>> wordContextMap = new HashMap<>();
-    procWords.forEach(w -> {
+    words.forEach(w -> {
       w.getContexts(detectionContextSize()).forEach(c -> {
         String first = c.words()[0];
         TObjectByteMap<Context> contextMap = null;
@@ -90,7 +71,7 @@ public interface ContextSensitiveBenchmarkDetectMixin
     });
     
     // Collect the results.
-    List<Boolean> results = procWords.stream()
+    List<Boolean> results = words.stream()
       .map(w -> w.getContexts(detectionContextSize()))
       .map(contexts -> {
         List<Boolean> detected = contexts.stream()
