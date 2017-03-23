@@ -12,10 +12,9 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
-import edu.dal.corr.util.Dictionary;
-import edu.dal.corr.util.GoogleUnigramHuristicThresholdDictionary;
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.ResourceUtils;
+import gnu.trove.set.hash.THashSet;
 
 /**
  * An object that implements the {@code Tokenizer} interface generates a series
@@ -50,13 +49,8 @@ public interface WordTokenizer
    */
   Token nextToken();
   
-  static List<Word> tokenize(String text, WordTokenizer tokenizer) {
+  static List<Word> tokenize(String text, WordTokenizer tokenizer) throws IOException {
     return WordTokenizerImpl.tokenize(text, tokenizer);
-  }
-  
-  static void test() throws IOException {
-    String txt = WordTokenizerImpl.fixLineBrokenWords(IOUtils.read(ResourceUtils.INPUT));
-    System.out.println(txt.substring(11900, 12100));
   }
 }
 
@@ -85,11 +79,11 @@ class WordTokenizerImpl
    * @return The input content without internal line-break and broken word
    *    fixed.
    */
-  public static String fixLineBrokenWords(String str)
+  public static String fixLineBrokenWords(String str, THashSet<String> vocab)
   {
     StringBuilder sb = new StringBuilder();
     try (BufferedReader br = new BufferedReader(new StringReader(str))) {
-      Dictionary dict = GoogleUnigramHuristicThresholdDictionary.getInstance();
+//      Dictionary dict = GoogleUnigramHuristicThresholdDictionary.getInstance();
 
       String curr = null;
       String bkPart1 = null;
@@ -118,16 +112,16 @@ class WordTokenizerImpl
             String fixedWord2 = bkPart1 + "-" + bkPart2;
             // LogUtils.info(">>> " + fixedWord1 + ", " + fixedWord2);
 
-            if (dict.contains(fixedWord2.toLowerCase())) {
+            if (vocab.contains(fixedWord2.toLowerCase())) {
               curr = "-" + bkPart2 + bkPart3 + repeat(" ", pad) + remain;
               // LogUtils.info("F2: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
 
-            } else if (dict.contains(fixedWord1.toLowerCase())) {
+            } else if (vocab.contains(fixedWord1.toLowerCase())) {
               curr = bkPart2 + bkPart3 + repeat(" ", pad + 1) + remain;
               // LogUtils.info("F1: " + fixedWord1 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
 
-            } else if (dict.contains(bkPart1.toLowerCase())
-                && dict.contains(bkPart2.toLowerCase())) {
+            } else if (vocab.contains(bkPart1.toLowerCase())
+                && vocab.contains(bkPart2.toLowerCase())) {
               curr = "-" + bkPart2 + bkPart3 + repeat(" ", pad) + remain;
               // LogUtils.info("F2: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
 
@@ -171,9 +165,8 @@ class WordTokenizerImpl
    * @param  tokenizer  A tokenizer.
    * @return A list of words.
    */
-  static List<Word> tokenize(String text, WordTokenizer tokenizer)
-  {
-    String concatenated = fixLineBrokenWords(text);
+  static List<Word> tokenize(String text, WordTokenizer tokenizer) throws IOException {
+    String concatenated = fixLineBrokenWords(text, IOUtils.readList(ResourceUtils.VOCAB));
 
     // Store eight latest reading consecutive tokens and positions.
     Token[] context = new Token[8];

@@ -2,6 +2,7 @@ package edu.dal.corr.suggest.batch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,14 +98,17 @@ public interface ContextSensitiveBatchSuggestMixin
     
     // Create search benchmarks for contexts separated by their first words.
     // Compute using the parallel streaming approach.
-    Map<Context, TObjectFloatMap<String>> suggestMap = new HashMap<>();
-    wordContextMap.keySet().parallelStream().forEach(str -> {
-      List<Context> contextList = wordContextMap.get(str);
-      List<TObjectFloatMap<String>> mapList = suggest(str, contextList);
-      for (int i = 0; i < contextList.size(); i++) {
-        suggestMap.put(contextList.get(i), mapList.get(i));
-      }
-    });
+    Map<Context, TObjectFloatMap<String>> suggestMap = Collections.synchronizedMap(new HashMap<>());
+    wordContextMap
+        .keySet()
+        .parallelStream()
+        .forEach(str -> {
+          List<Context> contextList = wordContextMap.get(str);
+          List<TObjectFloatMap<String>> mapList = suggest(str, contextList);
+          for (int i = 0; i < contextList.size(); i++) {
+            suggestMap.put(contextList.get(i), mapList.get(i));
+          }
+        });
     
     // Collect the results.
     return words.stream()

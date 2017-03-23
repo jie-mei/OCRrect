@@ -1,5 +1,6 @@
 package edu.dal.corr.suggest.feature;
 
+import java.io.IOException;
 import java.util.List;
 
 import edu.dal.corr.word.Word;
@@ -15,12 +16,12 @@ public class LexiconExistenceFeature
 
   private THashSet<String> lexicon;
   
-  public LexiconExistenceFeature(String name, THashSet<String> lexicon) {
+  public LexiconExistenceFeature(String name, THashSet<String> lexicon) throws IOException {
     this.lexicon = lexicon;
     setName(name);
   }
 
-  public LexiconExistenceFeature(String name, List<String> lexicon) {
+  public LexiconExistenceFeature(String name, List<String> lexicon) throws IOException {
     this(name, new THashSet<>(lexicon));
   }
 

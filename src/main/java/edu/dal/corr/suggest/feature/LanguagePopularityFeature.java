@@ -1,5 +1,7 @@
 package edu.dal.corr.suggest.feature;
 
+import java.io.IOException;
+
 import edu.dal.corr.suggest.NormalizationOption;
 import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.Word;
@@ -14,11 +16,11 @@ public class LanguagePopularityFeature
 
   private Unigram unigram;
   
-  public LanguagePopularityFeature(String name, Unigram unigram) {
+  public LanguagePopularityFeature(String name, Unigram unigram) throws IOException {
     this.unigram = unigram;
   }
 
-  public LanguagePopularityFeature(Unigram unigram) {
+  public LanguagePopularityFeature(Unigram unigram) throws IOException {
     this(null, unigram);
   }
 

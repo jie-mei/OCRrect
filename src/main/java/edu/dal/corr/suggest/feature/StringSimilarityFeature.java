@@ -1,7 +1,8 @@
 package edu.dal.corr.suggest.feature;
 
+import java.io.IOException;
+
 import edu.dal.corr.metric.LCS;
-import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.Word;
 
 /**
@@ -12,16 +13,13 @@ public class StringSimilarityFeature
 
   private static final long serialVersionUID = 5387953865452736053L;
 
-  private Unigram unigram;
-  
-  public StringSimilarityFeature(Unigram unigram) {
-    this.unigram = unigram;
+  public StringSimilarityFeature() throws IOException {
+    super();
   }
 
   @Override
-  public boolean detect(Word word)
-  {
-    return unigram.contains(word.text());
+  public boolean detect(Word word) {
+    return getVocab().contains(word.text());
   }
 
   @Override

@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -36,8 +37,10 @@ import edu.dal.corr.word.Word;
 
 public class SuggestionTest {
   
+  private static final Path VOCAB_PATH =
+      ResourceUtils.getResource("test.suggest/vocab.test.txt");
   private static final Path UNIGRAM_PATH =
-      ResourceUtils.getResource("test.suggest/1gm/vocab.test.txt");
+      ResourceUtils.getResource("test.suggest/1gm/1gm.test.txt");
   private static final List<Path> BIGRAM_PATH = Arrays.asList(
       ResourceUtils.getResource("test.suggest/2gms/2gms.0001.test.txt"),
       ResourceUtils.getResource("test.suggest/2gms/2gms.0002.test.txt"));
@@ -46,6 +49,8 @@ public class SuggestionTest {
   private static final Path TXT_PATH =
       ResourceUtils.getResource("test.suggest/input.txt");
 
+  private static List<Feature> features;
+  private static List<FeatureType> types;
   public static Suggestion top3;
   public static Suggestion top10;
   public static Suggestion top100;
@@ -60,28 +65,33 @@ public class SuggestionTest {
   {
     Logger.getRootLogger().setLevel(Level.OFF);
 
-    Unigram unigram = new Unigram(UNIGRAM_PATH);
-    Unigram.register(unigram);
-
-    // Generate suggestions.
-    List<Suggestion> suggests = Suggestion.suggest(
-        Word.get(IOUtils.read(TXT_PATH), new GoogleTokenizer()),
-        Arrays.asList(new Feature[] {
+//    Unigram unigram = new Unigram(UNIGRAM_PATH);
+//    Unigram.register(unigram);
+    ResourceUtils.VOCAB = VOCAB_PATH;
+    ResourceUtils.UNIGRAM = UNIGRAM_PATH;
+    
+    features = Arrays.asList(new Feature[] {
             new DistanceFeature("Levenstein",
                 Scoreable.levenshteinDist()),
             new LanguagePopularityFeature("GoogleWebUnigram",
-                Unigram.getInstance()),
+                new Unigram(UNIGRAM_PATH)),
             new ContextCoherenceFeature("GoogleWebBigram",
                 new NgramBoundedReaderSearcher(BIGRAM_PATH),  2),
             new ContextCoherenceFeature("GoogleWebTrigram",
                 new NgramBoundedReaderSearcher(TRIGRAM_PATH),  3),
             new ApproximateContextCoherenceFeature("GoogleWebTrigram",
                 new NgramBoundedReaderSearcher(TRIGRAM_PATH),  3),
-        })
+        });
+    types = features.stream().map(f -> f.type()).collect(Collectors.toList());
+
+    // Generate suggestions.
+    List<Suggestion> suggests = Suggestion.suggest(
+        Word.get(IOUtils.read(TXT_PATH), new GoogleTokenizer()),
+        features
     );
     suggests.forEach(suggest -> {
       for (Candidate cand : suggest.candidates()) {
-        System.out.println(cand.text() + "\t" + Arrays.toString(cand.score()));
+        System.out.println(cand.text() + "\t" + Arrays.toString(cand.score(types)));
       }
     });
 
@@ -111,47 +121,59 @@ public class SuggestionTest {
   
   private float[] array(float... values) { return values; }
 
+  private float tf(int max, int min, int freq) {
+    // Log and rescaled.
+    if (freq == 0) return 0;
+    float reduce = (float)Math.log10(min + 1);
+    float denorm = (float)Math.log10(max + 1) - reduce;
+    return ((float)Math.log10(freq + 1) - reduce) / denorm;
+  }
+
   @Test
   public void testSuggest()
     throws IOException
   {
+
     for (Candidate cand: all.candidates()) {
-      float[] scores = cand.score();
+      float[] scores = cand.score(types);
       switch (cand.text()) {
-        case "word":    assertThat(scores, is(array(0.0f, 0.01f, 0.1f, 1.0f, 0.2f))); break;
-        case "worde1":  assertThat(scores, is(array(2/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
-        case "worde2":  assertThat(scores, is(array(2/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
-        case "worde3":  assertThat(scores, is(array(2/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
-        case "worde4":  assertThat(scores, is(array(2/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
-        case "worde5":  assertThat(scores, is(array(2/3f, 0.01f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf1k": assertThat(scores, is(array(1.0f, 0.10f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf2k": assertThat(scores, is(array(1.0f, 0.20f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf3k": assertThat(scores, is(array(1.0f, 0.30f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf4k": assertThat(scores, is(array(1.0f, 0.40f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf5k": assertThat(scores, is(array(1.0f, 0.50f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf6k": assertThat(scores, is(array(1.0f, 0.60f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf7k": assertThat(scores, is(array(1.0f, 0.70f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf8k": assertThat(scores, is(array(1.0f, 0.80f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf9k": assertThat(scores, is(array(1.0f, 0.90f, 0.0f, 0.0f, 0.0f))); break;
-        case "wordf+k": assertThat(scores, is(array(1.0f, 1.00f, 0.0f, 0.0f, 0.0f))); break;
-        case "word2e1": assertThat(scores, is(array(1.0f, 0.01f, 0.2f, 0.0f, 0.0f))); break;
-        case "word2e2": assertThat(scores, is(array(1.0f, 0.02f, 0.4f, 0.0f, 0.0f))); break;
-        case "word2e3": assertThat(scores, is(array(1.0f, 0.03f, 0.6f, 0.0f, 0.0f))); break;
-        case "word2e4": assertThat(scores, is(array(1.0f, 0.04f, 0.8f, 0.0f, 0.0f))); break;
-        case "word2e5": assertThat(scores, is(array(1.0f, 0.05f, 1.0f, 0.0f, 0.0f))); break;
-        case "word2e6": assertThat(scores, is(array(1.0f, 0.06f, 0.0f, 0.0f, 0.0f))); break;
-        case "word2e7": assertThat(scores, is(array(1.0f, 0.07f, 0.0f, 0.0f, 0.0f))); break;
-        case "word2e8": assertThat(scores, is(array(1.0f, 0.08f, 0.0f, 0.0f, 0.0f))); break;
-        case "word3e1": assertThat(scores, is(array(1.0f, 0.01f, 0.0f, 0.1f, 0.02f))); break;
-        case "word3e2": assertThat(scores, is(array(1.0f, 0.02f, 0.0f, 0.2f, 0.04f))); break;
-        case "word3e3": assertThat(scores, is(array(1.0f, 0.03f, 0.0f, 0.3f, 0.06f))); break;
-        case "word3e4": assertThat(scores, is(array(1.0f, 0.04f, 0.0f, 0.4f, 0.08f))); break;
-        case "word3r1": assertThat(scores, is(array(1.0f, 0.01f, 0.0f, 0.0f, 0.2f))); break;
-        case "word3r2": assertThat(scores, is(array(1.0f, 0.02f, 0.0f, 0.0f, 0.4f))); break;
-        case "word3r3": assertThat(scores, is(array(1.0f, 0.03f, 0.0f, 0.0f, 0.6f))); break;
-        case "word3r4": assertThat(scores, is(array(1.0f, 0.04f, 0.0f, 0.0f, 0.8f))); break;
-        case "word3r5": assertThat(scores, is(array(0.0f, 0.00f, 0.0f, 0.0f, 1.0f))); break;
-        default:        assertThat(scores, is(array(1.0f, 0.00f, 0.0f, 0.0f, 0.0f))); break;
+        case "word":    assertThat(scores, is(array(0.0f,  tf(10000, 0, 100),   tf(500, 50, 50),  tf(100, 10, 100), tf(500, 10, 100)))); break;
+        case "x":       assertThat(scores, is(array(1.0f,  tf(10000, 0, 100),   tf(500, 50, 100), tf(100, 10, 10),  tf(500, 10, 10)))); break;
+        case "y":       assertThat(scores, is(array(1.0f,  tf(10000, 0, 100),   tf(500, 50, 150), tf(100, 10, 10),  tf(500, 10, 10)))); break;
+        case "z":       assertThat(scores, is(array(1.0f,  tf(10000, 0, 100),   tf(500, 50, 250), tf(100, 10, 10),  tf(500, 10, 10)))); break;
+        case "worde1":  assertThat(scores, is(array(0.5f,  tf(10000, 0, 100),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "worde2":  assertThat(scores, is(array(0.5f,  tf(10000, 0, 100),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "worde3":  assertThat(scores, is(array(0.5f,  tf(10000, 0, 100),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "worde4":  assertThat(scores, is(array(0.5f,  tf(10000, 0, 100),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "worde5":  assertThat(scores, is(array(0.5f,  tf(10000, 0, 100),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "wordf1k": assertThat(scores, is(array(0.75f, tf(10000, 0, 1000),  tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "wordf2k": assertThat(scores, is(array(0.75f, tf(10000, 0, 2000),  tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "wordf3k": assertThat(scores, is(array(0.75f, tf(10000, 0, 3000),  tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "wordf4k": assertThat(scores, is(array(0.75f, tf(10000, 0, 4000),  tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "wordf5k": assertThat(scores, is(array(0.75f, tf(10000, 0, 5000),  tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "wordf6k": assertThat(scores, is(array(0.75f, tf(10000, 0, 6000),  tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "wordf7k": assertThat(scores, is(array(0.75f, tf(10000, 0, 7000),  tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "wordf8k": assertThat(scores, is(array(0.75f, tf(10000, 0, 8000),  tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "wordf9k": assertThat(scores, is(array(0.75f, tf(10000, 0, 9000),  tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "wordf+k": assertThat(scores, is(array(0.75f, tf(10000, 0, 10000), tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "word2e1": assertThat(scores, is(array(0.75f, tf(10000, 0, 100),   tf(500, 50, 100), tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "word2e2": assertThat(scores, is(array(0.75f, tf(10000, 0, 200),   tf(500, 50, 200), tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "word2e3": assertThat(scores, is(array(0.75f, tf(10000, 0, 300),   tf(500, 50, 300), tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "word2e4": assertThat(scores, is(array(0.75f, tf(10000, 0, 400),   tf(500, 50, 400), tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "word2e5": assertThat(scores, is(array(0.75f, tf(10000, 0, 500),   tf(500, 50, 500), tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "word2e6": assertThat(scores, is(array(0.75f, tf(10000, 0, 600),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "word2e7": assertThat(scores, is(array(0.75f, tf(10000, 0, 700),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "word2e8": assertThat(scores, is(array(0.75f, tf(10000, 0, 800),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 0)))); break;
+        case "word3e1": assertThat(scores, is(array(0.75f, tf(10000, 0, 100),   tf(500, 50, 0),   tf(100, 10, 10),  tf(500, 10, 10)))); break;
+        case "word3e2": assertThat(scores, is(array(0.75f, tf(10000, 0, 200),   tf(500, 50, 0),   tf(100, 10, 20),  tf(500, 10, 20)))); break;
+        case "word3e3": assertThat(scores, is(array(0.75f, tf(10000, 0, 300),   tf(500, 50, 0),   tf(100, 10, 30),  tf(500, 10, 30)))); break;
+        case "word3e4": assertThat(scores, is(array(0.75f, tf(10000, 0, 400),   tf(500, 50, 0),   tf(100, 10, 40),  tf(500, 10, 40)))); break;
+        case "word3r1": assertThat(scores, is(array(0.75f, tf(10000, 0, 100),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 100)))); break;
+        case "word3r2": assertThat(scores, is(array(0.75f, tf(10000, 0, 200),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 200)))); break;
+        case "word3r3": assertThat(scores, is(array(0.75f, tf(10000, 0, 300),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 300)))); break;
+        case "word3r4": assertThat(scores, is(array(0.75f, tf(10000, 0, 400),   tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 400)))); break;
+        case "word3r5": assertThat(scores, is(array(0.75f, tf(10000, 0, 0),     tf(500, 50, 0),   tf(100, 10, 0),   tf(500, 10, 500)))); break;
+        default:        assertThat(scores, is(array(1.0f,  0.00f,     0.0f, 0.0f, 0.0f))); break;
       }
     }
   }
@@ -255,7 +277,7 @@ public class SuggestionTest {
     throws IOException
   {
     // Check error name.
-    String suggestName = br.readLine();
+    String suggestName = br.readLine().split("\t")[0];
     assertThat(suggestName, is(suggest.text()));
 
     // Check error corrections.

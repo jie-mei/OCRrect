@@ -1,6 +1,7 @@
 package edu.dal.corr.suggest;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -33,6 +34,14 @@ public class Candidate
   
   public float[] score() {
     return scores;
+  }
+
+  public float[] score(List<FeatureType> types) {
+    float[] out = new float[types.size()];
+    for (int i = 0; i < types.size(); i++) {
+      out[i] = score(types.get(i));
+    }
+    return out;
   }
   
   public float score(FeatureType type) {

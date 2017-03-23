@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
-import edu.dal.corr.suggest.Searchable;
-import edu.dal.corr.util.Unigram;
-import edu.dal.corr.word.Word;
 import gnu.trove.map.hash.TObjectByteHashMap;
+import gnu.trove.set.hash.THashSet;
 import info.debatty.java.stringsimilarity.Levenshtein;
 
 /**
@@ -19,9 +19,37 @@ import info.debatty.java.stringsimilarity.Levenshtein;
  * @since 2016.08.11
  */
 class ReverseLevenshteinDistanceSearcher
-    implements Searchable, Serializable
+    implements Serializable
 {
   private static final long serialVersionUID = -693442884043428965L;
+  
+  private static Map<THashSet<String>, ReverseLevenshteinDistanceSearcher> instanceMap =
+      new WeakHashMap<>();
+  
+  public static ReverseLevenshteinDistanceSearcher getInstance(THashSet<String> dictionary) {
+    if (instanceMap.containsKey(dictionary)) {
+      return instanceMap.get(dictionary);
+    }
+    for (THashSet<String> instDict: instanceMap.keySet()) {
+      if (instDict.size() != dictionary.size()) {
+        continue;
+      }
+      boolean equals = true;
+      for (String key: instDict) {
+        if (! dictionary.contains(key)) {
+          equals = false;
+          break;
+        }
+      }
+      if (equals) {
+        return instanceMap.get(instDict);
+      }
+    }
+    ReverseLevenshteinDistanceSearcher newInstance =
+        new ReverseLevenshteinDistanceSearcher(dictionary);
+    instanceMap.put(dictionary, newInstance);
+    return newInstance;
+  }
 
   /**
    * Categorize unigram by length for reducing search space of
@@ -30,11 +58,10 @@ class ReverseLevenshteinDistanceSearcher
    * 
    * TODO: unsafe for different unigram data.
    */
-  private static String[][] unigramInLen;
-  
+  private String[][] lexiconInLen;
+
   private Levenshtein lev;
-  private Unigram unigram;
-  private int maxDistance;
+  private THashSet<String> dict;
 
   /**
    * Construct an object with unigram and search distance threshold.
@@ -42,54 +69,40 @@ class ReverseLevenshteinDistanceSearcher
    * @param unigram  an unigram instance.
    * @param maxDistance  the maximum number of search distance.
    */
-  ReverseLevenshteinDistanceSearcher(Unigram unigram, int maxDistance)
-  {
-    if (maxDistance > 0) {
-      this.maxDistance = maxDistance;
-    } else {
-      throw new IllegalArgumentException(
-          "Non-positive distance threshold given: " + maxDistance);
-    }
-    this.unigram = unigram;
+  ReverseLevenshteinDistanceSearcher(THashSet<String> dictionary) {
+    this.dict = dictionary;
+    this.lev = new Levenshtein();
     
-    if (unigramInLen == null) {
-      // Separate unigram by length.
-      ArrayList<ArrayList<String>> uniList = new ArrayList<>();
-      for (String gram : unigram.keys()) {
-        int len = gram.length();
-        try {
-          uniList.get(len).add(gram);
-        } catch (IndexOutOfBoundsException e) {
-          int uniListSize = uniList.size();
-          for (int i = uniListSize; i <= len; i++) {
-            uniList.add(new ArrayList<>());
-          }
-          uniList.get(len).add(gram);
+    // Separate unigram by length.
+    ArrayList<ArrayList<String>> uniList = new ArrayList<>();
+    for (String gram : dictionary) {
+      int len = gram.length();
+      try {
+        uniList.get(len).add(gram);
+      } catch (IndexOutOfBoundsException e) {
+        int uniListSize = uniList.size();
+        for (int i = uniListSize; i <= len; i++) {
+          uniList.add(new ArrayList<>());
         }
-      }
-      unigramInLen = new String[uniList.size()][];
-      for (int i = 0; i < uniList.size(); i++) {
-        ArrayList<String> lenList = uniList.get(i);
-        unigramInLen[i] = lenList.toArray(new String[lenList.size()]);
+        uniList.get(len).add(gram);
       }
     }
-    lev = new Levenshtein();
-  }
-
-  @Override
-  public Set<String> search(Word word) {
-    return search(word.text());
+    lexiconInLen = new String[uniList.size()][];
+    for (int i = 0; i < uniList.size(); i++) {
+      ArrayList<String> lenList = uniList.get(i);
+      lexiconInLen[i] = lenList.toArray(new String[lenList.size()]);
+    }
   }
   
-  private Set<String> search(String word) {
+  public Set<String> search(String word, int maxDistance) {
     Set<String> candidates = new HashSet<String>();
     int len = word.length();
     
     // Add unigrams with `maxDistance` number of inserting into candidate list.
     if (len - maxDistance > 0) {
       TObjectByteHashMap<String> permMap = new TObjectByteHashMap<>();
-      permuteSubstrings(word).forEach(str -> {
-        if (unigram.contains(str)) {
+      permuteSubstrings(word, maxDistance).forEach(str -> {
+        if (dict.contains(str)) {
           // Avoid inserting duplicate candidate.
           if (! permMap.containsKey(str)) {
             permMap.put(str, (byte) 0);
@@ -104,7 +117,7 @@ class ReverseLevenshteinDistanceSearcher
     for (int i = (len - maxDistance + 1 > 0 ? len - maxDistance + 1 : 0);
          i <= len + maxDistance; i++) {
       try {
-        for (String gram : unigramInLen[i]) {
+        for (String gram : lexiconInLen[i]) {
           if (lev.distance(gram, word) <= maxDistance) {
             candidates.add(gram);
           }
@@ -116,7 +129,7 @@ class ReverseLevenshteinDistanceSearcher
     return candidates;
   }
   
-  private List<String> permuteSubstrings(String word)
+  private List<String> permuteSubstrings(String word, int maxDistance)
   {
     List<String> candidates = new ArrayList<String>();
     int len = word.length();

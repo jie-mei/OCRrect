@@ -23,9 +23,6 @@ import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.ResourceUtils;
 import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.GoogleTokenizer;
-import edu.dal.corr.word.filter.CommonPatternFilter;
-import edu.dal.corr.word.filter.CommonWordFilter;
-import edu.dal.corr.word.filter.WordFilter;
 
 /**
  * @since 2017.03.18
@@ -98,7 +95,7 @@ public class Main
             new DistanceFeature("qgram-fivegram", Scoreable.qgramDist(5)),
 
 
-            new StringSimilarityFeature(unigram),
+            new StringSimilarityFeature(),
             new LanguagePopularityFeature(unigram),
 
             new LexiconExistenceFeature("Lexical", IOUtils.readList(ResourceUtils.LEXI_LEXICON)),

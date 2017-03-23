@@ -49,6 +49,6 @@ public class FeatureType
   public final String toString() {
     return name == null
         ? cls.getSimpleName()
-        : String.format("%s(%s)", cls.getSimpleName(), name());
+        : String.format("%s$%s", cls.getSimpleName(), name());
   }
 }

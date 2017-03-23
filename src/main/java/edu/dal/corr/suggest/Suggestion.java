@@ -215,7 +215,10 @@ public class Suggestion
       // Generate features suggestions from context-sensitive features.
       for (Feature feat: features) {
         if (feat instanceof ContextSensitiveFeature) {
-          List<TObjectFloatMap<String>> scoreMaps = feat.suggest(words);
+          List<TObjectFloatMap<String>> scoreMaps = 
+              LogUtils.logTime(
+                  String.format("%s.%s.suggest()", feat.getClass().getPackage(), feat.type()), 3,
+                  () -> feat.suggest(words));
           fsByFeatsByWords.add(FeatureSuggestionBuilder.build(feat, words, scoreMaps));
           for (int i = 0; i < words.size(); i++) {
             candidateTotalByWords.get(i).addAll(scoreMaps.get(i).keySet());
@@ -225,7 +228,10 @@ public class Suggestion
       // Search candidates from word-isolated features.
       for (Feature feat: features) {
         if (! (feat instanceof ContextSensitiveFeature)) {
-          List<Set<String>> candidateLists = feat.search(words);
+          List<Set<String>> candidateLists = 
+              LogUtils.logTime(
+                  String.format("%s.%s.search()", feat.getClass().getPackage(), feat.type()), 3,
+                  () -> feat.search(words));
           for (int i = 0; i < words.size(); i++) {
             candidateTotalByWords.get(i).addAll(candidateLists.get(i));
           }
@@ -234,7 +240,10 @@ public class Suggestion
       // Score candidates and generate feature suggestions.
       for (Feature feat: features) {
         if (! (feat instanceof ContextSensitiveFeature)) {
-          List<TObjectFloatMap<String>> scoreMaps = feat.score(words, candidateTotalByWords);
+          List<TObjectFloatMap<String>> scoreMaps =
+              LogUtils.logTime(
+                  String.format("%s.%s.score()", feat.getClass().getPackage(), feat.type()), 3,
+                  () -> feat.score(words, candidateTotalByWords));
           fsByFeatsByWords.add(FeatureSuggestionBuilder.build(feat, words, scoreMaps));
         }
       }
@@ -292,11 +301,13 @@ public class Suggestion
    * A valid data file should formated follows:
    *
    * - the file starts with a list of feature names, which are separated by a
-   * newline character. Features follow by an empty line. - each error starts
-   * with one line containing its name, following by its candidates. - each
-   * error candidate uses one line, containing the following fields: candidate
-   * name, a list of candidate values, and a label. Fields are separated by a
-   * tab character. - there is an empty line between each errors.
+   *   newline character. Features follow by an empty line.
+   * - each error starts with one line containing its name, following by its
+   *   candidates.
+   * - each error candidate uses one line, containing the following fields:
+   *   candidate name, a list of candidate values, and a label. Fields are
+   *   separated by a tab character.
+   * - there is an empty line between each errors.
    * 
    * @param suggestions A list of suggestions.
    * @param gtErrs A list of ground truth errors.
@@ -328,11 +339,6 @@ public class Suggestion
       // Write suggestions.
       for (Suggestion suggest : suggestions) {
         int pos = suggest.position();
-        // TODO: ad-hoc modification, to be removed.
-        if (pos > 160007)
-          pos += 1;
-        if (pos > 173572)
-          pos -= 3;
         GroundTruthError err = errMap.get(pos);
 
         // Write suggestion name and position.

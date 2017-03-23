@@ -27,6 +27,7 @@ public class ResourceUtils
   /*
    * Lexicons.
    */
+  public static Path VOCAB = getResource("search_vocab.txt");
   public static Path SPECIAL_LEXICON = getResource("lexicon/special.txt");
   public static Path LEXI_LEXICON    = getResource("lexicon/lexicon.txt");
   public static Path WIKI_LEXICON    = getResource("lexicon/wiki.txt");

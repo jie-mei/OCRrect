@@ -1,15 +1,15 @@
 package edu.dal.corr.suggest.feature;
 
+import java.io.IOException;
 import java.util.Set;
 
-import edu.dal.corr.suggest.Searchable;
 import edu.dal.corr.suggest.batch.WordIsolatedBatchDetectMixin;
 import edu.dal.corr.suggest.batch.WordIsolatedBatchScoreMixin;
 import edu.dal.corr.suggest.batch.WordIsolatedBatchSearchMixin;
-import edu.dal.corr.util.Unigram;
+import edu.dal.corr.util.IOUtils;
+import edu.dal.corr.util.ResourceUtils;
 import edu.dal.corr.word.Word;
-import gnu.trove.map.TObjectFloatMap;
-import gnu.trove.map.hash.TObjectFloatHashMap;
+import gnu.trove.set.hash.THashSet;
 
 /**
  * @since 2016.08.11
@@ -27,18 +27,23 @@ abstract class WordIsolatedFeature
    */
   public static final int DISTANCE_THRESHOLD = 3;
 
-  private Searchable revLevDistance;
+  private ReverseLevenshteinDistanceSearcher revLevDistance;
+  private THashSet<String> vocab;
 
   /**
    * @param  unigram  a unigram that limit the candidate search space.
    */
-  WordIsolatedFeature(Unigram unigram) {
-    this.revLevDistance =
-        new ReverseLevenshteinDistanceSearcher(unigram, DISTANCE_THRESHOLD);
+  WordIsolatedFeature(THashSet<String> vocab) {
+    this.vocab = vocab;
+    this.revLevDistance = ReverseLevenshteinDistanceSearcher.getInstance(vocab);
   }
 
-  WordIsolatedFeature() {
-    this(Unigram.getInstance());
+  WordIsolatedFeature() throws IOException {
+    this(IOUtils.readList(ResourceUtils.VOCAB));
+  }
+  
+  protected THashSet<String> getVocab() {
+    return vocab;
   }
 
   /**
@@ -48,16 +53,6 @@ abstract class WordIsolatedFeature
    */
   @Override
   public Set<String> search(Word word) {
-    return revLevDistance.search(word);
-  }
-
-  @Override
-  public TObjectFloatMap<String> suggest(Word word)
-  {
-    TObjectFloatMap<String> map = new TObjectFloatHashMap<>();
-    search(word).stream().forEach(candidate -> {
-      map.put(candidate, score(word, candidate));
-    });
-    return map;
+    return revLevDistance.search(word.text(), DISTANCE_THRESHOLD);
   }
 }

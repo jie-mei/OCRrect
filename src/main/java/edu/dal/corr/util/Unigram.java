@@ -31,8 +31,7 @@ public class Unigram
 
   private TObjectLongHashMap<String> map;
 
-  private Unigram()
-  {
+  private Unigram() {
     this(ResourceUtils.UNIGRAM);
   }
   

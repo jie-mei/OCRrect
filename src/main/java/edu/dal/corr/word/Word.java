@@ -1,5 +1,6 @@
 package edu.dal.corr.word;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -216,8 +217,9 @@ public class Word
    * @param  tokenizer  a tokenizer.
    * @param  filters  an array of word filters.
    * @return a list of words.
+   * @throws IOException 
    */
-  public static List<Word> get(String content, WordTokenizer tokenizer, WordFilter... filters)
+  public static List<Word> get(String content, WordTokenizer tokenizer, WordFilter... filters) throws IOException
   {
     List<Word> words = WordTokenizer.tokenize(content, tokenizer);
     return getImpl(words, filters);
@@ -229,8 +231,9 @@ public class Word
    * @param  content  a text string.
    * @param  tokenizer  a tokenizer.
    * @return a list of words.
+   * @throws IOException 
    */
-  public static List<Word> get(String content, WordTokenizer tokenizer) {
+  public static List<Word> get(String content, WordTokenizer tokenizer) throws IOException {
     return get(content, tokenizer, new WordFilter[0]);
   }
 }

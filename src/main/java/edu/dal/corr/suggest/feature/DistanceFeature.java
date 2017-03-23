@@ -1,5 +1,7 @@
 package edu.dal.corr.suggest.feature;
 
+import java.io.IOException;
+
 import edu.dal.corr.suggest.NormalizationOption;
 import edu.dal.corr.suggest.Scoreable;
 import edu.dal.corr.suggest.batch.WordIsolatedBatchDetectMixin;
@@ -17,13 +19,14 @@ public class DistanceFeature
   private Scoreable scoreable;
   private NormalizationOption norm;
   
-  public DistanceFeature(String name, Scoreable scoreable, NormalizationOption norm) {
+  public DistanceFeature(String name, Scoreable scoreable, NormalizationOption norm)
+      throws IOException {
     setName(name);
     this.scoreable = scoreable;
     this.norm = norm;
   }
 
-  public DistanceFeature(String name, Scoreable scoreable) {
+  public DistanceFeature(String name, Scoreable scoreable) throws IOException {
     this(name, scoreable, NormalizationOption.RESCALE);
   }
 
