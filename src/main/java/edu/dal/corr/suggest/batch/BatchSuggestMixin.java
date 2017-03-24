@@ -8,7 +8,7 @@ import edu.dal.corr.word.Word;
 import gnu.trove.map.TObjectFloatMap;
 
 /**
- * @since 2016.08.10
+ * @since 2017.03.23
  */
 public interface BatchSuggestMixin
   extends Suggestable
@@ -21,7 +21,8 @@ public interface BatchSuggestMixin
    */
   default List<TObjectFloatMap<String>> suggest(List<Word> words)
   {
-    return words.stream()
+    return words
+        .parallelStream()
         .map(w -> suggest(w))
         .collect(Collectors.toList());
   }

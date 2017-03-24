@@ -7,7 +7,7 @@ import edu.dal.corr.suggest.feature.Detectable;
 import edu.dal.corr.word.Word;
 
 /**
- * @since 2016.08.10
+ * @since 2017.03.23
  */
 public interface BatchDetectMixin
   extends Detectable
@@ -21,7 +21,8 @@ public interface BatchDetectMixin
    */
   default List<Boolean> detect(List<Word> words)
   {
-    return words.stream()
+    return words
+        .parallelStream()
         .map(w -> detect(w))
         .collect(Collectors.toList());
   }

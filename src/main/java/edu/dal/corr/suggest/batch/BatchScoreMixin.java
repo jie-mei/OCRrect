@@ -3,6 +3,8 @@ package edu.dal.corr.suggest.batch;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import edu.dal.corr.suggest.Scoreable;
 import edu.dal.corr.word.Word;
@@ -11,7 +13,7 @@ import gnu.trove.map.hash.TObjectFloatHashMap;
 
 
 /**
- * @since 2016.08.10
+ * @since 2017.03.23
  */
 public interface BatchScoreMixin extends Scoreable {
 
@@ -19,16 +21,18 @@ public interface BatchScoreMixin extends Scoreable {
       List<Word> words,
       List<Set<String>> candidateLists)
   {
-    List<TObjectFloatMap<String>> scoreLists = new ArrayList<>();
-    for (int i = 0; i < words.size(); i++) {
-      Word word = words.get(i);
-      Set<String> candidates = candidateLists.get(i);
-      TObjectFloatMap<String> scores = new TObjectFloatHashMap<>();
-      candidates.forEach(c -> {
-        scores.put(c, score(word, c));
-      });
-      scoreLists.add(scores);
-    }
-    return scoreLists;
+    return IntStream
+        .range(0, words.size())
+        .parallel()
+        .mapToObj(i -> {
+          Word word = words.get(i);
+          Set<String> candidates = candidateLists.get(i);
+          TObjectFloatMap<String> scores = new TObjectFloatHashMap<>();
+          candidates.forEach(c -> {
+            scores.put(c, score(word, c));
+          });
+          return scores;
+        })
+        .collect(Collectors.toList());
   }
 }

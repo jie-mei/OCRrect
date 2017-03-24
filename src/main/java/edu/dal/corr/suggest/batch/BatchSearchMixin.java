@@ -8,7 +8,7 @@ import edu.dal.corr.suggest.Searchable;
 import edu.dal.corr.word.Word;
 
 /**
- * @since 2016.08.10
+ * @since 2017.03.23
  */
 public interface BatchSearchMixin
   extends Searchable
@@ -21,7 +21,8 @@ public interface BatchSearchMixin
    */
   default List<Set<String>> search(List<Word> words)
   {
-    return words.stream()
+    return words
+        .parallelStream()
         .map(w -> search(w))
         .collect(Collectors.toList());
   }
