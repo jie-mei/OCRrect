@@ -8,6 +8,7 @@ public enum NormalizationOption
   NONE,
   DIVIDE_MAX,
   RESCALE,
+  RESCALE_AND_NEGATE,
   LOG_AND_RESCALE,
   TO_PROB
 }

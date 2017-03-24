@@ -70,12 +70,16 @@ class FeatureSuggestionBuilder
         scores.transformValues(s -> (float)Math.log10(s + 1));  // add-one smooth
         // continue
       case RESCALE:
+      case RESCALE_AND_NEGATE:
         normReduce = scores.min();
         normDenom = scores.max() - scores.min(); break;
     }
     final float reduce = normReduce;
     final float denorm = (normDenom == 0 ? 1 : normDenom);  // avoid 0 division
     scores.transformValues(s -> (s - reduce) / denorm);
+    if (feature.normalize() == NormalizationOption.RESCALE_AND_NEGATE) {
+      scores.transformValues(s -> -s);
+    }
   }
   
   FeatureSuggestion build()

@@ -4,15 +4,13 @@ import java.io.IOException;
 
 import edu.dal.corr.suggest.NormalizationOption;
 import edu.dal.corr.suggest.Scoreable;
-import edu.dal.corr.suggest.batch.WordIsolatedBatchDetectMixin;
 import edu.dal.corr.word.Word;
 
 /**
  * @since 2016.08.10
  */
 public class DistanceFeature
-    extends WordIsolatedFeature
-    implements WordIsolatedBatchDetectMixin {
+    extends WordIsolatedFeature {
 
   private static final long serialVersionUID = -433050428364692186L;
   
@@ -27,7 +25,7 @@ public class DistanceFeature
   }
 
   public DistanceFeature(String name, Scoreable scoreable) throws IOException {
-    this(name, scoreable, NormalizationOption.RESCALE);
+    this(name, scoreable, NormalizationOption.RESCALE_AND_NEGATE);
   }
 
   @Override

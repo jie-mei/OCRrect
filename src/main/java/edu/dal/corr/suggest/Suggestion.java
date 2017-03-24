@@ -581,7 +581,7 @@ public class Suggestion
 
     for (FeatureType type : suggest.types()) {
       Stream.of(candidates)
-          .sorted(sortByFreq(word))
+//          .sorted(sortByFreq(word))
           .sorted(sortByScore(type))
           .limit(top)
           .forEach(c -> selected.add(c));
