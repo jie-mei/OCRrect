@@ -27,14 +27,12 @@ public class TokenTest
   
   @Before
   public void before()
-    throws IOException
-  {
+    throws IOException {
     tokens = Token.read(TOKEN_PATH);
   }
 
   @Test
-  public void testRead()
-  {
+  public void testRead() {
     assertThat(tokens.get(0), is(new Token("Hello", 0)));
     assertThat(tokens.get(1), is(new Token(",", 5)));
     assertThat(tokens.get(2), is(new Token("world", 7)));

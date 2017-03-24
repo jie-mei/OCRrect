@@ -51,6 +51,8 @@ public class Suggestion
 
   private static final int NON_MAPPING = -1;
 
+  public static final int ALL_CANDIDATES = 0;
+
   private final List<FeatureType> types;
   private final Candidate[] candidates;
 
@@ -203,7 +205,8 @@ public class Suggestion
 
   private static List<List<FeatureSuggestion>> batchSuggestWithBatchType(
       List<Word> words,
-      List<Feature> features)
+      List<Feature> features,
+      int top)
   {
     return LogUtils.logMethodTime(2, () -> {
       List<Set<String>> candidateTotalByWords =
@@ -219,9 +222,15 @@ public class Suggestion
               LogUtils.logTime(
                   String.format("%s.%s.suggest()", feat.getClass().getPackage(), feat.type()), 3,
                   () -> feat.suggest(words));
-          fsByFeatsByWords.add(FeatureSuggestionBuilder.build(feat, words, scoreMaps));
+          List<FeatureSuggestion> fsList =
+              FeatureSuggestionBuilder
+                  .build(feat, words, scoreMaps)
+                  .stream()
+                  .map(fs -> fs.top(top))
+                  .collect(Collectors.toList());
+          fsByFeatsByWords.add(fsList);
           for (int i = 0; i < words.size(); i++) {
-            candidateTotalByWords.get(i).addAll(scoreMaps.get(i).keySet());
+            candidateTotalByWords.get(i).addAll(fsList.get(i).candidateNames());
           }
         }
       }
@@ -244,10 +253,15 @@ public class Suggestion
               LogUtils.logTime(
                   String.format("%s.%s.score()", feat.getClass().getPackage(), feat.type()), 3,
                   () -> feat.score(words, candidateTotalByWords));
-          fsByFeatsByWords.add(FeatureSuggestionBuilder.build(feat, words, scoreMaps));
+          List<FeatureSuggestion> fsList =
+              FeatureSuggestionBuilder
+                  .build(feat, words, scoreMaps)
+                  .stream()
+                  .map(fs -> fs.top(top))
+                  .collect(Collectors.toList());
+          fsByFeatsByWords.add(fsList);
         }
       }
-
       return fsByFeatsByWords;
     });
   }
@@ -260,7 +274,8 @@ public class Suggestion
    * @param detect   whether the error detection step is needed.
    * @return A list of suggestions.
    */
-  public static List<Suggestion> suggest(List<Word> words, List<Feature> features, boolean detect) {
+  public static List<Suggestion> suggest(List<Word> words, List<Feature>
+      features, int top, boolean detect) {
     return LogUtils.logMethodTime(1, () -> {
       // Detection.
       List<Word> errWords = words;
@@ -275,7 +290,7 @@ public class Suggestion
       }
       // Candidate suggesting.
       List<List<FeatureSuggestion>> fsByFeatsByWords =
-          batchSuggestWithBatchType(errWords, features);
+          batchSuggestWithBatchType(errWords, features, top);
       List<SuggestionBuilder> sbList = 
           errWords.stream()
                .map(w -> new SuggestionBuilder(w))
@@ -291,8 +306,8 @@ public class Suggestion
     });
   }
 
-  public static List<Suggestion> suggest(List<Word> words, List<Feature> features) {
-    return suggest(words, features, false);
+  public static List<Suggestion> suggest(List<Word> words, List<Feature> features, int top) {
+    return suggest(words, features, top, false);
   }
 
   /**

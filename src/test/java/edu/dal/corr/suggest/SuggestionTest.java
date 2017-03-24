@@ -87,7 +87,8 @@ public class SuggestionTest {
     // Generate suggestions.
     List<Suggestion> suggests = Suggestion.suggest(
         Word.get(IOUtils.read(TXT_PATH), new GoogleTokenizer()),
-        features
+        features,
+        99
     );
     suggests.forEach(suggest -> {
       for (Candidate cand : suggest.candidates()) {

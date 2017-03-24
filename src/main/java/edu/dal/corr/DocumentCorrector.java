@@ -22,17 +22,14 @@ import edu.dal.corr.word.filter.WordFilter;
  */
 public class DocumentCorrector
 {
-  private static final Logger LOG = Logger.getLogger(DocumentCorrector.class);
-  
-  private static final String GEN_WORD_FORMAT = "Generate words\n" +
-                                                "  - words:      %d\n" +
-                                                "  - time taken: %4.2f seconds";
+  public static final Logger LOG = Logger.getLogger(DocumentCorrector.class);
 
   public void correct(WordTokenizer tokenizer,
-                                  List<WordFilter> filters,
-                                  List<Feature> features,
-                                  String content)
-    throws IOException
+                      List<WordFilter> filters,
+                      List<Feature> features,
+                      String content,
+                      int top)
+      throws IOException
   {
     Timer t = new Timer();
     if (filters == null) {
@@ -41,12 +38,17 @@ public class DocumentCorrector
     List<Word> words = Word.get(content, tokenizer,
         filters.toArray(new WordFilter[filters.size()]));
     if (LOG.isInfoEnabled()) {
-      LOG.info(String.format(GEN_WORD_FORMAT, words.size(), t.interval()));
+      LOG.info(String.format(
+          "Generate words\n" +
+          "  - words:      %d\n" +
+          "  - time taken: %4.2f seconds",
+          words.size(),
+          t.interval()));
     }
 
     List<List<Word>> wordSubLists = split(words, 1000);
     for (int i = 0; i < wordSubLists.size(); i++) {
-      correctImpl(wordSubLists.get(i), features, String.format("part%03d", i));
+      correctImpl(wordSubLists.get(i), features, top, String.format("part%03d", i));
     }
   }
 
@@ -59,13 +61,13 @@ public class DocumentCorrector
     return parts;
   }
 
-  public List<Suggestion> correctImpl(List<Word> words, List<Feature> features, String sign)
+  public List<Suggestion> correctImpl(List<Word> words, List<Feature> features, int top, String sign)
       throws IOException {
     String name = "suggestion" + (sign.length() == 0 ? "" :  "." + sign);
 
     Timer t = new Timer();
     t.start();
-    List<Suggestion> suggestions = Suggestion.suggest(words, features);
+    List<Suggestion> suggestions = Suggestion.suggest(words, features, top);
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
           "Suggesting candidates using features...\n" +
@@ -78,45 +80,41 @@ public class DocumentCorrector
     }
     
     t.start();
-    List<Suggestion> top1000 = Suggestion.top(suggestions, 1000);
+    List<Suggestion> top100 = Suggestion.top(suggestions, 100);
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
-          "Get top 1000...\n" +
+          "Get top 100...\n" +
           "  - time taken:  %4.2f seconds",
           t.interval()));
     }
 
     t.start();
-    Suggestion.write(top1000, Paths.get("tmp/" + name + ".top.1000"), "suggest");
+    Suggestion.write(top100, Paths.get("tmp/" + name + ".top.100"), "suggest");
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
-          "Writing top 1000 to file...\n" +
+          "Writing top 100 to file...\n" +
           "  - time taken:  %4.2f seconds",
           t.interval()));
     }
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/" + name + ".top.1000"),
-        Paths.get("tmp/" + name + ".top.100"), 100);
-    
-    Suggestion.rewriteTop(
-        Paths.get("tmp/" + name + ".top.1000"),
+        Paths.get("tmp/" + name + ".top.100"),
         Paths.get("tmp/" + name + ".top.50"), 50);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/" + name + ".top.1000"),
+        Paths.get("tmp/" + name + ".top.100"),
         Paths.get("tmp/" + name + ".top.20"), 20);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/" + name + ".top.1000"),
+        Paths.get("tmp/" + name + ".top.100"),
         Paths.get("tmp/" + name + ".top.10"), 10);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/" + name + ".top.1000"),
+        Paths.get("tmp/" + name + ".top.100"),
         Paths.get("tmp/" + name + ".top.5"), 5);
     
     Suggestion.rewriteTop(
-        Paths.get("tmp/" + name + ".top.1000"),
+        Paths.get("tmp/" + name + ".top.100"),
         Paths.get("tmp/" + name + ".top.3"), 3);
     
     return suggestions;

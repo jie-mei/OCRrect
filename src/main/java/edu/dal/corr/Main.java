@@ -29,6 +29,8 @@ import edu.dal.corr.word.GoogleTokenizer;
  */
 public class Main
 {
+  private static final int TOP = 100;
+
   public static NgramBoundedReaderSearcher getNgramSearch(
       String pathname,
       List<Path> dataPath)
@@ -118,7 +120,8 @@ public class Main
         new GoogleTokenizer(),
         null,
         Arrays.asList(features),
-        IOUtils.read(ResourceUtils.INPUT)
+        IOUtils.read(ResourceUtils.INPUT),
+        TOP
     );
   }
   

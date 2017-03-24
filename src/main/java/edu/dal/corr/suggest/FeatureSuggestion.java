@@ -1,6 +1,7 @@
 package edu.dal.corr.suggest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.dal.corr.suggest.feature.Feature;
@@ -22,25 +23,55 @@ public class FeatureSuggestion
   private final String[] candidates;
   private final float[] scores;
 
-  FeatureSuggestion(Feature feature, String name, int position, String[]
+  FeatureSuggestion(FeatureType type, String name, int position, String[]
       candidates, float[] scores) {
     super(name, position);
-    this.type = feature.type();
+    this.type = type;
     this.candidates = candidates;
     this.scores = scores;
   }
+
+  FeatureSuggestion(Feature feature, String name, int position, String[]
+      candidates, float[] scores) {
+    this(feature.type(), name, position, candidates, scores);
+  }
   
-  public FeatureType type()
-  {
+  public FeatureType type() {
     return type;
   }
 
-  public List<FeatureCandidate> candidates()
-  {
+  public List<String> candidateNames() {
+    return Arrays.asList(candidates);
+  }
+
+  public List<FeatureCandidate> candidates() {
     List<FeatureCandidate> cands = new ArrayList<>(scores.length);
     for (int i = 0; i < scores.length; i++) {
       cands.add(new FeatureCandidate(type, candidates[i], scores[i]));
     }
     return cands;
+  }
+  
+  /**
+   * Get a truncated feature suggestion with only top suggestions.
+   * @return A feature suggestion with only top suggestions from the original object.
+   */
+  public FeatureSuggestion top(int num) {
+    int top = num < candidates.length ? num : candidates.length;
+    String[] topCand = new String[top];
+    float[] topScore = new float[top];
+    List<FeatureCandidate> candidates = candidates();
+    if (top != num) {
+      candidates.sort((a, b) -> {
+        float diff = b.score() - a.score();
+        return diff == 0 ? 0 : (diff > 0 ? 1 : -1);
+      });
+    }
+    for (int i = 0; i < top; i++) {
+      FeatureCandidate fc = candidates.get(i);
+      topCand[i] = fc.text();
+      topScore[i] = fc.score();
+    }
+    return new FeatureSuggestion(type, text(), position(), topCand, topScore);
   }
 }
