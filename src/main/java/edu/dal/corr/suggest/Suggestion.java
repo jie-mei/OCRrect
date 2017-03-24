@@ -35,6 +35,7 @@ import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.LocatedTextualUnit;
 import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.util.PathUtils;
+import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.Word;
 import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -547,6 +548,14 @@ public class Suggestion
     };
   }
 
+  static Comparator<Candidate> sortByFreq(String errorWord) {
+    return (c1, c2) -> {
+      double diff = Unigram.getInstance().freq(c1.text())
+                  - Unigram.getInstance().freq(c2.text());
+      return diff == 0 ? 0 : diff > 0 ? -1 : 1;
+    };
+  }
+
   /**
    * Create a new suggestion with only the top suggested candidates from each
    * feature type.
@@ -571,7 +580,10 @@ public class Suggestion
     Set<Candidate> selected = new HashSet<>();
 
     for (FeatureType type : suggest.types()) {
-      Stream.of(candidates).sorted(sortByMetric(word)).sorted(sortByScore(type)).limit(top)
+      Stream.of(candidates)
+          .sorted(sortByFreq(word))
+          .sorted(sortByScore(type))
+          .limit(top)
           .forEach(c -> selected.add(c));
     }
 
@@ -580,7 +592,10 @@ public class Suggestion
   }
 
   public static List<Suggestion> top(List<Suggestion> suggests, int top) {
-    return suggests.parallelStream().map(s -> top(s, top)).collect(Collectors.toList());
+    return suggests
+        .parallelStream()
+        .map(s -> top(s, top))
+        .collect(Collectors.toList());
   }
 
   /**
