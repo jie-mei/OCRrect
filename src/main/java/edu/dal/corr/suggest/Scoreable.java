@@ -33,18 +33,18 @@ public interface Scoreable
   }
 
   static Scoreable lscDist() {
-    return (w, c) -> 
-        (float)new LongestCommonSubsequence().distance(w.text(), c);
+    return (w, c) -> (float)new LongestCommonSubsequence().distance(w.text(), c);
   }
 
   static Scoreable jaroWinklerDist() {
-    return (w, c) -> 
-        (float)new JaroWinkler().distance(w.text(), c);
+    return (w, c) -> (float)new JaroWinkler().distance(w.text(), c);
   }
 
   static Scoreable jaccardDist(int size) {
-    return (w, c) -> 
-        (float)new Jaccard(size).distance(w.text(), c);
+    return (w, c) -> {
+      double dist = new Jaccard(size).distance(w.text(), c);
+      return dist == Double.NaN ? 0f : (float)dist;
+    };
   }
 
   static Scoreable optStrAlignDist() {
@@ -52,18 +52,15 @@ public interface Scoreable
   }
 
   static Scoreable binNgramDist(int size) {
-    return (w, c) -> (float)new NGram(size, NGram.BINARY_COST)
-        .distance(w.text(), c);
+    return (w, c) -> (float)new NGram(size, NGram.BINARY_COST).distance(w.text(), c);
   }
 
   static Scoreable posNgramDist(int size) {
-    return (w, c) -> (float)new NGram(size, NGram.POSITIONAL_COST)
-        .distance(w.text(), c);
+    return (w, c) -> (float)new NGram(size, NGram.POSITIONAL_COST).distance(w.text(), c);
   }
 
   static Scoreable cmphNgramDist(int size) {
-    return (w, c) -> (float)new NGram(size, NGram.COMPREHENSIVE_COST)
-        .distance(w.text(), c);
+    return (w, c) -> (float)new NGram(size, NGram.COMPREHENSIVE_COST).distance(w.text(), c);
   }
 
   static Scoreable qgramDist(int size) {

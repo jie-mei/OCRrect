@@ -569,22 +569,19 @@ public class Suggestion
    * @see #sortByScore(String, Class)
    */
   public static Suggestion top(Suggestion suggest, int top) {
-    String word = suggest.text();
-    Candidate[] candidates = suggest.candidates();
-
-    HashMap<String, Candidate> candMap = new HashMap<>();
-    for (int i = 0; i < suggest.candidates().length; i++) {
-      Candidate c = suggest.candidates()[i];
-      candMap.put(c.text(), c);
-    }
     Set<Candidate> selected = new HashSet<>();
-
+    Candidate[] candidates = suggest.candidates();
     for (FeatureType type : suggest.types()) {
-      Stream.of(candidates)
+      try {
+        Stream.of(candidates)
 //          .sorted(sortByFreq(word))
-          .sorted(sortByScore(type))
-          .limit(top)
-          .forEach(c -> selected.add(c));
+            .sorted(sortByScore(type))
+            .limit(top)
+            .forEach(c -> selected.add(c));
+      } catch (IllegalArgumentException e) {
+        System.out.println(type);
+        throw e;
+      }
     }
 
     return new Suggestion(suggest.text(), suggest.position(), suggest.types(),
