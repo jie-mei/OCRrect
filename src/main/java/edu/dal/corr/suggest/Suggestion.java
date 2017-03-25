@@ -2,6 +2,7 @@ package edu.dal.corr.suggest;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,6 +11,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -579,6 +581,15 @@ public class Suggestion
             .limit(top)
             .forEach(c -> selected.add(c));
       } catch (IllegalArgumentException e) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("log/error.log." + type.toString() + "." + suggest.text()))) {
+          bw.write(type.toString() + "\n");
+          bw.write(suggest.text() + "\n");
+          for (Candidate c: candidates) {
+            bw.write(String.format("\t%20s: %d\n", c.text(), c.score(type)));
+          }
+        } catch (IOException e1) {
+          e1.printStackTrace();
+        }
         System.out.println(type);
         throw e;
       }
