@@ -1,7 +1,6 @@
 package edu.dal.corr.suggest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import edu.dal.corr.suggest.feature.Feature;
@@ -40,8 +39,12 @@ public class FeatureSuggestion
     return type;
   }
 
-  public List<String> candidateNames() {
-    return Arrays.asList(candidates);
+  public String[] candidateNames() {
+    return candidates;
+  }
+
+  public float[] scores() {
+    return scores;
   }
 
   public List<FeatureCandidate> candidates() {
@@ -52,11 +55,8 @@ public class FeatureSuggestion
     return cands;
   }
   
-  /**
-   * Get a truncated feature suggestion with only top suggestions.
-   * @return A feature suggestion with only top suggestions from the original object.
-   */
-  public FeatureSuggestion top(int num) {
+  
+  Object[] topCandidatesAndScores(int num) {
     int top = num < candidates.length ? num : candidates.length;
     String[] topCand = new String[top];
     float[] topScore = new float[top];
@@ -72,6 +72,15 @@ public class FeatureSuggestion
       topCand[i] = fc.text();
       topScore[i] = fc.score();
     }
-    return new FeatureSuggestion(type, text(), position(), topCand, topScore);
+    return new Object[]{topCand, topScore};
+  }
+  
+  /**
+   * Get a truncated feature suggestion with only top suggestions.
+   * @return A feature suggestion with only top suggestions from the original object.
+   */
+  public FeatureSuggestion top(int num) {
+    Object[] topData = topCandidatesAndScores(num);
+    return new FeatureSuggestion(type, text(), position(), (String[])topData[0], (float[])topData[1]);
   }
 }

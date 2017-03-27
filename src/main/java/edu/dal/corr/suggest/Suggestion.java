@@ -2,7 +2,6 @@ package edu.dal.corr.suggest;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,12 +10,10 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -218,25 +215,6 @@ public class Suggestion
                .collect(Collectors.toList());
       List<List<FeatureSuggestion>> fsByFeatsByWords = new ArrayList<>();
 
-      // Generate features suggestions from context-sensitive features.
-      for (Feature feat: features) {
-        if (feat instanceof ContextSensitiveFeature) {
-          List<TObjectFloatMap<String>> scoreMaps = 
-              LogUtils.logTime(
-                  String.format("%s.%s.suggest()", feat.getClass().getPackage(), feat.type()), 3,
-                  () -> feat.suggest(words));
-          List<FeatureSuggestion> fsList =
-              FeatureSuggestionBuilder
-                  .build(feat, words, scoreMaps)
-                  .stream()
-                  .map(fs -> fs.top(top))
-                  .collect(Collectors.toList());
-          fsByFeatsByWords.add(fsList);
-          for (int i = 0; i < words.size(); i++) {
-            candidateTotalByWords.get(i).addAll(fsList.get(i).candidateNames());
-          }
-        }
-      }
       // Search candidates from word-isolated features.
       for (Feature feat: features) {
         if (! (feat instanceof ContextSensitiveFeature)) {
@@ -247,6 +225,51 @@ public class Suggestion
           for (int i = 0; i < words.size(); i++) {
             candidateTotalByWords.get(i).addAll(candidateLists.get(i));
           }
+        }
+      }
+      // Generate features suggestions from context-sensitive features.
+      for (Feature feat: features) {
+        if (feat instanceof ContextSensitiveFeature) {
+          List<TObjectFloatMap<String>> scoreMaps = 
+              LogUtils.logTime(
+                  String.format("%s.%s.suggest()", feat.getClass().getPackage(), feat.type()), 3,
+                  () -> feat.suggest(words));
+          List<FeatureSuggestion> fsList =
+              IntStream.range(0, words.size())
+                  .mapToObj(i -> {
+                    TObjectFloatMap<String> scoreMap = scoreMaps.get(i);
+                    // Find the top candidates sorted by according feature
+                    // scores.
+                    List<FeatureCandidate> topCands =
+                        scoreMap.keySet()
+                                .stream()
+                                .map(s -> new FeatureCandidate(feat.type(), s, scoreMap.get(s)))
+                                .sorted((a, b) -> {
+                                  float diff = b.score() - a.score();
+                                  return diff == 0 ? 0 : (diff > 0 ? 1 : -1);
+                                })
+                                .limit(top)
+                                .collect(Collectors.toList());
+                    // Build a new feature suggestion with scores from the top
+                    // ranked and reverse levenshtein suggested candidates.
+                    FeatureSuggestionBuilder fsb = new FeatureSuggestionBuilder(feat, words.get(i));
+                    topCands.stream().forEach(fc -> fsb.add(fc));
+                    candidateTotalByWords.get(i).forEach(c -> {
+                      float score = 0;
+                      if ((score = scoreMap.get(c)) > 0) {
+                        fsb.add(c, score);
+                      }
+                    });
+                    // Insert the top candidates into the candidate list.
+                    candidateTotalByWords.get(i).addAll(
+                        topCands.stream()
+                            .map(fc -> fc.text())
+                            .collect(Collectors.toList())
+                        );
+                    return fsb.build();
+                  })
+                  .collect(Collectors.toList());
+          fsByFeatsByWords.add(fsList);
         }
       }
       // Score candidates and generate feature suggestions.
@@ -440,8 +463,6 @@ public class Suggestion
               try (ObjectOutputStream oos = new ObjectOutputStream(Channels
                   .newOutputStream(FileChannel.open(outPath, StandardOpenOption.CREATE,
                       StandardOpenOption.WRITE)))) {
-                System.out.println(String.format("%s: %d candidates", outPath.getFileName(),
-                    suggestions.get(i).candidates.length));
                 oos.writeObject(suggestions.get(i));
               } catch (IOException e) {
                 throw new RuntimeException(e);

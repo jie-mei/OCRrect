@@ -9,37 +9,43 @@ import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.word.Word;
 import gnu.trove.list.array.TFloatArrayList;
 import gnu.trove.map.TObjectFloatMap;
+import gnu.trove.set.hash.THashSet;
 
 /**
  * @since 2017.03.19
  */
-class FeatureSuggestionBuilder
-{
+class FeatureSuggestionBuilder {
   private Feature feature;
   private String name;
   private int position;
   private List<String> candidates;
+  private THashSet<String> candSet;
   private TFloatArrayList scores;
- 
-  FeatureSuggestionBuilder(Feature feature, Word word)
-  {
+
+  FeatureSuggestionBuilder(Feature feature, String name, int position) {
     this.feature = feature;
-    name = word.text();
-    position = word.position();
+    this.name = name;
+    this.position = position;
     candidates = new ArrayList<>();
+    candSet = new THashSet<String>();
     scores = new TFloatArrayList();
   }
+ 
+  FeatureSuggestionBuilder(Feature feature, Word word) {
+    this(feature, word.text(), word.position());
+  }
   
-  FeatureSuggestionBuilder add(String name, float score)
-  {
-    candidates.add(name);
-    scores.add(score);
+  FeatureSuggestionBuilder add(String name, float score) {
+    if (! candSet.contains(name)) {
+      candidates.add(name);
+      candSet.add(name);
+      scores.add(score);
+    }
     return this;
   }
   
-  FeatureSuggestionBuilder add(FeatureCandidate fc)
-  {
-    if (! fc.type().equals(feature)) {
+  FeatureSuggestionBuilder add(FeatureCandidate fc) {
+    if (! fc.type().equals(feature.type())) {
       throw new RuntimeException(String.join(" ", 
           "Invalid candidate type given:", fc.type().toString(),
           "expect:", feature.toString()));
@@ -47,14 +53,12 @@ class FeatureSuggestionBuilder
     return add(fc.text(), fc.score());
   }
   
-  FeatureSuggestionBuilder add(TObjectFloatMap<String> map)
-  {
+  FeatureSuggestionBuilder add(TObjectFloatMap<String> map) {
     map.keySet().forEach(k -> add(k, map.get(k)));
     return this;
   }
   
-  private void normalize()
-  {
+  private void normalize() {
     if (scores.size() == 0) return;
 
     float normDenom = 0;
@@ -78,12 +82,11 @@ class FeatureSuggestionBuilder
     final float denorm = (normDenom == 0 ? 1 : normDenom);  // avoid 0 division
     scores.transformValues(s -> (s - reduce) / denorm);
     if (feature.normalize() == NormalizationOption.RESCALE_AND_NEGATE) {
-      scores.transformValues(s -> -s);
+      scores.transformValues(s -> 1 - s);
     }
   }
   
-  FeatureSuggestion build()
-  {
+  FeatureSuggestion build() {
     normalize();
     return new FeatureSuggestion(feature, name, position,
         candidates.toArray(new String[candidates.size()]),
