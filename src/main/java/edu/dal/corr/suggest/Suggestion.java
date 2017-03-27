@@ -571,30 +571,17 @@ public class Suggestion
    * @see #sortByScore(String, Class)
    */
   public static Suggestion top(Suggestion suggest, int top) {
+    String word = suggest.text();
     Set<Candidate> selected = new HashSet<>();
     Candidate[] candidates = suggest.candidates();
     for (FeatureType type : suggest.types()) {
-      try {
-        Stream.of(candidates)
-//          .sorted(sortByFreq(word))
-            .sorted(sortByScore(type))
-            .limit(top)
-            .forEach(c -> selected.add(c));
-      } catch (IllegalArgumentException e) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("log/error.log." + type.toString() + "." + suggest.text()))) {
-          bw.write(type.toString() + "\n");
-          bw.write(suggest.text() + "\n");
-          for (Candidate c: candidates) {
-            bw.write(String.format("\t%20s: %d\n", c.text(), c.score(type)));
-          }
-        } catch (IOException e1) {
-          e1.printStackTrace();
-        }
-        System.out.println(type);
-        throw e;
-      }
+      Stream.of(candidates)
+          .sorted(sortByFreq(word))
+          .sorted(sortByMetric(word))
+          .sorted(sortByScore(type))
+          .limit(top)
+          .forEach(c -> selected.add(c));
     }
-
     return new Suggestion(suggest.text(), suggest.position(), suggest.types(),
         selected.toArray(new Candidate[selected.size()]));
   }

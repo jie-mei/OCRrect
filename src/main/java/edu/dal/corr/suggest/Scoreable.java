@@ -43,7 +43,7 @@ public interface Scoreable
   static Scoreable jaccardDist(int size) {
     return (w, c) -> {
       double dist = new Jaccard(size).distance(w.text(), c);
-      return dist == Double.NaN ? 0f : (float)dist;
+      return Double.isNaN(dist) ? 0f : (float)dist;
     };
   }
 
