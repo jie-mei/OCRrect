@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.dal.corr.eval.GroundTruthError;
 import edu.dal.corr.eval.GroundTruthErrors;
@@ -125,41 +127,35 @@ public class Main
     );
   }
   
-  public static void runRewrite()
+  private static List<Integer> TOP_VALS = Arrays.asList(3, 5, 10, 20, 50, 100);
+  
+  public static void runWriteText(int top)
     throws IOException
   {
+    if (! TOP_VALS.contains(top)) {
+      throw new RuntimeException();
+    }
     List<GroundTruthError> errors = GroundTruthErrors.read(Paths.get("data/error.gt.txt"));
-
-    Suggestion.writeText(
-        Suggestion.readList(Paths.get("tmp/suggestion.top.100")),
-        errors,
-        Paths.get("tmp/suggestion.top.100.txt"));
-
-    Suggestion.writeText(
-        Suggestion.readList(Paths.get("tmp/suggestion.top.20")),
-        errors,
-        Paths.get("tmp/suggestion.top.20.txt"));
-
-    Suggestion.writeText(
-        Suggestion.readList(Paths.get("tmp/suggestion.top.10")),
-        errors,
-        Paths.get("tmp/suggestion.top.10.txt"));
-
-    Suggestion.writeText(
-        Suggestion.readList(Paths.get("tmp/suggestion.top.5")),
-        errors,
-        Paths.get("tmp/suggestion.top.5.txt"));
-
-    Suggestion.writeText(
-        Suggestion.readList(Paths.get("tmp/suggestion.top.3")),
-        errors,
-        Paths.get("tmp/suggestion.top.3.txt"));
+    List<Path> files = ResourceUtils
+        .getPathsInDir("suggestion.part***.top." + top, "tmp")
+        .stream()
+        .map(b -> ResourceUtils.getPathsInDir("suggest.*", b.toString()))
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
+    List<Suggestion> suggests = files
+        .parallelStream()
+        .map(Suggestion::read)
+        .collect(Collectors.toList());
+    Suggestion.writeText(suggests, errors, Paths.get("tmp/suggestion.top." + top));
   }
 
   public static void main(String[] args)
     throws IOException
   {
-    runCorrection();
-    //runRewrite();
+    // runCorrection();
+    runWriteText(3);
+    runWriteText(5);
+    runWriteText(10);
+    runWriteText(20);
   }
 }
