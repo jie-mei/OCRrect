@@ -27,7 +27,7 @@ import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.GoogleTokenizer;
 
 /**
- * @since 2017.03.18
+ * @since 2017.03.30
  */
 public class Main
 {
@@ -135,7 +135,7 @@ public class Main
     if (! TOP_VALS.contains(top)) {
       throw new RuntimeException();
     }
-    List<GroundTruthError> errors = GroundTruthErrors.read(Paths.get("data/error.gt.txt"));
+    List<GroundTruthError> errors = GroundTruthErrors.read(Paths.get("data/error.gt.tsv"));
     List<Path> files = ResourceUtils
         .getPathsInDir("suggestion.part***.top." + top, "tmp")
         .stream()
