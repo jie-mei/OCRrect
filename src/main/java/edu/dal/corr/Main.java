@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.dal.corr.eval.GroundTruthError;
 import edu.dal.corr.eval.GroundTruthErrors;
+import edu.dal.corr.suggest.Candidate;
 import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
 import edu.dal.corr.suggest.Scoreable;
 import edu.dal.corr.suggest.Suggestion;
@@ -25,6 +27,8 @@ import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.ResourceUtils;
 import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.GoogleTokenizer;
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * @since 2017.03.30
@@ -49,9 +53,7 @@ public class Main
     }
   }
 
-  public static void runCorrection()
-      throws IOException
-  {
+  public static void runCorrection() throws IOException {
     // Construct unigram.
     Unigram unigram = Unigram.getInstance();
 
@@ -129,9 +131,7 @@ public class Main
   
   private static List<Integer> TOP_VALS = Arrays.asList(3, 5, 10, 20, 50, 100);
   
-  public static void runWriteText(int top)
-    throws IOException
-  {
+  public static void runWriteText(int top) throws IOException {
     if (! TOP_VALS.contains(top)) {
       throw new RuntimeException();
     }
@@ -148,14 +148,82 @@ public class Main
         .collect(Collectors.toList());
     Suggestion.writeText(suggests, errors, Paths.get("tmp/suggestion.top." + top));
   }
+  
+  private static boolean correctSuggested(Suggestion suggest, TIntObjectMap<GroundTruthError> errMap,
+        BitSet errPos) {
+    // Check whether the suggested word overlaps any error.
+    boolean overlap = false;
+    for (int i = suggest.position(); i < suggest.position() + suggest.text().length(); i++) {
+      if (errPos.get(i)) {
+        overlap = true;
+        break;
+      }
+    }
+    // Setup the target word according the overlapping status.
+    int pos = suggest.position();
+    String word = suggest.text();
+    List<String> targets = null;
+    if (overlap) {
+      GroundTruthError err = errMap.get(pos);
+      if (err != null) {
+        targets = Arrays.asList(err.gtText(), err.gtTextAscii());
+      }
+    } else {
+      targets = Arrays.asList(word);
+    }
 
-  public static void main(String[] args)
-    throws IOException
-  {
+    // Check if any candidates matches the target word.
+    if (targets == null) {
+      return false;
+    }
+    for (Candidate cand : suggest.candidates()) {
+      if (targets.contains(cand.text())) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  public static void evaluateSuggestRecall(int top) throws IOException {
+    // Map each error starting position to the according error.
+    List<GroundTruthError> errors = GroundTruthErrors.read(Paths.get("data/error.gt.tsv"));
+    TIntObjectMap<GroundTruthError> errMap = new TIntObjectHashMap<>();
+    for (GroundTruthError err : errors) {
+      errMap.put(err.position(), err);
+    }
+
+    // Representing error location using a bit set.
+    BitSet errPos = new BitSet(IOUtils.read(ResourceUtils.INPUT).length());
+    for (GroundTruthError err : errors) {
+      errPos.set(err.position(), err.position() + err.text().length(), true);
+    }
+    
+    // Detect whether a correction contains in the suggestion, or the original
+    // word in the suggestion for a correction word.
+    List<Path> files = ResourceUtils
+        .getPathsInDir("suggestion.part***.top." + top, "tmp")
+        .stream()
+        .map(b -> ResourceUtils.getPathsInDir("suggest.*", b.toString()))
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
+    long numOfCorr = files
+        .parallelStream()
+        .map(f -> correctSuggested(Suggestion.read(f), errMap, errPos))
+        .filter(b -> b)
+        .count();
+    System.out.println(String.format("Correctly suggested: %8d / %8d = %.4f",
+        numOfCorr, files.size(), (float)numOfCorr / files.size()));
+  }
+
+  public static void main(String[] args) throws IOException {
     // runCorrection();
-    runWriteText(3);
-    runWriteText(5);
-    runWriteText(10);
-    runWriteText(20);
+    // runWriteText(3);
+    // runWriteText(5);
+    // runWriteText(10);
+    // runWriteText(20);
+    evaluateSuggestRecall(3);
+    evaluateSuggestRecall(5);
+    evaluateSuggestRecall(10);
+    evaluateSuggestRecall(20);
   }
 }

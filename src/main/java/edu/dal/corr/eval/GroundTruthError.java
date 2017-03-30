@@ -67,7 +67,7 @@ public class GroundTruthError
   }
 
   public String gtTextAscii() {
-    return gtTextAscii;
+    return gtTextAscii.length() == 0 ? gtText : gtTextAscii;
   }
 
   /**
