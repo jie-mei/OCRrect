@@ -12,7 +12,7 @@ TEMP_DIR = 'tmp/'
 MODEL_DIR = TEMP_DIR + 'model/'
 
 # The pathname to the generated suggestion data.
-DATA_PATH = TEMP_DIR + 'suggestion.top.10.txt'
+DATA_PATH = TEMP_DIR + 'suggestion.top.3'
 
 # The pathname to the ground truth error list.
 GT_PATH = 'data/error.gt.tsv'
@@ -40,19 +40,19 @@ DEFAULT_SK_CONFIG = lambda name, sk_model_class: \
 
 
 TRAIN_SETTINGS = [
+        (model.SKLModel              , DEFAULT_SK_CONFIG('rf.refcv', model.RandomForestModel)),
+        (model.SKLModel              , DEFAULT_SK_CONFIG('et.refcv', model.ExtraTreesModel)),
+        (model.SKLModel              , DEFAULT_SK_CONFIG('ab.refcv', model.AdaBoostModel)),
+        (model.SKLModel              , DEFAULT_SK_CONFIG('gb.refcv', model.GradientBoostingModel)),
+        (model.SKLModel              , DEFAULT_SK_CONFIG('mlp.refcv', model.MLPModel)),
         (model.RandomForestModel     , DEFAULT_CONFIG('rf')),
         (model.ExtraTreesModel       , DEFAULT_CONFIG('et')),
         (model.AdaBoostModel         , DEFAULT_CONFIG('ab')),
         (model.GradientBoostingModel , DEFAULT_CONFIG('gb')),
-        #(model.MLPModel              , DEFAULT_CONFIG('mlp')),
-        #(model.SupportVectorModel    , DEFAULT_CONFIG('svr')),
-        #(model.RandomForestModel     , (False, False, MODEL_DIR + 'rf.unweight.' + SUFFIX, None, None)),
-        #(model.SKLModel              , DEFAULT_SK_CONFIG('svr.refcv', model.SupportVectorModel)),
-        #(model.SKLModel              , DEFAULT_SK_CONFIG('rf.refcv', model.RandomForestModel)),
-        #(model.SKLModel              , DEFAULT_SK_CONFIG('et.refcv', model.ExtraTreesModel)),
-        #(model.SKLModel              , DEFAULT_SK_CONFIG('ab.refcv', model.AdaBoostModel)),
-        #(model.SKLModel              , DEFAULT_SK_CONFIG('gb.refcv', model.GradientBoostingModel)),
-        #(model.SKLModel              , DEFAULT_SK_CONFIG('mlp.refcv', model.MLPModel)),
+        (model.MLPModel              , DEFAULT_CONFIG('mlp')),
+        (model.RandomForestModel     , (False, False, MODEL_DIR + 'rf.unweight.' + SUFFIX, None, None)),
+        (model.SupportVectorModel    , DEFAULT_CONFIG('svr')),
+        (model.SKLModel              , DEFAULT_SK_CONFIG('svr.refcv', model.SupportVectorModel))
        ]
 
 
@@ -73,16 +73,8 @@ def data_split(data_path, gt_path, train_ratio, test_ratio):
 
 
 def main():
-    import time
-
-    start = time.time()
-    print(DATA_PATH)
-
     (train_data, test_data), total_data = data_split(DATA_PATH, GT_PATH,
             TRAIN_SPLITS_RATIO, TEST_SPLITS_RATIO)
-    print(sys.getsizeof(total_data) / float(1024 * 1024 * 1024), 'GB')
-    end = time.time()
-    print(end - start, 'time taken')
 
 
     def data_eval(data):
@@ -93,25 +85,23 @@ def main():
     data_eval(test_data)
     data_eval(total_data)
 
-    """
-    for md, (_override, _weighted, _path, _grid, _estimator) in TRAIN_SETTINGS:
-        try:
-            if md == model.SKLModel:
-                md(_estimator, _grid, train_data, override=_override,
-                        weighted=_weighted, pkl_path=_path)
-            elif _grid != None:
-                md(train_data, override=_override, weighted=_weighted,
-                        pkl_path=_path, para_grid=_grid)
-            else:
-                md(train_data, override=_override, weighted=_weighted,
-                        pkl_path=_path)
-        except Exception as e:
-            #print('Error')
-            #print(str(e))
-            #print()
-            #sys.exit(1)
-            pass # skip error model
-    """
+    #for md, (_override, _weighted, _path, _grid, _estimator) in TRAIN_SETTINGS:
+    #    try:
+    #        if md == model.SKLModel:
+    #            md(_estimator, _grid, train_data, override=_override,
+    #                    weighted=_weighted, pkl_path=_path)
+    #        elif _grid != None:
+    #            md(train_data, override=_override, weighted=_weighted,
+    #                    pkl_path=_path, para_grid=_grid)
+    #        else:
+    #            md(train_data, override=_override, weighted=_weighted,
+    #                    pkl_path=_path)
+    #    except Exception as e:
+    #        #print('Error')
+    #        #print(str(e))
+    #        #print()
+    #        #sys.exit(1)
+    #        pass # skip error model
 
     """
     for md, (_override, _weighted, _path, _grid, _estimator) in \

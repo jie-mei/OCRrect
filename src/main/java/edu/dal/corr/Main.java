@@ -95,12 +95,6 @@ public class Main
             new DistanceFeature("ngram-comprehensive-fourgram", Scoreable.cmphNgramDist(4)),
             new DistanceFeature("ngram-comprehensive-fivegram", Scoreable.cmphNgramDist(5)),
 
-            new DistanceFeature("qgram-bigram", Scoreable.qgramDist(2)),
-            new DistanceFeature("qgram-trigram", Scoreable.qgramDist(3)),
-            new DistanceFeature("qgram-fourgram", Scoreable.qgramDist(4)),
-            new DistanceFeature("qgram-fivegram", Scoreable.qgramDist(5)),
-
-
             new StringSimilarityFeature(),
             new LanguagePopularityFeature(unigram),
 
@@ -211,19 +205,63 @@ public class Main
         .map(f -> correctSuggested(Suggestion.read(f), errMap, errPos))
         .filter(b -> b)
         .count();
-    System.out.println(String.format("Correctly suggested: %8d / %8d = %.4f",
-        numOfCorr, files.size(), (float)numOfCorr / files.size()));
+    System.out.println(String.format("Correctly suggested with top %3d: %8d / %8d = %.4f",
+        top, numOfCorr, files.size(), (float)numOfCorr / files.size()));
+  }
+
+  public static void evaluateSuggestRecall(int top, String folder) throws IOException {
+    // Map each error starting position to the according error.
+    List<GroundTruthError> errors = GroundTruthErrors.read(Paths.get("data/error.gt.tsv"));
+    TIntObjectMap<GroundTruthError> errMap = new TIntObjectHashMap<>();
+    for (GroundTruthError err : errors) {
+      errMap.put(err.position(), err);
+    }
+
+    // Representing error location using a bit set.
+    BitSet errPos = new BitSet(IOUtils.read(ResourceUtils.INPUT).length());
+    for (GroundTruthError err : errors) {
+      errPos.set(err.position(), err.position() + err.text().length(), true);
+    }
+    
+    // Detect whether a correction contains in the suggestion, or the original
+    // word in the suggestion for a correction word.
+    List<Path> files = ResourceUtils
+        .getPathsInDir("suggestion.top." + top, folder)
+        .stream()
+        .map(b -> ResourceUtils.getPathsInDir("suggest.*", b.toString()))
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
+    long numOfCorr = files
+        .parallelStream()
+        .map(f -> correctSuggested(Suggestion.read(f), errMap, errPos))
+        .filter(b -> b)
+        .count();
+    System.out.println(String.format("Correctly suggested with top %3d: %8d / %8d = %.4f",
+        top, numOfCorr, files.size(), (float)numOfCorr / files.size()));
   }
 
   public static void main(String[] args) throws IOException {
     // runCorrection();
+    //
     // runWriteText(3);
     // runWriteText(5);
     // runWriteText(10);
     // runWriteText(20);
+    runWriteText(50);
+    runWriteText(100);
+
     evaluateSuggestRecall(3);
     evaluateSuggestRecall(5);
     evaluateSuggestRecall(10);
     evaluateSuggestRecall(20);
+    evaluateSuggestRecall(50);
+    evaluateSuggestRecall(100);
+
+    evaluateSuggestRecall(3,   "tmp.Mar17");
+    evaluateSuggestRecall(5,   "tmp.Mar17");
+    evaluateSuggestRecall(10,  "tmp.Mar17");
+    evaluateSuggestRecall(20,  "tmp.Mar17");
+    evaluateSuggestRecall(50,  "tmp.Mar17");
+    evaluateSuggestRecall(100, "tmp.Mar17");
   }
 }
