@@ -5,6 +5,7 @@
 **/target
 **/tmp*
 **/log*
+**/.ipynb_checkpoints
 
 # Temp Files
 
@@ -41,5 +42,6 @@
 **.DS_Store
 
 *.log
+*.back
 *.out
 /target/

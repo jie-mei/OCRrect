@@ -31,7 +31,7 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
- * @since 2017.03.30
+ * @since 2017.04.01
  */
 public class Main
 {
@@ -53,7 +53,7 @@ public class Main
     }
   }
 
-  public static void runCorrection() throws IOException {
+  public static void runCorrection(String text) throws IOException {
     // Construct unigram.
     Unigram unigram = Unigram.getInstance();
 
@@ -118,7 +118,7 @@ public class Main
         new GoogleTokenizer(),
         null,
         Arrays.asList(features),
-        IOUtils.read(ResourceUtils.INPUT),
+        text,
         TOP
     );
   }
@@ -240,28 +240,74 @@ public class Main
         top, numOfCorr, files.size(), (float)numOfCorr / files.size()));
   }
 
+  public static void printUndetected(int top, String folder) throws IOException {
+    System.out.println("print undetected");
+
+    // Map each error starting position to the according error.
+    List<GroundTruthError> errors = GroundTruthErrors.read(Paths.get("data/error.gt.tsv"));
+    TIntObjectMap<GroundTruthError> errMap = new TIntObjectHashMap<>();
+    for (GroundTruthError err : errors) {
+      errMap.put(err.position(), err);
+    }
+
+    // Representing error location using a bit set.
+    BitSet errPos = new BitSet(IOUtils.read(ResourceUtils.INPUT).length());
+    for (GroundTruthError err : errors) {
+      errPos.set(err.position(), err.position() + err.text().length(), true);
+    }
+    
+    // Detect whether a correction contains in the suggestion, or the original
+    // word in the suggestion for a correction word.
+    List<Path> files = ResourceUtils
+        .getPathsInDir("suggestion.part***.top." + top, folder)
+        .stream()
+        .map(b -> ResourceUtils.getPathsInDir("suggest.*", b.toString()))
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
+    files
+        .parallelStream()
+        .forEach(f -> {
+          Suggestion suggest = Suggestion.read(f);
+          if (! correctSuggested(suggest, errMap, errPos)) {
+            System.out.println(suggest.text() + ":" + suggest.position());
+          }
+        });
+    /*
+    long numOfCorr = files
+        .parallelStream()
+        .map(f -> correctSuggested(Suggestion.read(f), errMap, errPos))
+        .filter(b -> b)
+        .count();
+    System.out.println(String.format("Correctly suggested with top %3d: %8d / %8d = %.4f",
+        top, numOfCorr, files.size(), (float)numOfCorr / files.size()));
+        */
+  }
+
   public static void main(String[] args) throws IOException {
-    // runCorrection();
-    //
-    // runWriteText(3);
+    // runCorrection(IOUtils.read(ResourceUtils.INPUT).substring(0, 2980));
+
+    runWriteText(3);
     // runWriteText(5);
     // runWriteText(10);
     // runWriteText(20);
-    runWriteText(50);
-    runWriteText(100);
+    // runWriteText(50);
+    // runWriteText(100);
 
-    evaluateSuggestRecall(3);
-    evaluateSuggestRecall(5);
-    evaluateSuggestRecall(10);
-    evaluateSuggestRecall(20);
-    evaluateSuggestRecall(50);
-    evaluateSuggestRecall(100);
+    // evaluateSuggestRecall(3);
+    // evaluateSuggestRecall(5);
+    // evaluateSuggestRecall(10);
+    // evaluateSuggestRecall(20);
+    // evaluateSuggestRecall(50);
+    // evaluateSuggestRecall(100);
 
-    evaluateSuggestRecall(3,   "tmp.Mar17");
-    evaluateSuggestRecall(5,   "tmp.Mar17");
-    evaluateSuggestRecall(10,  "tmp.Mar17");
-    evaluateSuggestRecall(20,  "tmp.Mar17");
-    evaluateSuggestRecall(50,  "tmp.Mar17");
-    evaluateSuggestRecall(100, "tmp.Mar17");
+    printUndetected(3, "tmp");
+
+
+    // evaluateSuggestRecall(3,   "tmp.Mar17");
+    // evaluateSuggestRecall(5,   "tmp.Mar17");
+    // evaluateSuggestRecall(10,  "tmp.Mar17");
+    // evaluateSuggestRecall(20,  "tmp.Mar17");
+    // evaluateSuggestRecall(50,  "tmp.Mar17");
+    // evaluateSuggestRecall(100, "tmp.Mar17");
   }
 }
