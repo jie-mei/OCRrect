@@ -69,7 +69,7 @@ class ReverseLevenshteinDistanceSearcher
    * @param unigram  an unigram instance.
    * @param maxDistance  the maximum number of search distance.
    */
-  ReverseLevenshteinDistanceSearcher(THashSet<String> dictionary) {
+  private ReverseLevenshteinDistanceSearcher(THashSet<String> dictionary) {
     this.dict = dictionary;
     this.lev = new Levenshtein();
     

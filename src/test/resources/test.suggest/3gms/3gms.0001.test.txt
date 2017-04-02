@@ -8,6 +8,6 @@ ctxtBef2 ctxtBef1 y	10
 ctxtBef2 ctxtBef1 z	10
 ctxtBef2 ctxtBef1 word3e3	30
 ctxtBef2 ctxtBef1 word3e4	40
-ctxtBef2 x word3r3	300
+ctxtBef2 x word3r3+++	300
 ctxtBef2 y word3r4	400
 ctxtBef2 y word3r5	500

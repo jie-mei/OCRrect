@@ -6,6 +6,7 @@ import java.util.List;
 import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.suggest.feature.FeatureType;
 import edu.dal.corr.util.LocatedTextualUnit;
+import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.Word;
 
 /**
@@ -56,15 +57,25 @@ public class FeatureSuggestion
   }
   
   
-  Object[] topCandidatesAndScores(int num) {
+  /**
+   * Get a truncated feature suggestion with only top suggestions.
+   * @return A feature suggestion with only top suggestions from the original object.
+   */
+  public FeatureSuggestion top(int num) {
     int top = num < candidates.length ? num : candidates.length;
     String[] topCand = new String[top];
-    float[] topScore = new float[top];
+    float[] topScore = new float[top];  // deep clone
     List<FeatureCandidate> candidates = candidates();
-    if (top != num) {
+    if (top != candidates.size()) {
       candidates.sort((a, b) -> {
-        float diff = b.score() - a.score();
-        return diff == 0 ? 0 : (diff > 0 ? 1 : -1);
+        float diff = a.score() - b.score();
+        if (diff != 0) {
+          return diff > 0 ? -1 : 1;
+        } else {
+          diff = Unigram.getInstance().freq(a.text())
+               - Unigram.getInstance().freq(b.text());  // prefer common word
+          return diff == 0 ? 0 : (diff > 0 ? -1 : 1);
+        }
       });
     }
     for (int i = 0; i < top; i++) {
@@ -72,15 +83,6 @@ public class FeatureSuggestion
       topCand[i] = fc.text();
       topScore[i] = fc.score();
     }
-    return new Object[]{topCand, topScore};
-  }
-  
-  /**
-   * Get a truncated feature suggestion with only top suggestions.
-   * @return A feature suggestion with only top suggestions from the original object.
-   */
-  public FeatureSuggestion top(int num) {
-    Object[] topData = topCandidatesAndScores(num);
-    return new FeatureSuggestion(type, text(), position(), (String[])topData[0], (float[])topData[1]);
+    return new FeatureSuggestion(type, text(), position(), topCand, topScore);
   }
 }

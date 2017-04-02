@@ -12,7 +12,7 @@ word3e3
 word3e4
 word3r1
 word3r2
-word3r3
+word3r3+++
 word3r4
 wordf1k
 wordf2k
@@ -24,8 +24,8 @@ wordf7k
 wordf8k
 wordf9k
 wordf+k
-worde1
-worde2
+word1
+word2
 worde3
 worde4
 worde5

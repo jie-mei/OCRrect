@@ -245,8 +245,8 @@ public class Suggestion
                                 .stream()
                                 .map(s -> new FeatureCandidate(feat.type(), s, scoreMap.get(s)))
                                 .sorted((a, b) -> {
-                                  float diff = b.score() - a.score();
-                                  return diff == 0 ? 0 : (diff > 0 ? 1 : -1);
+                                  float diff = a.score() - b.score();
+                                  return diff == 0 ? 0 : (diff > 0 ? -1 : 1);
                                 })
                                 .limit(top)
                                 .collect(Collectors.toList());
@@ -472,7 +472,7 @@ public class Suggestion
 
   public static void write(Suggestion suggestion, Path path) throws IOException {
     try (ObjectOutputStream oos = new ObjectOutputStream(Channels.newOutputStream(
-            FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE)))){
+        FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE)))) {
       oos.writeObject(suggestion);
     }
   }

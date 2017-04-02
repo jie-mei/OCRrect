@@ -44,14 +44,12 @@ public class Word
    * @param  context   a series of eight words. Four words before the occurring
    *                   word and three after.
    */
-  public Word(int position, String... context)
-  {
+  public Word(int position, String... context) {
     super(checkAndGetPivot(context), position);
     this.context = context;
   }
   
-  private static String checkAndGetPivot(String[] context)
-  {
+  private static String checkAndGetPivot(String[] context) {
     if (context.length != 8)
       throw new IllegalArgumentException("Incorrect context is given.");
     return context[4];
@@ -76,8 +74,7 @@ public class Word
    * @param  size  the size of the n-gram context.
    * @throws IllegalArgumentException  if size is not in a valid range.
    */
-  private void checkContextSize(int size)
-  {
+  private void checkContextSize(int size) {
     if (size > 5 || size < 1) {
       throw new IllegalArgumentException(
           "invalid context size is given: " + size);
@@ -91,8 +88,7 @@ public class Word
    *
    * @return a list of n-gram contexts which pivot is this word.
    */
-  public List<Context> getContexts(int size)
-  {
+  public List<Context> getContexts(int size) {
     checkContextSize(size);
     // Note that we omit the n-gram context starting with pivot word for
     // efficiency reason in future computation.
@@ -108,8 +104,7 @@ public class Word
    * @param  index  the index of the pivot word in context.
    * @return a context.
    */
-  public Context getContext(int size, int index)
-  {
+  public Context getContext(int size, int index) {
     checkContextSize(size);
     if (index <= 0 && index >= size) {
       throw new IllegalArgumentException("invalid pivot index: " + index);
@@ -127,8 +122,7 @@ public class Word
    *    the pivot word.
    * @return a new word object with a different text name.
    */
-  public Word mapTo(Function<String, String> mapper)
-  {
+  public Word mapTo(Function<String, String> mapper) {
     String[] mapped = new String[8];
     for (int i = 0; i < context.length; i++) {
       mapped[i] = mapper.apply(context[i]);;
@@ -155,16 +149,14 @@ public class Word
   }
   
   @Override
-  protected HashCodeBuilder buildHash()
-  {
+  protected HashCodeBuilder buildHash() {
     return super.buildHash().append(context);
   }
 
   /*
    * Generate words from tokens.
    */
-  private static List<Word> getImpl(List<Word> words, WordFilter... filters)
-  {
+  private static List<Word> getImpl(List<Word> words, WordFilter... filters) {
     WordFilter.filter(words, filters);
 
     if (LOG.isTraceEnabled()) {
@@ -186,8 +178,7 @@ public class Word
    * @param  filters  an array of word filters.
    * @return a list of words.
    */
-  public static List<Word> get(List<Token> tokens, WordFilter... filters)
-  {
+  public static List<Word> get(List<Token> tokens, WordFilter... filters) {
     List<Token> expend = new ArrayList<>();
 
     for (int i = 0; i < 4; i++) expend.add(Token.EMPTY);
@@ -219,8 +210,8 @@ public class Word
    * @return a list of words.
    * @throws IOException 
    */
-  public static List<Word> get(String content, WordTokenizer tokenizer, WordFilter... filters) throws IOException
-  {
+  public static List<Word> get(String content, WordTokenizer tokenizer, WordFilter... filters)
+      throws IOException {
     List<Word> words = WordTokenizer.tokenize(content, tokenizer);
     return getImpl(words, filters);
   }
