@@ -1,8 +1,11 @@
 package edu.dal.corr;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
@@ -27,6 +30,8 @@ import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.ResourceUtils;
 import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.GoogleTokenizer;
+import edu.dal.corr.word.Word;
+import edu.dal.corr.word.filter.WordFilter;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
@@ -282,11 +287,24 @@ public class Main
         top, numOfCorr, files.size(), (float)numOfCorr / files.size()));
         */
   }
+  
+  public static void writeWords(String text) throws IOException {
+    List<Word> words = Word.get(
+        text, 
+        new GoogleTokenizer(),
+        new WordFilter[]{});
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter("words.log"))) {
+      for (Word word: words) {
+        bw.write(word.text() + "\t" + word.position() + "\n");
+      }
+    }
+  }
 
   public static void main(String[] args) throws IOException {
     // runCorrection(IOUtils.read(ResourceUtils.INPUT).substring(0, 2980));
+    writeWords(IOUtils.read(ResourceUtils.INPUT));
 
-    runWriteText(3);
+    // runWriteText(3);
     // runWriteText(5);
     // runWriteText(10);
     // runWriteText(20);
@@ -300,7 +318,7 @@ public class Main
     // evaluateSuggestRecall(50);
     // evaluateSuggestRecall(100);
 
-    printUndetected(3, "tmp");
+    // printUndetected(3, "tmp");
 
 
     // evaluateSuggestRecall(3,   "tmp.Mar17");

@@ -236,6 +236,7 @@ public class Suggestion
                   () -> feat.suggest(words));
           List<FeatureSuggestion> fsList =
               IntStream.range(0, words.size())
+                  .parallel()
                   .mapToObj(i -> {
                     TObjectFloatMap<String> scoreMap = scoreMaps.get(i);
                     // Find the top candidates sorted by according feature
@@ -282,7 +283,7 @@ public class Suggestion
           List<FeatureSuggestion> fsList =
               FeatureSuggestionBuilder
                   .build(feat, words, scoreMaps)
-                  .stream()
+                  .parallelStream()
                   .map(fs -> fs.top(top))
                   .collect(Collectors.toList());
           fsByFeatsByWords.add(fsList);
