@@ -8,14 +8,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PathUtils
-{
+public class PathUtils {
   public static Path TEMP_DIR = Paths.get("tmp");
 
   private PathUtils() {}
-  
-  public static Path getTempPath(String pathname)
-  {
+
+  public static Path getTempPath(String pathname) {
     Path path = TEMP_DIR.resolve(pathname);
     try {
       Files.createDirectories(path.getParent());
@@ -24,33 +22,30 @@ public class PathUtils
     }
     return path;
   }
-  
-  public static Path getTempFile()
-      throws IOException
-  {
+
+  public static Path getTempFile() throws IOException {
     Path temp = Files.createTempFile(TEMP_DIR, null, ".tmp");
     temp.toFile().deleteOnExit();
     return temp;
   }
 
   /**
-   * Retrieve all subpaths in the given pathname and filter by a wildcard.
-   * Retrieved paths are sorted by their pathnames.
-   * 
-   * @param  path  the resource folder in the file system.
-   * @param  glob  a wildcard pattern for filtering the retrieved subpaths.
+   * Retrieve all subpaths in the given pathname and filter by a wildcard. Retrieved paths are
+   * sorted by their pathnames.
+   *
+   * @param path the resource folder in the file system.
+   * @param glob a wildcard pattern for filtering the retrieved subpaths.
    * @return a list of subpaths.
-   * @throws IOException  if I/O error occurs. 
+   * @throws IOException if I/O error occurs.
    */
-  public static List<Path> listPaths(Path path, String glob) throws IOException
-  {
+  public static List<Path> listPaths(Path path, String glob) throws IOException {
     List<Path> paths = new ArrayList<>();
     try (DirectoryStream<Path> ds = Files.newDirectoryStream(path, glob)) {
       for (Path p : ds) {
         paths.add(p);
       }
     }
-    paths.sort((a, b) -> a.getFileName().compareTo(b.getFileName())); 
+    paths.sort((a, b) -> a.getFileName().compareTo(b.getFileName()));
     return paths;
   }
 }

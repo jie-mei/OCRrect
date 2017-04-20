@@ -1,5 +1,8 @@
 package edu.dal.corr.word;
 
+import edu.dal.corr.util.IOUtils;
+import edu.dal.corr.util.ResourceUtils;
+import gnu.trove.set.hash.THashSet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -9,55 +12,47 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import org.apache.log4j.Logger;
 
-import edu.dal.corr.util.IOUtils;
-import edu.dal.corr.util.ResourceUtils;
-import gnu.trove.set.hash.THashSet;
-
 /**
- * An object that implements the {@code Tokenizer} interface generates a series
- * of tokens from a text.
- * 
- * @since 2016.07.24
+ * An object that implements the {@code Tokenizer} interface generates a series of tokens from a
+ * text.
+ *
+ * @since 2017.04.20
  */
-public interface WordTokenizer
-{
+public interface WordTokenizer {
   static final Logger LOG = Logger.getLogger(WordTokenizer.class);
 
   /**
-   * Tokenize the content. This method initializes the tokenization task and
-   * should be called before {@link #hasNextToken()} and {@link #nextToken()}.
-   * 
-   * @param  content A string.
+   * Tokenize the content. This method initializes the tokenization task and should be called before
+   * {@link #hasNextToken()} and {@link #nextToken()}.
+   *
+   * @param content A string.
    */
   void tokenize(String content);
 
   /**
    * Return {@code true} if there is more token available.
-   * 
-   * @return {@code true} if there is at least one more token after current
-   *    position; {@code false} otherwise.
+   *
+   * @return {@code true} if there is at least one more token after current position; {@code false}
+   *     otherwise.
    */
   boolean hasNextToken();
-  
+
   /**
    * Return the next token.
-   * 
+   *
    * @return A token string.
    */
   Token nextToken();
-  
+
   static List<Word> tokenize(String text, WordTokenizer tokenizer) throws IOException {
     return WordTokenizerImpl.tokenize(text, tokenizer);
   }
 }
 
-class WordTokenizerImpl
-{
-	private static String repeat(String str, int times)
-	{
+class WordTokenizerImpl {
+  private static String repeat(String str, int times) {
 	  if (times < 0) {
 	    throw new RuntimeException();
 	  } else if (times == 0) {
@@ -70,17 +65,14 @@ class WordTokenizerImpl
   private static final Pattern FIRST_WORD = Pattern.compile("^([a-zA-Z]*)(\\S*)(.*)$");
 
   /**
-   * Concatenate content lines and fix the broken word created by line wrap.
-   * If fixing a word changes the text length, extra white space characters are
-   * padded following the modified words to keep the position of other words
-   * unchanged.
-   * 
-   * @param  content A string.
-   * @return The input content without internal line-break and broken word
-   *    fixed.
+   * Concatenate content lines and fix the broken word created by line wrap. If fixing a word
+   * changes the text length, extra white space characters are padded following the modified words
+   * to keep the position of other words unchanged.
+   *
+   * @param content A string.
+   * @return The input content without internal line-break and broken word fixed.
    */
-  public static String fixLineBrokenWords(String str, THashSet<String> vocab)
-  {
+  public static String fixLineBrokenWords(String str, THashSet<String> vocab) {
     StringBuilder sb = new StringBuilder();
     try (BufferedReader br = new BufferedReader(new StringReader(str))) {
 //      Dictionary dict = GoogleUnigramHuristicThresholdDictionary.getInstance();
@@ -89,7 +81,7 @@ class WordTokenizerImpl
       String bkPart1 = null;
       int pad = 0;
       for (curr = br.readLine(); curr != null; curr = br.readLine()) {
-        
+
         // Pad is greater than zero, if the previous line is truncated.
         if (pad > 0) {
           // Pad white spaces to before the first white space characters on this
@@ -99,7 +91,7 @@ class WordTokenizerImpl
           String bkPart2 = m.group(1);
           String bkPart3 = m.group(2);
           String remain = m.group(3);
-          
+
           if (bkPart2.length() == 0) {
             // If current line start with a white space, then restore the
             // character sequence on the previous line.
@@ -132,7 +124,7 @@ class WordTokenizerImpl
           }
           pad = 0;
         }
-        
+
         // Check the line tail. If there is word broken by line wrap, remove the
         // internal hyphen and trailing white-spaces.
         Matcher brokenWord = BROKEN_WORD.matcher(curr);
@@ -160,9 +152,9 @@ class WordTokenizerImpl
 
   /**
    * Tokenize the text using a {@link WordTokenizer}.
-   * 
-   * @param  concatenated       A text string.
-   * @param  tokenizer  A tokenizer.
+   *
+   * @param concatenated A text string.
+   * @param tokenizer A tokenizer.
    * @return A list of words.
    */
   static List<Word> tokenize(String text, WordTokenizer tokenizer) throws IOException {
@@ -173,9 +165,9 @@ class WordTokenizerImpl
     Arrays.fill(context, Token.EMPTY);
     int widx = 0;
     List<WordBuilder> bldrs = new ArrayList<>();
-    
+
     tokenizer.tokenize(concatenated);
-    
+
     Token prev = null;
     for (Token curr = null; tokenizer.hasNextToken(); prev = curr) {
       curr = tokenizer.nextToken();
@@ -191,7 +183,7 @@ class WordTokenizerImpl
             prev.text(), curr.text(), prev.text() + curr.text()));
 
         curr = new Token(prev.text() + curr.text(), prev.position());
-        
+
         // Override the previous written token.
         // TODO less than 3 tokens in total may throw error here!
         bldrs.get(bldrs.size() - 1).set(7, curr);
@@ -199,11 +191,11 @@ class WordTokenizerImpl
 
         continue;
       }
-     
+
       // Add token to context.
       int idx = widx % 8;
       context[idx] = curr;
-      
+
       if (widx >= 3) {
         // Store the full-context token.
         idx = (widx - 3) % 8;

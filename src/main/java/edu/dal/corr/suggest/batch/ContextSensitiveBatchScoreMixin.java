@@ -1,11 +1,8 @@
 package edu.dal.corr.suggest.batch;
 
-
 /**
- * @since 2016.08.10
+ * @since 2017.04.20
  */
-public interface ContextSensitiveBatchScoreMixin
-    extends BatchScoreMixin {
-
+public interface ContextSensitiveBatchScoreMixin extends BatchScoreMixin {
   // TODO: to implement.
 }

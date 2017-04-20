@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class NGram
-{
+public class NGram {
   private static char PREFIX = '\n';
 
   private int n;
   private CostFunction cf;
-  
+
   /**
    * Unnormalized n-gram distance with different cost functions.
-   * 
+   *
    * @param size
    * @param func
    */
@@ -21,11 +20,11 @@ public class NGram
     n = size;
     cf = func;
   }
-  
+
   public interface CostFunction {
     public float cost(char[] ngram1, char[] ngram2);
   }
-  
+
   public static CostFunction BINARY_COST = (s1, s2) -> {
     int n = s1.length;
     for (int ni = 0; ni < n; ni++) {
@@ -35,7 +34,7 @@ public class NGram
     }
     return 0;
   };
-  
+
   public static CostFunction POSITIONAL_COST = (s1, s2) -> {
     int n = s1.length;
     int tn = n;
@@ -75,11 +74,9 @@ public class NGram
     if (s0 == null) {
         throw new NullPointerException("s0 must not be null");
     }
-
     if (s1 == null) {
         throw new NullPointerException("s1 must not be null");
     }
-
     if (s0.equals(s1)) {
         return 0;
     }
@@ -143,7 +140,7 @@ public class NGram
         d[0] = j;
         for (i = 1; i <= sl; i++) {
             float ec = cf.cost(Arrays.copyOfRange(sa, i - 1, i - 1 + n), t_j);
-            
+
             // minimum of cell to the left+1, to the top+1,
             // diagonally left and up +cost
             d[i] = Math.min(

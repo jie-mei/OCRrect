@@ -1,5 +1,7 @@
 package edu.dal.corr.word;
 
+import edu.dal.corr.util.LocatedTextualUnit;
+import edu.dal.corr.word.filter.WordFilter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,71 +10,61 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
 
-import edu.dal.corr.util.LocatedTextualUnit;
-import edu.dal.corr.word.filter.WordFilter;
-
 /**
- * An abstract representation of word.
- * An abstract word contains the following components:
+ * An abstract representation of word. An abstract word contains the following components:
+ *
  * <ul>
- *  <li> The string representation of this word.
- *  <li> All context words.
- *  <li> The offset from the beginning of the original text to the the position
- *       of the first character in the error word.
+ *   <li>The string representation of this word.
+ *   <li>All context words.
+ *   <li>The offset from the beginning of the original text to the the position of the first
+ *       character in the error word.
  * </ul>
  *
- * @since 2016.09.07
+ * @since 2017.04.20
  */
-public class Word
-  extends LocatedTextualUnit
-  implements Serializable
-{
+public class Word extends LocatedTextualUnit implements Serializable {
   private static final long serialVersionUID = 1201174127991744048L;
   private static final Logger LOG = Logger.getLogger(Word.class);
 
   private String[] context;
 
   /**
-   * Construct a word with the position and four neighboring words before and
-   * three after.
-   * 
-   * @param  position  the offset from the beginning of the text.
-   * @param  context   a series of eight words. Four words before the occurring
-   *                   word and three after.
+   * Construct a word with the position and four neighboring words before and three after.
+   *
+   * @param position the offset from the beginning of the text.
+   * @param context a series of eight words. Four words before the occurring word and three after.
    */
   public Word(int position, String... context) {
     super(checkAndGetPivot(context), position);
     this.context = context;
   }
-  
+
   private static String checkAndGetPivot(String[] context) {
     if (context.length != 8)
       throw new IllegalArgumentException("Incorrect context is given.");
     return context[4];
   }
-  
+
   /**
-   * Construct a context, which pivot is set using the information of this
-   * object.
-   * 
-   * @param  size   the size of the n-gram context.
-   * @param  index  the index of the pivot word in context.
+   * Construct a context, which pivot is set using the information of this object.
+   *
+   * @param size the size of the n-gram context.
+   * @param index the index of the pivot word in context.
    */
   private Context newContext(int size, int index) {
     int rangeStr = 4 - index;
     return new Context(index, position(),
         Arrays.copyOfRange(context, rangeStr, rangeStr + size));
   }
-  
+
   /**
    * Check if n-gram size is valid.
-   * 
-   * @param  size  the size of the n-gram context.
-   * @throws IllegalArgumentException  if size is not in a valid range.
+   *
+   * @param size the size of the n-gram context.
+   * @throws IllegalArgumentException if size is not in a valid range.
    */
   private void checkContextSize(int size) {
     if (size > 5 || size < 1) {
@@ -80,12 +72,11 @@ public class Word
           "invalid context size is given: " + size);
     }
   }
-  
+
   /**
    * Get all the of n-gram contexts which pivot is this word.
-   * 
-   * @param  size  the size of the ngram.
    *
+   * @param size the size of the ngram.
    * @return a list of n-gram contexts which pivot is this word.
    */
   public List<Context> getContexts(int size) {
@@ -99,9 +90,9 @@ public class Word
 
   /**
    * Get a n-gram contexts which pivot is this word.
-   * 
-   * @param  size  the size of the ngram.
-   * @param  index  the index of the pivot word in context.
+   *
+   * @param size the size of the ngram.
+   * @param index the index of the pivot word in context.
    * @return a context.
    */
   public Context getContext(int size, int index) {
@@ -111,15 +102,14 @@ public class Word
     }
     return newContext(size, index);
   }
-  
+
   /**
    * Construct a new word with a new pivot word string.
-   * <p>
-   * The pivot word string is provided by the given mapper function. Position
-   * and all context words and remain unchanged in the generated word.
-   * 
-   * @param  mapper  a mapper function that changes the string representation of
-   *    the pivot word.
+   *
+   * <p>The pivot word string is provided by the given mapper function. Position and all context
+   * words and remain unchanged in the generated word.
+   *
+   * @param mapper a mapper function that changes the string representation of the pivot word.
    * @return a new word object with a different text name.
    */
   public Word mapTo(Function<String, String> mapper) {
@@ -129,7 +119,7 @@ public class Word
     }
     return new Word(position(), mapped);
   }
-  
+
   /**
    * Get the string representation of the context words.
    *
@@ -138,16 +128,16 @@ public class Word
   private String contextToString() {
     return " <\"" + String.join("\",\"", context) + "\">";
   }
-  
+
   public String toString(int formatLen) {
     return String.format("%" + formatLen + "s %s", text(), contextToString());
   }
-  
+
   @Override
   public String toString() {
     return text() + contextToString();
   }
-  
+
   @Override
   protected HashCodeBuilder buildHash() {
     return super.buildHash().append(context);
@@ -170,12 +160,12 @@ public class Word
     }
     return words;
   }
-  
+
   /**
    * Generate words from tokens.
-   * 
-   * @param  tokens  a list of tokens, sorted by their positions in text.
-   * @param  filters  an array of word filters.
+   *
+   * @param tokens a list of tokens, sorted by their positions in text.
+   * @param filters an array of word filters.
    * @return a list of words.
    */
   public static List<Word> get(List<Token> tokens, WordFilter... filters) {
@@ -203,26 +193,26 @@ public class Word
 
   /**
    * Generate words from text.
-   * 
-   * @param  content  a text string.
-   * @param  tokenizer  a tokenizer.
-   * @param  filters  an array of word filters.
+   *
+   * @param content a text string.
+   * @param tokenizer a tokenizer.
+   * @param filters an array of word filters.
    * @return a list of words.
-   * @throws IOException 
+   * @throws IOException
    */
   public static List<Word> get(String content, WordTokenizer tokenizer, WordFilter... filters)
       throws IOException {
     List<Word> words = WordTokenizer.tokenize(content, tokenizer);
     return getImpl(words, filters);
   }
-  
+
   /**
    * Generate words from text.
-   * 
-   * @param  content  a text string.
-   * @param  tokenizer  a tokenizer.
+   *
+   * @param content a text string.
+   * @param tokenizer a tokenizer.
    * @return a list of words.
-   * @throws IOException 
+   * @throws IOException
    */
   public static List<Word> get(String content, WordTokenizer tokenizer) throws IOException {
     return get(content, tokenizer, new WordFilter[0]);

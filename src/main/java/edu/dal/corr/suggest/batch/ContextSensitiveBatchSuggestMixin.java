@@ -1,5 +1,9 @@
 package edu.dal.corr.suggest.batch;
 
+import edu.dal.corr.word.Context;
+import edu.dal.corr.word.Word;
+import gnu.trove.map.TObjectFloatMap;
+import gnu.trove.map.hash.TObjectFloatHashMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,63 +12,50 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import edu.dal.corr.word.Context;
-import edu.dal.corr.word.Word;
-import gnu.trove.map.TObjectFloatMap;
-import gnu.trove.map.hash.TObjectFloatHashMap;
-
 /**
- * @since 2016.09.07
+ * @since 2017.04.20
  */
-public interface ContextSensitiveBatchSuggestMixin
-  extends BatchSuggestMixin
-{
+public interface ContextSensitiveBatchSuggestMixin extends BatchSuggestMixin {
   /**
    * Generate suggestions for a list of contexts with the same first gram.
-   * 
-   * @param  first    the first gram.
-   * @param  context  a list of context starting which first gram is {@code first}.
-   * @return a map from suggested candidates to their according suggestion
-   *         confidence values.
+   *
+   * @param first the first gram.
+   * @param context a list of context starting which first gram is {@code first}.
+   * @return a map from suggested candidates to their according suggestion confidence values.
    */
   List<TObjectFloatMap<String>> suggest(String first, List<Context> contexts);
 
   /**
-   * Define the size of the suggestion context. This method will be used in
-   * context creation during benchmark.
-   * 
+   * Define the size of the suggestion context. This method will be used in context creation during
+   * benchmark.
+   *
    * @return the size of the n-gram in context.
    */
   int suggestionContextSize();
 
   /**
    * Generate suggestions for one context.
-   * <p>
-   * This method is a shortcut for suggesting one context in the benchmark
-   * approach. This method calls {@link #suggest(String, List)} in the
-   * subroutine.
-   * </p>
-   * 
-   * @param  context  a context.
-   * @return a map from suggested candidates to their according suggestion
-   *         confidence values.
+   *
+   * <p>This method is a shortcut for suggesting one context in the benchmark approach. This method
+   * calls {@link #suggest(String, List)} in the subroutine.
+   *
+   * @param context a context.
+   * @return a map from suggested candidates to their according suggestion confidence values.
    */
   default TObjectFloatMap<String> suggest(Context context) {
     return suggest(context.words()[0], Arrays.asList(context)).get(0);
   }
-  
+
   /**
-   * Merge the {@code <k, v>} pairs from two maps into one. Note that input map
-   * could potentially be a {@code null} object.
-   * 
-   * @param  mapA  a map.
-   * @param  mapB  another map.
+   * Merge the {@code <k, v>} pairs from two maps into one. Note that input map could potentially be
+   * a {@code null} object.
+   *
+   * @param mapA a map.
+   * @param mapB another map.
    * @return a map which includes all the mappings from both input maps.
    */
   default TObjectFloatMap<String> mergeContextSuggests(
-      TObjectFloatMap<String> mapA,
-      TObjectFloatMap<String> mapB)
-  {
+      TObjectFloatMap<String> mapA, TObjectFloatMap<String> mapB) {
     TObjectFloatMap<String> merged = new TObjectFloatHashMap<>();
     Arrays.asList(mapA, mapB).forEach(map -> {
       if (map != null) {
@@ -76,10 +67,9 @@ public interface ContextSensitiveBatchSuggestMixin
     });
     return merged;
   }
-  
+
   @Override
   default List<TObjectFloatMap<String>> suggest(List<Word> words) {
-    
     // Construct a mapping from word to ngram contexts start with such word.
     Map<String, List<Context>> wordContextMap = new HashMap<>();
     words.forEach(w -> {
@@ -95,7 +85,7 @@ public interface ContextSensitiveBatchSuggestMixin
         }
       });
     });
-    
+
     // Create search benchmarks for contexts separated by their first words.
     // Compute using the parallel streaming approach.
     Map<Context, TObjectFloatMap<String>> suggestMap = Collections.synchronizedMap(new HashMap<>());
@@ -109,7 +99,7 @@ public interface ContextSensitiveBatchSuggestMixin
             suggestMap.put(contextList.get(i), mapList.get(i));
           }
         });
-    
+
     // Collect the results.
     return words.stream()
       .map(w -> w.getContexts(suggestionContextSize()).stream()

@@ -1,28 +1,24 @@
 package edu.dal.corr.util;
 
+import gnu.trove.map.hash.TObjectLongHashMap;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.Set;
 
-import gnu.trove.map.hash.TObjectLongHashMap;
-
 /**
- * Unigram object for supporting frequency lookup. This class is implemented in
- * a thread-safe lazy-loading singleton manner.
+ * Unigram object for supporting frequency lookup. This class is implemented in a thread-safe
+ * lazy-loading singleton manner.
  *
- * @since 2016.07.26
+ * @since 2017.04.20
  */
-public class Unigram
-  implements Serializable
-{
+public class Unigram implements Serializable {
   private static final long serialVersionUID = -1614121007280050705L;
 
   private static Unigram instance = null;
 
-  public static synchronized Unigram getInstance()
-  {
+  public static synchronized Unigram getInstance() {
     if (instance == null) {
       instance = new Unigram();
     }
@@ -34,14 +30,13 @@ public class Unigram
   private Unigram() {
     this(ResourceUtils.UNIGRAM);
   }
-  
+
   /**
    * Construct a unigram with file.
-   * 
-   * @param unigram  a path to the unigram file.
+   *
+   * @param unigram a path to the unigram file.
    */
-  public Unigram(Path unigram)
-  {
+  public Unigram(Path unigram) {
     map = new TObjectLongHashMap<String>();
     try (
       BufferedReader br = IOUtils.newBufferedReader(unigram)
@@ -56,41 +51,37 @@ public class Unigram
       throw new RuntimeException(e);
     }
   }
-  
+
   /**
    * Register an instance as the default for {@link #getInstance()}.
-   * 
-   * @param  unigram  an unigram instance.
+   *
+   * @param unigram an unigram instance.
    */
-  public static void register(Unigram unigram)
-  {
+  public static void register(Unigram unigram) {
     instance = unigram;
   }
-  
+
   /**
    * Get word frequency in the unigram corpus.
    *
-   * @param  word  A word string.
+   * @param word A word string.
    * @return The word frequency in the unigram corpus.
    */
-  public Long freq(String word)
-  {
+  public Long freq(String word) {
     return map.get(word);
   }
-  
+
   /**
    * Check whether word exists in the unigram corpus.
-   * 
-   * @param  word A word string.
+   *
+   * @param word A word string.
    * @return {@code True} if the given word exists in the unigram corpus.
    */
-  public boolean contains(String word)
-  {
+  public boolean contains(String word) {
     return map.containsKey(word);
   }
-  
-  public Set<String> keys()
-  {
+
+  public Set<String> keys() {
     return map.keySet();
   }
 }

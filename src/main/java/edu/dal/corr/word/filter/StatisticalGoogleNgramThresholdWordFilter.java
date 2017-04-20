@@ -1,34 +1,26 @@
 package edu.dal.corr.word.filter;
 
+import edu.dal.corr.util.Unigram;
+import gnu.trove.list.array.TLongArrayList;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.dal.corr.util.Unigram;
-import gnu.trove.list.array.TLongArrayList;
-
 /**
- * @since 2016.08.10
+ * @since 2017.04.20
  */
-public class StatisticalGoogleNgramThresholdWordFilter
-  extends AbstractNgramThresholdWordFilter
-{
+public class StatisticalGoogleNgramThresholdWordFilter extends AbstractNgramThresholdWordFilter {
   private static Unigram unigram = Unigram.getInstance();
-  
+
   public StatisticalGoogleNgramThresholdWordFilter(float stddevFactor) {
     this(stddevFactor, (freqsByLen, len) -> freqsByLen.get(len));
   }
 
   protected StatisticalGoogleNgramThresholdWordFilter(
-      float stddevFactor,
-      StatisticsSelector selector)
-  {
+      float stddevFactor, StatisticsSelector selector) {
     super(unigram, computeThreshold(stddevFactor, selector));
   }
-  
-  static float[] computeThreshold(
-      float stddevFactor,
-      StatisticsSelector selector)
-  {
+
+  static float[] computeThreshold(float stddevFactor, StatisticsSelector selector) {
     // Collect frequencies by the length of their according words.
     List<TLongArrayList> freqsByLen = new ArrayList<>();
     for (String gram : unigram.keys()) {
@@ -57,9 +49,8 @@ public class StatisticalGoogleNgramThresholdWordFilter
     }
     return thresholds;
   }
-  
-  private static long mean(TLongArrayList vals)
-  {
+
+  private static long mean(TLongArrayList vals) {
     int sum = 0;
     int num = vals.size();
     for (int i = 0; i < num; i++) {
@@ -67,9 +58,8 @@ public class StatisticalGoogleNgramThresholdWordFilter
     }
     return sum / num;
   }
-  
-  private static double stddev(TLongArrayList vals, long mean)
-  {
+
+  private static double stddev(TLongArrayList vals, long mean) {
     long devSum = 0;
     int num = vals.size();
     for (int i = 0; i < num; i++) {
@@ -77,7 +67,7 @@ public class StatisticalGoogleNgramThresholdWordFilter
     }
     return Math.sqrt(devSum / num);
   }
-  
+
   protected interface StatisticsSelector {
     TLongArrayList get(List<TLongArrayList> freqsByLen, int len);
   }

@@ -1,21 +1,18 @@
 package edu.dal.corr.suggest.feature;
 
-import java.io.IOException;
-
 import edu.dal.corr.suggest.NormalizationOption;
 import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.Word;
+import java.io.IOException;
 
 /**
- * @since 2016.08.10
+ * @since 2017.04.20
  */
-public class LanguagePopularityFeature
-    extends WordIsolatedFeature {
-
+public class LanguagePopularityFeature extends WordIsolatedFeature {
   private static final long serialVersionUID = -7219239074897074972L;
 
   private Unigram unigram;
-  
+
   public LanguagePopularityFeature(String name, Unigram unigram) throws IOException {
     this.unigram = unigram;
   }

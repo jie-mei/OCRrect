@@ -1,10 +1,9 @@
 package edu.dal.corr.suggest;
 
 /**
- * @since 2016.08.10
+ * @since 2017.04.20
  */
-public enum NormalizationOption
-{
+public enum NormalizationOption {
   NONE,
   DIVIDE_MAX,
   RESCALE,

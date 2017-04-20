@@ -1,22 +1,18 @@
 package edu.dal.corr.util;
 
-public class GoogleUnigramHuristicThresholdDictionary
-  implements Dictionary
-{
+public class GoogleUnigramHuristicThresholdDictionary implements Dictionary {
   private static GoogleUnigramHuristicThresholdDictionary instance;
-  
-  public static GoogleUnigramHuristicThresholdDictionary getInstance()
-  {
+
+  private Unigram unigram;
+
+  public static GoogleUnigramHuristicThresholdDictionary getInstance() {
     if (instance == null) {
       instance = new GoogleUnigramHuristicThresholdDictionary();
     }
     return instance;
   }
-  
-  private Unigram unigram;
 
-  private GoogleUnigramHuristicThresholdDictionary()
-  {
+  private GoogleUnigramHuristicThresholdDictionary() {
     unigram = Unigram.getInstance();
   }
 

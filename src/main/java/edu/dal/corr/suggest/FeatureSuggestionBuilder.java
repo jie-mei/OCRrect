@@ -1,40 +1,35 @@
 package edu.dal.corr.suggest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.word.Word;
 import gnu.trove.list.array.TFloatArrayList;
 import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.set.hash.THashSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
- * @since 2017.03.19
+ * An abstract builder for the feature suggestion.
+ *
+ * @since 2017.04.20
  */
 class FeatureSuggestionBuilder {
   private Feature feature;
-  private String name;
-  private int position;
+  private Word word;
   private List<String> candidates;
   private THashSet<String> candSet;
   private TFloatArrayList scores;
 
-  FeatureSuggestionBuilder(Feature feature, String name, int position) {
+  FeatureSuggestionBuilder(Feature feature, Word word) {
     this.feature = feature;
-    this.name = name;
-    this.position = position;
+    this.word = word;
     candidates = new ArrayList<>();
     candSet = new THashSet<String>();
     scores = new TFloatArrayList();
   }
- 
-  FeatureSuggestionBuilder(Feature feature, Word word) {
-    this(feature, word.text(), word.position());
-  }
-  
+
   FeatureSuggestionBuilder add(String name, float score) {
     if (! candSet.contains(name)) {
       candidates.add(name);
@@ -43,21 +38,21 @@ class FeatureSuggestionBuilder {
     }
     return this;
   }
-  
+
   FeatureSuggestionBuilder add(FeatureCandidate fc) {
     if (! fc.type().equals(feature.type())) {
-      throw new RuntimeException(String.join(" ", 
+      throw new RuntimeException(String.join(" ",
           "Invalid candidate type given:", fc.type().toString(),
           "expect:", feature.toString()));
     }
     return add(fc.text(), fc.score());
   }
-  
+
   FeatureSuggestionBuilder add(TObjectFloatMap<String> map) {
     map.keySet().forEach(k -> add(k, map.get(k)));
     return this;
   }
-  
+
   private void normalize() {
     if (scores.size() == 0) return;
 
@@ -85,21 +80,20 @@ class FeatureSuggestionBuilder {
       scores.transformValues(s -> 1 - s);
     }
   }
-  
+
   FeatureSuggestion build() {
     normalize();
-    return new FeatureSuggestion(feature, name, position,
+    return new FeatureSuggestion(feature, word,
         candidates.toArray(new String[candidates.size()]),
         scores.toArray());
   }
-  
-  static FeatureSuggestion build(Feature feature, Word word,
-      TObjectFloatMap<String> scoreMap) {
+
+  static FeatureSuggestion build(Feature feature, Word word, TObjectFloatMap<String> scoreMap) {
     return new FeatureSuggestionBuilder(feature, word)
         .add(scoreMap)
         .build();
   }
-  
+
   static List<FeatureSuggestion> build(Feature feature, List<Word> words,
       List<TObjectFloatMap<String>> scoreMaps) {
     return IntStream

@@ -3,11 +3,10 @@ package edu.dal.corr.word.filter;
 import gnu.trove.list.array.TLongArrayList;
 
 /**
- * @since 2016.08.10
+ * @since 2017.04.20
  */
 public class FuzzyStatisticalGoogleNgramThresholdWordFilter
-  extends StatisticalGoogleNgramThresholdWordFilter
-{
+  extends StatisticalGoogleNgramThresholdWordFilter {
   public FuzzyStatisticalGoogleNgramThresholdWordFilter(float stddevFactor) {
     super(stddevFactor, (freqsByLen, len) -> {
       TLongArrayList prev = (len == 1

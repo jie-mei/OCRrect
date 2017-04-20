@@ -6,27 +6,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @since 2016.08.10
+ * @since 2017.04.20
  */
-public class GoogleTokenizer
-  extends PennTreebankTokenizer
-{
+public class GoogleTokenizer extends PennTreebankTokenizer {
   private final static Pattern SPLIT_PATTERN = Pattern.compile("([^-]+|-)");
 
   /**
    * The tokens has been extracted from text but not yet given via {@link nextToken()}.
    */
   private Queue<Token> cache;
-  
-  public GoogleTokenizer()
-  {
+
+  public GoogleTokenizer() {
   	super();
     cache = new LinkedList<>();
   }
 
   @Override
-  public boolean hasNextToken()
-  {
+  public boolean hasNextToken() {
     if (cache.size() > 0) {
       return true;
     } else {
@@ -36,8 +32,7 @@ public class GoogleTokenizer
   }
 
   @Override
-  public Token nextToken()
-  {
+  public Token nextToken() {
     Token next = null;
     if ((next = cache.poll()) == null) {
       Token token = super.nextToken();

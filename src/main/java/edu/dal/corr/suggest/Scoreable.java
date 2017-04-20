@@ -1,7 +1,5 @@
 package edu.dal.corr.suggest;
 
-import java.io.Serializable;
-
 import edu.dal.corr.metric.NGram;
 import edu.dal.corr.word.Word;
 import info.debatty.java.stringsimilarity.Damerau;
@@ -11,19 +9,18 @@ import info.debatty.java.stringsimilarity.Levenshtein;
 import info.debatty.java.stringsimilarity.LongestCommonSubsequence;
 import info.debatty.java.stringsimilarity.OptimalStringAlignment;
 import info.debatty.java.stringsimilarity.QGram;
+import java.io.Serializable;
 
-public interface Scoreable
-  extends Serializable
-{
+public interface Scoreable extends Serializable {
   /**
    * Score the candidate string.
-   * 
-   * @param  word  A word.
-   * @param  candidate  A candidate for the given word.
+   *
+   * @param word A word.
+   * @param candidate A candidate for the given word.
    * @return A score for the specified candidate.
    */
   float score(Word word, String candidate);
-  
+
   static Scoreable levenshteinDist() {
     return (w, c) -> (float)new Levenshtein().distance(w.text(), c);
   }
@@ -43,7 +40,7 @@ public interface Scoreable
   static Scoreable jaccardDist(int size) {
     return (w, c) -> {
       double dist = new Jaccard(size).distance(w.text(), c);
-      return Double.isNaN(dist) ? 0f : (float)dist;
+      return Double.isNaN(dist) ? 0f : (float) dist;
     };
   }
 

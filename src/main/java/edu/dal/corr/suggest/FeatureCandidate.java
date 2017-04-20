@@ -7,16 +7,14 @@ import edu.dal.corr.util.TextualUnit;
 /**
  * The error candidate provided by a {@link Feature}.
  *
- * @since 2016.07.27
+ * @since 2017.04.19
  */
-public class FeatureCandidate
-  extends TextualUnit
-{
+public class FeatureCandidate extends TextualUnit {
   private static final long serialVersionUID = 5951851015043707671L;
 
   private final float score;
   private final FeatureType type;
-  
+
   FeatureCandidate(FeatureType type, String name, float score) {
     super(name);
     this.type = type;
@@ -26,7 +24,7 @@ public class FeatureCandidate
   FeatureCandidate(Feature feature, String name, float score) {
     this(feature.type(), name, score);
   }
-  
+
   public FeatureType type() {
     return type;
   }

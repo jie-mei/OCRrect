@@ -1,20 +1,18 @@
 package edu.dal.corr.suggest;
 
+import edu.dal.corr.suggest.feature.FeatureType;
+import edu.dal.corr.word.Word;
+import gnu.trove.list.array.TFloatArrayList;
+import gnu.trove.map.hash.TObjectIntHashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.dal.corr.suggest.feature.FeatureType;
-import edu.dal.corr.word.Word;
-import gnu.trove.list.array.TFloatArrayList;
-import gnu.trove.map.hash.TObjectIntHashMap;
-
 /**
- * @since 2016.08.10
+ * @since 2017.04.20
  */
-class SuggestionBuilder
-{
+class SuggestionBuilder {
   private String name;
   private int position;
   private List<FeatureType> types;
@@ -26,25 +24,23 @@ class SuggestionBuilder
     types = new ArrayList<>();
     scoreMap = new HashMap<>();
   }
-  
+
   SuggestionBuilder(Word word) {
     this(word.text(), word.position());
   }
-  
+
   /**
    * Add a feature suggestion.
-   * 
-   * @param  fs  a feature suggestion.
+   *
+   * @param fs a feature suggestion.
    * @return this builder object.
    */
-  SuggestionBuilder add(FeatureSuggestion fs)
-  {
+  SuggestionBuilder add(FeatureSuggestion fs) {
     if (types.contains(fs.type())) {
       throw new IllegalArgumentException("duplicate feature suggestion type.");
     }
     for (FeatureCandidate fc : fs.candidates()) {
       TFloatArrayList cScores = null;
-
       // Create a new candidate score list if not exist.
       if ((cScores = scoreMap.get(fc.text())) == null) {
         cScores = new TFloatArrayList();
@@ -59,9 +55,8 @@ class SuggestionBuilder
     types.add(fs.type());
     return this;
   }
-  
-  Suggestion build()
-  {
+
+  Suggestion build() {
     // Build candidates.
     List<Candidate> cList = new ArrayList<>();
     TObjectIntHashMap<FeatureType> typeMap = new TObjectIntHashMap<>();
@@ -79,7 +74,7 @@ class SuggestionBuilder
       cList.add(c);
     });
     Candidate[] candidates = cList.toArray(new Candidate[cList.size()]);
-    
+
     return new Suggestion(name, position, types, candidates);
   }
 }

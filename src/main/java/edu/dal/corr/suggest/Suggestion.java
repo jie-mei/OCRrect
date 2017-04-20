@@ -1,5 +1,18 @@
 package edu.dal.corr.suggest;
 
+import edu.dal.corr.eval.GroundTruthError;
+import edu.dal.corr.metric.NGram;
+import edu.dal.corr.suggest.feature.ContextSensitiveFeature;
+import edu.dal.corr.suggest.feature.Feature;
+import edu.dal.corr.suggest.feature.FeatureType;
+import edu.dal.corr.util.IOUtils;
+import edu.dal.corr.util.LocatedTextualUnit;
+import edu.dal.corr.util.LogUtils;
+import edu.dal.corr.util.PathUtils;
+import edu.dal.corr.util.Unigram;
+import edu.dal.corr.word.Word;
+import gnu.trove.map.TObjectFloatMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,37 +29,18 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
 import org.apache.commons.lang.builder.HashCodeBuilder;
-
-import edu.dal.corr.eval.GroundTruthError;
-import edu.dal.corr.metric.NGram;
-import edu.dal.corr.suggest.feature.ContextSensitiveFeature;
-import edu.dal.corr.suggest.feature.Feature;
-import edu.dal.corr.suggest.feature.FeatureType;
-import edu.dal.corr.util.IOUtils;
-import edu.dal.corr.util.LocatedTextualUnit;
-import edu.dal.corr.util.LogUtils;
-import edu.dal.corr.util.PathUtils;
-import edu.dal.corr.util.Unigram;
-import edu.dal.corr.word.Word;
-import gnu.trove.map.TObjectFloatMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 
 /**
  * @since 2017.02.15
  */
-public class Suggestion
-    extends LocatedTextualUnit
-    implements Serializable {
-
+public class Suggestion extends LocatedTextualUnit implements Serializable {
   private static final long serialVersionUID = 4175847645213310315L;
 
   private static final int NON_MAPPING = -1;
@@ -73,7 +67,7 @@ public class Suggestion
 
   /**
    * Get feature scores for each candidates.
-   * 
+   *
    * @param types a list of types that sort order of the output scores for each
    *          candidate.
    * @return a two dimensional array, which first dimensional represents the
@@ -129,22 +123,17 @@ public class Suggestion
    * Detect whether the given word requires further correction. The performance
    * of this method is optimized for detection with {@link BatchSearchMixin}
    * features.
-   * 
+   *
    * @param word A list of words.
    * @param features A list of features.
    * @return A list of candidates for each word ordered in the input word list.
    */
-  private static List<Boolean> batchDetect(
-      List<Word> words,
-      List<Feature> features)
-  {
+  private static List<Boolean> batchDetect(List<Word> words, List<Feature> features) {
     return LogUtils.logMethodTime(2, () -> {
       // Detect for each word using all features.
-      List<List<Boolean>> decisions = features
-          .stream()
-          .map(feat -> 
-              LogUtils.logTime(3,
-                  () -> feat.detect(words),
+      List<List<Boolean>> decisions = features.stream()
+          .map(feat ->
+              LogUtils.logTime(3, () -> feat.detect(words),
                   feat.getClass().getName()
                       + ".detect()"
                       + (feat.type().name() == null ? "" : " [" + feat.type().name() + "]")))
@@ -161,12 +150,9 @@ public class Suggestion
     });
   }
 
-  private static List<Set<String>> batchSearch(
-      List<Word> words,
-      List<Feature> features)
-  {
+  private static List<Set<String>> batchSearch(List<Word> words, List<Feature> features) {
     return LogUtils.logMethodTime(2, () -> {
-      List<Set<String>> candidateForWords = 
+      List<Set<String>> candidateForWords =
           words.stream()
                .map(w -> new HashSet<String>())
                .collect(Collectors.toList());
@@ -179,12 +165,9 @@ public class Suggestion
       return candidateForWords;
     });
   }
-  
-  private static List<List<FeatureSuggestion>> batchScore(
-      List<Word> words,
-      List<Feature> features,
-      List<Set<String>> candidateLists)
-  {
+
+  private static List<List<FeatureSuggestion>> batchScore(List<Word> words, List<Feature> features,
+      List<Set<String>> candidateLists) {
     return LogUtils.logMethodTime(2, () -> {
       List<List<FeatureSuggestion>> fsByFeatsByWords = new ArrayList<>();
       for (Feature feat: features) {
@@ -218,10 +201,10 @@ public class Suggestion
       // Search candidates from word-isolated features.
       for (Feature feat: features) {
         if (! (feat instanceof ContextSensitiveFeature)) {
-          List<Set<String>> candidateLists = 
-              LogUtils.logTime(
-                  String.format("%s.%s.search()", feat.getClass().getPackage(), feat.type()), 3,
-                  () -> feat.search(words));
+          List<Set<String>> candidateLists = LogUtils.logTime(
+              String.format("%s.%s.search()", feat.getClass().getPackage(), feat.type()),
+              3,
+              () -> feat.search(words));
           for (int i = 0; i < words.size(); i++) {
             candidateTotalByWords.get(i).addAll(candidateLists.get(i));
           }
@@ -230,7 +213,7 @@ public class Suggestion
       // Generate features suggestions from context-sensitive features.
       for (Feature feat: features) {
         if (feat instanceof ContextSensitiveFeature) {
-          List<TObjectFloatMap<String>> scoreMaps = 
+          List<TObjectFloatMap<String>> scoreMaps =
               LogUtils.logTime(
                   String.format("%s.%s.suggest()", feat.getClass().getPackage(), feat.type()), 3,
                   () -> feat.suggest(words));
@@ -295,14 +278,14 @@ public class Suggestion
 
   /**
    * Generate correction suggestions.
-   * 
-   * @param words    a list of words.
+   *
+   * @param words a list of words.
    * @param features a list of features.
-   * @param detect   whether the error detection step is needed.
+   * @param detect whether the error detection step is needed.
    * @return A list of suggestions.
    */
-  public static List<Suggestion> suggest(List<Word> words, List<Feature>
-      features, int top, boolean detect) {
+  public static List<Suggestion> suggest(List<Word> words, List<Feature> features, int top,
+      boolean detect) {
     return LogUtils.logMethodTime(1, () -> {
       // Detection.
       List<Word> errWords = words;
@@ -318,18 +301,19 @@ public class Suggestion
       // Candidate suggesting.
       List<List<FeatureSuggestion>> fsByFeatsByWords =
           batchSuggestWithBatchType(errWords, features, top);
-      List<SuggestionBuilder> sbList = 
-          errWords.stream()
-               .map(w -> new SuggestionBuilder(w))
-               .collect(Collectors.toList());
+      List<SuggestionBuilder> sbList = errWords
+          .stream()
+          .map(w -> new SuggestionBuilder(w))
+          .collect(Collectors.toList());
       fsByFeatsByWords.forEach(fsByWords -> {
         for (int i = 0; i < words.size(); i++) {
           sbList.get(i).add(fsByWords.get(i));
         }
       });
-      return sbList.stream()
-                   .map(sb -> sb.build())
-                   .collect(Collectors.toList());
+      return sbList
+          .stream()
+          .map(sb -> sb.build())
+          .collect(Collectors.toList());
     });
   }
 
@@ -339,30 +323,22 @@ public class Suggestion
 
   /**
    * Write suggestions to a text file.
-   * 
-   * A valid data file should formated follows:
    *
-   * - the file starts with a list of feature names, which are separated by a
-   *   newline character. Features follow by an empty line.
-   * - each error starts with one line containing its name, following by its
-   *   candidates.
-   * - each error candidate uses one line, containing the following fields:
-   *   candidate name, a list of candidate values, and a label. Fields are
-   *   separated by a tab character.
-   * - there is an empty line between each errors.
-   * 
+   * <p>A valid data file should formated follows:
+   *
+   * <p>- the file starts with a list of feature names, which are separated by a newline character.
+   * Features follow by an empty line. - each error starts with one line containing its name,
+   * following by its candidates. - each error candidate uses one line, containing the following
+   * fields: candidate name, a list of candidate values, and a label. Fields are separated by a tab
+   * character. - there is an empty line between each errors.
+   *
    * @param suggestions A list of suggestions.
    * @param gtErrs A list of ground truth errors.
    * @param out The folder of the output files.
-   * 
    * @throws IOException If I/O error occurs.
    */
-  public static void writeText(
-      List<Suggestion> suggestions,
-      List<GroundTruthError> gtErrs,
-      Path out)
-      throws IOException
-  {
+  public static void writeText(List<Suggestion> suggestions, List<GroundTruthError> gtErrs,
+      Path out) throws IOException {
     TIntObjectHashMap<GroundTruthError> errMap = new TIntObjectHashMap<>();
     for (GroundTruthError err : gtErrs) {
       errMap.put(err.position(), err);
@@ -405,15 +381,14 @@ public class Suggestion
             }
           } else {
             // TODO: check if bounded detection, the exact GT match is required.
-            match = (err.gtText().equals(candidate.text()) || err.gtTextAscii().equals(
-                candidate.text()));
+            match = err.gtText().equals(candidate.text())
+                 || err.gtTextAscii().equals(candidate.text());
             // TODO matching requires normalization?
             // boolean match = suggest.text().toLowerCase()
             // .equals(candidate.text().toLowerCase());
           }
-
-          bw.write(String.format("%s\t%s\t%s\n", candidate.text(), candScores.toString(),
-              match ? "1" : "0"));
+          bw.write(String.format("%s\t%s\t%s\n",
+                candidate.text(), candScores.toString(), match ? "1" : "0"));
         }
         bw.write("\n");
       }
@@ -434,7 +409,7 @@ public class Suggestion
 
   /**
    * Write suggestions to one file.
-   * 
+   *
    * @param suggestions a list of suggestions.
    * @param out the path to the output files.
    * @throws IOException if I/O error occurs.
@@ -458,17 +433,15 @@ public class Suggestion
     IntStream
         .range(0, suggestions.size())
         .parallel()
-        .forEach(
-            i -> {
-              Path outPath = folder.resolve(String.format("%s.%0" + numLen + "d", prefix, i));
-              try (ObjectOutputStream oos = new ObjectOutputStream(Channels
-                  .newOutputStream(FileChannel.open(outPath, StandardOpenOption.CREATE,
-                      StandardOpenOption.WRITE)))) {
-                oos.writeObject(suggestions.get(i));
-              } catch (IOException e) {
-                throw new RuntimeException(e);
-              }
-            });
+        .forEach(i -> {
+          Path outPath = folder.resolve(String.format("%s.%0" + numLen + "d", prefix, i));
+          try (ObjectOutputStream oos = new ObjectOutputStream(Channels.newOutputStream(
+                  FileChannel.open(outPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE)))) {
+            oos.writeObject(suggestions.get(i));
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        });
   }
 
   public static void write(Suggestion suggestion, Path path) throws IOException {
@@ -480,7 +453,7 @@ public class Suggestion
 
   /**
    * Read suggestions from path.
-   * 
+   *
    * @param path the read path. It could be either a folder that contains a list
    *          of files able to be read by {@link #read(Path)}, or a file that
    *          contains a list of serialized suggestions.
@@ -494,7 +467,6 @@ public class Suggestion
     if (!Files.exists(path)) {
       throw new FileNotFoundException();
     }
-
     // Read suggestions from path.
     List<Suggestion> suggestions = new ArrayList<>();
     if (!Files.isDirectory(path)) {
@@ -514,27 +486,21 @@ public class Suggestion
         suggestions.add(read(p));
       }
     }
-
     // Sort suggestions by position.
     suggestions.sort((a, b) -> a.position() - b.position());
-
     // Log read suggestions.
-    LogUtils.logToFile(
-        "suggest.read",
-        false,
-        (logger) -> {
-          suggestions.stream().forEachOrdered(
-              sug -> {
-                logger.debug(String.format("%6d %-25s (%d candidates)", sug.position(), sug.text(),
-                    sug.candidates().length));
-              });
-        });
+    LogUtils.logToFile("suggest.read", false, (logger) -> {
+      suggestions.stream().forEachOrdered(sug -> {
+        logger.debug(String.format("%6d %-25s (%d candidates)",
+              sug.position(), sug.text(), sug.candidates().length));
+      });
+    });
     return suggestions;
   }
 
   /**
    * Read a serialized suggestion object from path.
-   * 
+   *
    * @param path a path to the serialized object.
    * @return a suggestion.
    */
@@ -549,12 +515,12 @@ public class Suggestion
 
   /**
    * A comparator that sort candidates by score.
-   * 
+   *
    * @param errorWord the error word that candidates are suggested for. It is
    *          the {@link Suggestion#text()} for the candidates belongs to.
    * @param feature the feature that two candidates are comparing.
    * @return an integer value used for sorting.
-   * 
+   *
    * @see Comparator#compare(Object, Object)
    */
   static Comparator<Candidate> sortByScore(FeatureType type) {
@@ -583,13 +549,13 @@ public class Suggestion
   /**
    * Create a new suggestion with only the top suggested candidates from each
    * feature type.
-   * 
+   *
    * @param suggest a suggestion.
    * @param top the number of candidates with the top feature scores remains in
    *          the output suggestion.
    * @return a new suggestion with only the top suggested candidates from each
    *         feature type.
-   * 
+   *
    * @see #sortByScore(String, Class)
    */
   public static Suggestion top(Suggestion suggest, int top) {
@@ -619,7 +585,7 @@ public class Suggestion
    * Regenerate a suggestion from a serialized suggestion object with the top
    * candidates using {@link #top(Suggestion, int)} and write the new suggestion
    * to another file.
-   * 
+   *
    * @param in the input path.
    * @param out the output path.
    * @param top the number of candidates with the top feature scores remains in

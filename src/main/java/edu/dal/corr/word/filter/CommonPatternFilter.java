@@ -5,19 +5,16 @@ import java.util.regex.Pattern;
 import edu.dal.corr.word.Word;
 
 /**
- * @since 2016.08.10
+ * @since 2017.04.20
  */
-public class CommonPatternFilter
-  implements WordFilter
-{
+public class CommonPatternFilter implements WordFilter {
   private static Pattern NTH_PATTERN = Pattern.compile("[0-9]+(th|rd|nd)");
   private static Pattern SLASH_S_PATTERN = Pattern.compile("'[sS]");
   private static Pattern PUNCT_PATTERN = Pattern.compile("[^a-zA-Z]+");
   private static Pattern ABBR_PATTERN = Pattern.compile("[a-zA-Z]+\\.");
 
   @Override
-  public boolean filter(Word word)
-  {
+  public boolean filter(Word word) {
     String text = word.text();
     if(NTH_PATTERN.matcher(text).matches()
         || SLASH_S_PATTERN.matcher(text).matches()
@@ -29,9 +26,8 @@ public class CommonPatternFilter
       return false;
     }
   }
-  
-  private boolean isRomanNumber(String word)
-  {
+
+  private boolean isRomanNumber(String word) {
     switch(word) {
       case "i":
       case "ii":

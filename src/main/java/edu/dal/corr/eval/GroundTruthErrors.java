@@ -1,5 +1,8 @@
 package edu.dal.corr.eval;
 
+import edu.dal.corr.util.IOUtils;
+import edu.dal.corr.util.LogUtils;
+import edu.dal.corr.util.ResourceUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -7,18 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import edu.dal.corr.util.IOUtils;
-import edu.dal.corr.util.LogUtils;
-import edu.dal.corr.util.ResourceUtils;
-
 /**
- * This class defines the static procedures for operating {@code
- * GroundTruthError} objects.
+ * This class defines the static procedures for operating {@code GroundTruthError} objects.
  *
- * @since 2017.03.02
+ * @since 2017.04.20
  */
-public class GroundTruthErrors
-{
+public class GroundTruthErrors {
   private GroundTruthErrors() {}
 
   /**
@@ -33,12 +30,10 @@ public class GroundTruthErrors
    * @param  path  path to file containing the ground truth error records.
    * @return A list of groud truth errors.
    */
-  public static List<GroundTruthError> read(Path path)
-  {
-    return LogUtils.logMethodTime(1, () ->
-    {
+  public static List<GroundTruthError> read(Path path) {
+    return LogUtils.logMethodTime(1, () -> {
       List<GroundTruthError> errors = new ArrayList<>();
-      
+
       try (BufferedReader br = IOUtils.newBufferedReader(path)) {
         for (String line = br.readLine(); line != null; line = br.readLine()) {
           if (ERROR.matcher(line).matches()) {
@@ -57,18 +52,6 @@ public class GroundTruthErrors
         throw new RuntimeException(e);
       }
       return errors;
-    });
-  }
-
-  
-  public static void main(String[] args)
-  {
-    List<GroundTruthError> errors = GroundTruthErrors.read(ResourceUtils.GT_ERROR);
-    errors.forEach(e -> {
-//      if (! ASCII_ENCODER.canEncode(e.gtText())) {
-//        System.out.println(e.gtText());
-        System.out.println(e);
-//      }
     });
   }
 }

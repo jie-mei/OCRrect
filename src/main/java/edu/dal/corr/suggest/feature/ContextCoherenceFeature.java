@@ -1,8 +1,16 @@
 package edu.dal.corr.suggest.feature;
 
-import java.lang.UnsupportedOperationException;
+import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
+import edu.dal.corr.suggest.NormalizationOption;
+import edu.dal.corr.word.Context;
+import edu.dal.corr.word.Word;
+import gnu.trove.map.TObjectByteMap;
+import gnu.trove.map.TObjectFloatMap;
+import gnu.trove.map.hash.TObjectByteHashMap;
+import gnu.trove.map.hash.TObjectFloatHashMap;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.UnsupportedOperationException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -12,34 +20,21 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
-import edu.dal.corr.suggest.NormalizationOption;
-import edu.dal.corr.word.Context;
-import edu.dal.corr.word.Word;
-import gnu.trove.map.TObjectByteMap;
-import gnu.trove.map.TObjectFloatMap;
-import gnu.trove.map.hash.TObjectByteHashMap;
-import gnu.trove.map.hash.TObjectFloatHashMap;
-
 /**
- * @since 2016.09.09
+ * @since 2017.04.20
  */
-public class ContextCoherenceFeature
-    extends ContextSensitiveFeature {
-
+public class ContextCoherenceFeature extends ContextSensitiveFeature {
   private static final long serialVersionUID = -2869172417125408590L;
 
   protected NgramBoundedReaderSearcher reader;
   private int ngramSize;
-  
-  public ContextCoherenceFeature(String name, NgramBoundedReaderSearcher reader,
-      int ngramSize)
-  {
+
+  public ContextCoherenceFeature(String name, NgramBoundedReaderSearcher reader, int ngramSize) {
     setName(name);
     this.reader = reader;
     this.ngramSize = ngramSize;
   }
-  
+
   public ContextCoherenceFeature(NgramBoundedReaderSearcher reader, int ngramSize) {
     this(null, reader, ngramSize);
   }
@@ -50,32 +45,26 @@ public class ContextCoherenceFeature
   public int searchContextSize() { return ngramSize; }
   @Override
   public int suggestionContextSize() { return ngramSize; }
-  
+
   /**
    * Generate a skip ngram.
-   * 
-   * @param  ngram     A list of {@code n} gram strings.
-   * @param  position  The index of the skipped gram in ngram array.
-   * @return A concatenated skip-ngram, which skipped gram is replaced by an
-   *    space character.
+   *
+   * @param ngram A list of {@code n} gram strings.
+   * @param position The index of the skipped gram in ngram array.
+   * @return A concatenated skip-ngram, which skipped gram is replaced by an space character.
    */
-  private String skipNgram(String[] ngram, int position)
-  {
+  private String skipNgram(String[] ngram, int position) {
     String[] copy = ngram.clone();
     copy[position] = " ";
     return String.join(" ", copy);
   }
 
   @Override
-  public TObjectByteMap<Context> detect(
-      String first,
-      TObjectByteMap<Context> contextMap)
-  {
+  public TObjectByteMap<Context> detect(String first, TObjectByteMap<Context> contextMap) {
     TObjectByteHashMap<String> ngramMap = new TObjectByteHashMap<>();
     contextMap.keySet().forEach(context -> {
       ngramMap.put(context.toString(), (byte) 0);
     });
-    
     // Check for the existence of n-grams in corpus.
     try (BufferedReader br = reader.openBufferedRecordsWithFirstWord(first)) {
       if (br != null) {
@@ -90,7 +79,6 @@ public class ContextCoherenceFeature
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    
     // Update detection results to contextMap.
     TObjectByteMap<Context> resultMap = new TObjectByteHashMap<>();
     for (Context key : contextMap.keySet()) {
@@ -101,12 +89,10 @@ public class ContextCoherenceFeature
   }
 
   @Override
-  public List<TObjectFloatMap<String>> suggest(String first,
-                                               List<Context> contexts)
-  {
-    // Initialize a hash map storing mappings from skipped ngram context to all
-    // its candidates. The map is separated by the position of the skipped gram
-    // in the context, in order to increase the searching speed.
+  public List<TObjectFloatMap<String>> suggest(String first, List<Context> contexts) {
+    // Initialize a hash map storing mappings from skipped ngram context to all its candidates. The
+    // map is separated by the position of the skipped gram in the context, in order to increase the
+    // searching speed.
     int maxNgramSize = contexts.stream().map(c -> c.words().length)
         .max(Comparator.naturalOrder()).get();
     List<HashMap<String, TObjectFloatMap<String>>> skipNgramMaps
@@ -121,7 +107,6 @@ public class ContextCoherenceFeature
           skipNgram(words, idx),
           new TObjectFloatHashMap<>());
     });
-
     // Check for the existence of n-grams in corpus.
     try (BufferedReader br = reader.openBufferedRecordsWithFirstWord(first)) {
       if (br != null) {
@@ -129,7 +114,7 @@ public class ContextCoherenceFeature
           String[] splits = line.split("\t");
           String[] grams = splits[0].split(" ");
           float freq = Float.parseFloat(splits[1]);
-          
+
           // Post-process the reading grams.
           String[] procGrams = Arrays.stream(grams)
               .collect(Collectors.toList())
@@ -148,15 +133,16 @@ public class ContextCoherenceFeature
         }
       } else {
         // Return a list of empty maps.
-        return IntStream.range(0, contexts.size())
+        return IntStream
+            .range(0, contexts.size())
             .mapToObj(i -> new TObjectFloatHashMap<String>())
             .collect(Collectors.toList());
       }
     } catch (IOException e) {
       throw new RuntimeException();
     }
-
-    return contexts.stream()
+    return contexts
+        .stream()
         .map(c -> {
             int pos = c.index();
             return skipNgramMaps.get(pos).get(skipNgram(c.words(), pos));
@@ -167,7 +153,8 @@ public class ContextCoherenceFeature
   @Override
   public List<Set<String>> search(String first, List<Context> contexts)
   {
-    return suggest(first, contexts).stream()
+    return suggest(first, contexts)
+        .stream()
         .map(map -> map.keySet())
         .collect(Collectors.toList());
   }

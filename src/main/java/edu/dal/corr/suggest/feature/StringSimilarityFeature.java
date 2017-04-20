@@ -6,11 +6,9 @@ import edu.dal.corr.metric.LCS;
 import edu.dal.corr.word.Word;
 
 /**
- * @since 2016.08.10
+ * @since 2017.04.20
  */
-public class StringSimilarityFeature
-    extends WordIsolatedFeature {
-
+public class StringSimilarityFeature extends WordIsolatedFeature {
   private static final long serialVersionUID = 5387953865452736053L;
 
   public StringSimilarityFeature() throws IOException {

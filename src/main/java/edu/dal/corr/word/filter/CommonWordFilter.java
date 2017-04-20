@@ -1,25 +1,21 @@
 package edu.dal.corr.word.filter;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.regex.Pattern;
-
 import edu.dal.corr.util.IOUtils;
 import edu.dal.corr.util.ResourceUtils;
 import edu.dal.corr.word.PennTreebankTokenizer;
 import edu.dal.corr.word.Word;
 import gnu.trove.map.hash.TObjectByteHashMap;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.regex.Pattern;
 
 /**
- * @since 2016.08.10
+ * @since 2017.04.20
  */
-public class CommonWordFilter
-  implements WordFilter
-{
+public class CommonWordFilter implements WordFilter {
   private TObjectByteHashMap<String> dict;
-  
-  public CommonWordFilter() 
-  {
+
+  public CommonWordFilter() {
     PennTreebankTokenizer tkz = new PennTreebankTokenizer();
 
     dict = new TObjectByteHashMap<>();
@@ -30,7 +26,6 @@ public class CommonWordFilter
       // lower-case English words in the definition and explanation.
       StringBuilder sb = null;
       for (String line; (line = br.readLine()) != null;) {
-
         String text = line.trim();
         if (text.length() == 0) {
           continue;
@@ -61,7 +56,7 @@ public class CommonWordFilter
           // derivations.
           String word = text.toLowerCase();
           dict.put(word, (byte) 0);
-          
+
           sb = new StringBuilder();
         } else {
           if (sb != null) {
@@ -77,8 +72,7 @@ public class CommonWordFilter
   private static Pattern NON_ENGLISH = Pattern.compile("[^a-zA-Z]+");
 
   @Override
-  public boolean filter(Word word)
-  {
+  public boolean filter(Word word) {
     String name = word.text().toLowerCase();
     if(name.length() <= 1
         || dict.contains(name)

@@ -1,14 +1,13 @@
 package edu.dal.corr.suggest.batch;
 
+import edu.dal.corr.word.Word;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import edu.dal.corr.word.Word;
-
 /**
- * @since 2017.03.22
+ * @since 2017.04.20
  */
 public interface WordIsolatedBatchDetectMixin
   extends BatchDetectMixin

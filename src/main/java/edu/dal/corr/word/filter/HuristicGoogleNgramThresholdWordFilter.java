@@ -3,14 +3,10 @@ package edu.dal.corr.word.filter;
 import edu.dal.corr.util.Unigram;
 
 /**
- * @since 2016.09.01
+ * @since 2017.04.20
  */
-public class HuristicGoogleNgramThresholdWordFilter
-  extends AbstractNgramThresholdWordFilter
-{
-
-  public HuristicGoogleNgramThresholdWordFilter()
-  {
+public class HuristicGoogleNgramThresholdWordFilter extends AbstractNgramThresholdWordFilter {
+  public HuristicGoogleNgramThresholdWordFilter() {
     super(Unigram.getInstance(), new float[]{
       0,        // 0
       0,        // 1

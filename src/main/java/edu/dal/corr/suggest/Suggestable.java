@@ -4,16 +4,14 @@ import edu.dal.corr.word.Word;
 import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 
-
 /**
- * @since 2016.08.10
+ * @since 2017.04.20
  */
-public interface Suggestable
-    extends Searchable, Scoreable {
+public interface Suggestable extends Searchable, Scoreable {
 
   /**
    * Suggest correction candidates for an error word.
-   * 
+   *
    * @param word A word.
    * @return A feature suggestion.
    */
