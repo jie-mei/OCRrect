@@ -2,14 +2,22 @@ package edu.dal.corr.word;
 
 import edu.dal.corr.util.LocatedTextualUnit;
 import edu.dal.corr.word.filter.WordFilter;
+
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
 
@@ -101,23 +109,6 @@ public class Word extends LocatedTextualUnit implements Serializable {
       throw new IllegalArgumentException("invalid pivot index: " + index);
     }
     return newContext(size, index);
-  }
-
-  /**
-   * Construct a new word with a new pivot word string.
-   *
-   * <p>The pivot word string is provided by the given mapper function. Position and all context
-   * words and remain unchanged in the generated word.
-   *
-   * @param mapper a mapper function that changes the string representation of the pivot word.
-   * @return a new word object with a different text name.
-   */
-  public Word mapTo(Function<String, String> mapper) {
-    String[] mapped = new String[8];
-    for (int i = 0; i < context.length; i++) {
-      mapped[i] = mapper.apply(context[i]);;
-    }
-    return new Word(position(), mapped);
   }
 
   /**
@@ -216,5 +207,27 @@ public class Word extends LocatedTextualUnit implements Serializable {
    */
   public static List<Word> get(String content, WordTokenizer tokenizer) throws IOException {
     return get(content, tokenizer, new WordFilter[0]);
+  }
+  
+  public static List<Word> readTSV(Path path) throws IOException {
+    try (Stream<String> lines = Files.lines(path)) {
+      return lines
+          .parallel()
+          .map(l -> {
+            String[] splits = l.split("\t");
+            int pos = Integer.parseInt(splits[0]);
+            String[] ctxt = Arrays.copyOfRange(splits, 1, splits.length);
+            return new Word(pos, ctxt);
+          })
+          .collect(Collectors.toList());
+    }
+  }
+  
+  public static void writeTSV(List<Word> words, Path path) {
+    try (BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.CREATE)) {
+      words
+          .stream()
+          .forEach(w -> bw);
+    }
   }
 }
