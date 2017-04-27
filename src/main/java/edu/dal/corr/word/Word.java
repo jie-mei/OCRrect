@@ -1,25 +1,18 @@
 package edu.dal.corr.word;
 
 import edu.dal.corr.util.LocatedTextualUnit;
-import edu.dal.corr.word.filter.WordFilter;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.log4j.Logger;
 
 /**
  * An abstract representation of word. An abstract word contains the following components:
@@ -31,11 +24,10 @@ import org.apache.log4j.Logger;
  *       character in the error word.
  * </ul>
  *
- * @since 2017.04.20
+ * @since 2017.04.21
  */
 public class Word extends LocatedTextualUnit implements Serializable {
   private static final long serialVersionUID = 1201174127991744048L;
-  private static final Logger LOG = Logger.getLogger(Word.class);
 
   private String[] context;
 
@@ -134,85 +126,29 @@ public class Word extends LocatedTextualUnit implements Serializable {
     return super.buildHash().append(context);
   }
 
-  /*
-   * Generate words from tokens.
-   */
-  private static List<Word> getImpl(List<Word> words, WordFilter... filters) {
-    WordFilter.filter(words, filters);
-
-    if (LOG.isTraceEnabled()) {
-      int lenMax = words.stream()
-          .mapToInt(w -> w.text().length())
-          .max()
-          .getAsInt();
-      words.stream()
-          .map(w -> w.toString(lenMax))
-          .forEach(LOG::trace);
-    }
-    return words;
-  }
-
   /**
-   * Generate words from tokens.
-   *
-   * @param tokens a list of tokens, sorted by their positions in text.
-   * @param filters an array of word filters.
-   * @return a list of words.
-   */
-  public static List<Word> get(List<Token> tokens, WordFilter... filters) {
-    List<Token> expend = new ArrayList<>();
-
-    for (int i = 0; i < 4; i++) expend.add(Token.EMPTY);
-    expend.addAll(tokens);
-    for (int i = 0; i < 3; i++) expend.add(Token.EMPTY);
-
-    List<Word> words = new ArrayList<>();
-    for (int i = 0; i < tokens.size(); i++) {
-      words.add(new Word(expend.get(i + 4).position(),
-          expend.get(i).text(),
-          expend.get(i + 1).text(),
-          expend.get(i + 2).text(),
-          expend.get(i + 3).text(),
-          expend.get(i + 4).text(),
-          expend.get(i + 5).text(),
-          expend.get(i + 6).text(),
-          expend.get(i + 7).text()
-          ));
-    }
-    return getImpl(words, filters);
-  }
-
-  /**
-   * Generate words from text.
-   *
-   * @param content a text string.
-   * @param tokenizer a tokenizer.
-   * @param filters an array of word filters.
-   * @return a list of words.
-   * @throws IOException
-   */
-  public static List<Word> get(String content, WordTokenizer tokenizer, WordFilter... filters)
-      throws IOException {
-    List<Word> words = WordTokenizer.tokenize(content, tokenizer);
-    return getImpl(words, filters);
-  }
-
-  /**
-   * Generate words from text.
+   * Tokenize and generate words from text. This method behaviors the same as
+   * {@link WordTokenizer#tokenize(String, WordTokenizer)}.
    *
    * @param content a text string.
    * @param tokenizer a tokenizer.
    * @return a list of words.
-   * @throws IOException
+   * @throws IOException if I/O error occurs.
    */
-  public static List<Word> get(String content, WordTokenizer tokenizer) throws IOException {
-    return get(content, tokenizer, new WordFilter[0]);
+  public static List<Word> tokenize(String text, WordTokenizer tokenizer) throws IOException {
+    return WordTokenizer.tokenize(text, tokenizer);
   }
-  
+
+  /**
+   * Read a list of words from a formated CSV file.
+   *
+   * @param path the input path.
+   * @return a list of words.
+   * @throws IOException if I/O error occurs.
+   */
   public static List<Word> readTSV(Path path) throws IOException {
     try (Stream<String> lines = Files.lines(path)) {
       return lines
-          .parallel()
           .map(l -> {
             String[] splits = l.split("\t");
             int pos = Integer.parseInt(splits[0]);
@@ -222,12 +158,22 @@ public class Word extends LocatedTextualUnit implements Serializable {
           .collect(Collectors.toList());
     }
   }
-  
-  public static void writeTSV(List<Word> words, Path path) {
+
+  /**
+   * Write a list of words into a CSV file.
+   *
+   * @param words a list of words.
+   * @param path the output path.
+   * @throws IOException if I/O error occurs.
+   */
+  public static void writeTSV(List<Word> words, Path path) throws IOException {
+    // Concatenate the CSV records and write the entire string at once.
+    String tsvStr = words
+        .stream()
+        .map(w -> w.position() + "\t" + String.join("\t", w.context))
+        .collect(Collectors.joining("\n"));
     try (BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.CREATE)) {
-      words
-          .stream()
-          .forEach(w -> bw);
+      bw.write(tsvStr);
     }
   }
 }

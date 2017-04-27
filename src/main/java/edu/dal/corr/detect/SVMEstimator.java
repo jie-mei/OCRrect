@@ -1,0 +1,111 @@
+package edu.dal.corr.detect;
+
+import edu.dal.corr.util.ResourceUtils;
+import edu.dal.corr.word.Word;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+import com.google.common.primitives.Booleans;
+
+/**
+ * Use scikit-learn SVM model. Methods in this class calls python and requires the following python
+ * packages:
+ *
+ * <ul>
+ *   <li>numpy
+ *   <li>scikit-learn
+ *   <li>pandas
+ * </ul>
+ *
+ * @since 2017.04.26
+ */
+public class SVMEstimator extends DetectionEstimator {
+
+  private static final String SCRIPT_PATH =
+      ResourceUtils.getResource("scripts/svm_detect.py").toAbsolutePath().toString();
+  private static final String DEAFULT_MODEL_PATH = "temp/model/svm.detect.model";
+
+  private String pythonPath;
+  private String modelPath;
+
+  /**
+   * @param python the absolute pathname to the python executable that contains all the required
+   *     packages.
+   */
+  public SVMEstimator(String pythonPath, String modelPath) {
+    this.pythonPath = pythonPath;
+    this.modelPath = modelPath;
+  }
+
+  public SVMEstimator(String pythonPath) {
+    this(pythonPath, DEAFULT_MODEL_PATH);
+  }
+
+  public void train(float[][] scores, boolean[] labels) {
+    try {
+      Files.createDirectories(Paths.get(modelPath).getParent());
+      Process p = Runtime.getRuntime().exec(new String[]{
+          pythonPath, SCRIPT_PATH, "train", modelPath
+        });
+      try (BufferedWriter stdin = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()))) {
+        // Convert scores to an TSV string.
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < scores.length; i++) {
+          for (float s: scores[i]) {
+            sb.append(s).append('\t');
+          }
+          sb.append(labels[i] ? '1' : '0').append('\n');
+        }
+        stdin.write(sb.toString());
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+  
+  public void train(List<Word> words, List<Boolean> labels) {
+    train(toScores(words), Booleans.toArray(labels));
+  }
+
+  @Override
+  public boolean[] predict(float[][] scores) {
+    try {
+      Process p = Runtime.getRuntime().exec(new String[]{
+          pythonPath, SCRIPT_PATH, "predict", modelPath
+        });
+      try (BufferedWriter stdin = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()))) {
+        // Convert scores to an TSV string.
+        StringBuilder sb = new StringBuilder();
+        for (float[] score: scores) {
+          for (float s: score) {
+            sb.append(s).append('\t');
+          }
+          sb.deleteCharAt(sb.length() - 1).append('\n');
+        }
+        stdin.write(sb.toString());
+      }
+      try (BufferedReader stdout = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+        StringBuilder sb = new StringBuilder();
+        for (String line = stdout.readLine(); line != null; line = stdout.readLine()) {
+          sb.append(line);
+        }
+        System.out.println("output: " + sb.toString());
+        String[] fields = sb.toString().split("\t");
+        boolean[] labels = new boolean[fields.length];
+        for (int i = 0; i < fields.length; i++) {
+          labels[i] = fields[i].equals("1");
+        }
+        return labels;
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+}

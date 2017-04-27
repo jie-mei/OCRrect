@@ -28,7 +28,7 @@ public class TokenTest
   @Before
   public void before()
     throws IOException {
-    tokens = Token.read(TOKEN_PATH);
+    tokens = Token.readTSV(TOKEN_PATH);
   }
 
   @Test
@@ -40,11 +40,9 @@ public class TokenTest
   }
 
   @Test
-  public void testWrite()
-    throws IOException
-  {
+  public void testWrite() throws IOException {
     Path tempPath = temp.newFile().toPath();
-    Token.write(tokens, tempPath);
-    assertThat(Token.read(tempPath), is(tokens));
+    Token.writeTSV(tokens, tempPath);
+    assertThat(Token.readTSV(tempPath), is(tokens));
   }
 }

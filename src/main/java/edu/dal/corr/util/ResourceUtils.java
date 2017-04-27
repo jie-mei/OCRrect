@@ -18,10 +18,8 @@ public class ResourceUtils {
    * Input error texts.
    */
   public static Path TEST_INPUT_SEGMENT = getResource("test.in.seg.txt");
-  //public static List<Path> INPUT = getResourceInDir("*.txt", "input");
-  //public static List<Path> GT = getResourceInDir("*.txt", "gt");
-  public static List<Path> INPUT = getPathsInDir("*.txt", "data/ocr");
-  public static List<Path> GT = getPathsInDir("*.txt", "data/gt");
+  public static List<Path> INPUT = getResourceInDir("*.txt", "mibio-ocr/ocr");
+  public static List<Path> GT = getResourceInDir("*.txt", "mibio-ocr/gt");
 
   /*
    * Lexicons.
@@ -45,29 +43,35 @@ public class ResourceUtils {
   /*
    * Ngram corpus.
    */
-  public static Path UNIGRAM = tryAndGetPath(
-      "/raid6/user/jmei/Google_Web_1T_5-gram/1gm/vocab",
-      "/home/default/data/Google_Web_1T_5-gram/1gm/vocab");
+//  public static Path UNIGRAM = tryAndGetPath(
+//      "/raid6/user/jmei/Google_Web_1T_5-gram/1gm/vocab",
+//      "/home/default/data/Google_Web_1T_5-gram/1gm/vocab");
+  public static Path UNIGRAM = null;
 
-  public static List<Path> BIGRAM = tryAndGetPathsInDir(
-      "2gm-[0-9][0-9][0-9][0-9]",
-      "/raid6/user/jmei/Google_Web_1T_5-gram/2gms",
-      "/home/default/data/Google_Web_1T_5-gram/2gms");
 
-  public static List<Path> TRIGRAM = tryAndGetPathsInDir(
-      "3gm-[0-9][0-9][0-9][0-9]",
-      "/raid6/user/jmei/Google_Web_1T_5-gram/3gms",
-      "/home/default/data/Google_Web_1T_5-gram/3gms");
+//  public static List<Path> BIGRAM = tryAndGetPathsInDir(
+//      "2gm-[0-9][0-9][0-9][0-9]",
+//      "/raid6/user/jmei/Google_Web_1T_5-gram/2gms",
+//      "/home/default/data/Google_Web_1T_5-gram/2gms");
+  public static List<Path> BIGRAM = null;
 
-  public static List<Path> FOURGRAM = tryAndGetPathsInDir(
-      "4gm-[0-9][0-9][0-9][0-9]",
-      "/raid6/user/jmei/Google_Web_1T_5-gram/4gms",
-      "/home/default/data/Google_Web_1T_5-gram/4gms");
+//  public static List<Path> TRIGRAM = tryAndGetPathsInDir(
+//      "3gm-[0-9][0-9][0-9][0-9]",
+//      "/raid6/user/jmei/Google_Web_1T_5-gram/3gms",
+//      "/home/default/data/Google_Web_1T_5-gram/3gms");
+  public static List<Path> TRIGRAM = null;
 
-  public static List<Path> FIVEGRAM = tryAndGetPathsInDir(
-      "5gm-[0-9][0-9][0-9][0-9]",
-      "/raid6/user/jmei/Google_Web_1T_5-gram/5gms",
-      "/home/default/data/Google_Web_1T_5-gram/5gms");
+//  public static List<Path> FOURGRAM = tryAndGetPathsInDir(
+//      "4gm-[0-9][0-9][0-9][0-9]",
+//      "/raid6/user/jmei/Google_Web_1T_5-gram/4gms",
+//      "/home/default/data/Google_Web_1T_5-gram/4gms");
+  public static List<Path> FOURGRAM = null;
+
+//  public static List<Path> FIVEGRAM = tryAndGetPathsInDir(
+//      "5gm-[0-9][0-9][0-9][0-9]",
+//      "/raid6/user/jmei/Google_Web_1T_5-gram/5gms",
+//      "/home/default/data/Google_Web_1T_5-gram/5gms");
+  public static List<Path> FIVEGRAM = null;
 
   /**
    * Get resource file from compiled path.

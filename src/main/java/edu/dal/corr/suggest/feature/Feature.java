@@ -14,7 +14,7 @@ import edu.dal.corr.suggest.batch.BatchSuggestMixin;
  * An abstract feature that able to detect error words and suggest candidates corrections. Basic
  * batch processing procedures are available for feature operations.
  *
- * @since 2017.04.20
+ * @since 2017.04.22
  */
 public abstract class Feature
     implements Detectable,
@@ -52,5 +52,10 @@ public abstract class Feature
    */
   public NormalizationOption normalize() {
     return NormalizationOption.RESCALE;
+  }
+
+  @Override
+  public final String toString() {
+    return type.toString();
   }
 }

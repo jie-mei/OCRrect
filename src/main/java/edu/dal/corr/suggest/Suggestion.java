@@ -3,6 +3,7 @@ package edu.dal.corr.suggest;
 import edu.dal.corr.eval.GroundTruthError;
 import edu.dal.corr.metric.NGram;
 import edu.dal.corr.suggest.feature.ContextSensitiveFeature;
+import edu.dal.corr.suggest.feature.DuplicateFeatureException;
 import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.suggest.feature.FeatureType;
 import edu.dal.corr.util.IOUtils;
@@ -43,16 +44,20 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 public class Suggestion extends LocatedTextualUnit implements Serializable {
   private static final long serialVersionUID = 4175847645213310315L;
 
-  private static final int NON_MAPPING = -1;
-
   public static final int ALL_CANDIDATES = 0;
 
-  private final List<FeatureType> types;
+  private final FeatureRegistry featureRegistry;
   private final Candidate[] candidates;
 
-  Suggestion(String name, int position, List<FeatureType> types, Candidate[] candidates) {
+  Suggestion(String name, int position, FeatureRegistry featureRegistry, Candidate[] candidates) {
     super(name, position);
-    this.types = types;
+    for (Candidate c : candidates) {
+      if (featureRegistry.types().size() != c.scores().length) {
+        throw new IllegalArgumentException("unequal number of features and scores: "
+            + featureRegistry.types().size() + ", " + c.scores().length);
+      }
+    }
+    this.featureRegistry = featureRegistry;
     this.candidates = candidates;
   }
 
@@ -68,44 +73,26 @@ public class Suggestion extends LocatedTextualUnit implements Serializable {
   /**
    * Get feature scores for each candidates.
    *
-   * @param types a list of types that sort order of the output scores for each
-   *          candidate.
-   * @return a two dimensional array, which first dimensional represents the
-   *         index of the candidates according to {@link #candidates()} and
-   *         second dimension represents the score for each feature sorted by
-   *         the give type list.
+   * @param types a list of types that sort order of the output scores for each candidate.
+   * @return a two dimensional array, which first dimensional represents the index of the candidates
+   *     according to {@link #candidates()} and second dimension represents the score for each
+   *     feature sorted by the give type list.
    */
   public float[][] score(List<FeatureType> types) {
-    // Create a mapping for types to the new position in the output array.
-    int[] map = new int[types.size()];
-    Arrays.fill(map, NON_MAPPING);
-    for (int i = 0; i < types.size(); i++) {
-      for (int j = 0; j < types.size(); j++) {
-        if (types.get(i) == types.get(j)) {
-          map[i] = j;
-          break;
-        }
-      }
-    }
     float[][] scores = new float[candidates.length][types.size()];
     for (int i = 0; i < candidates.length; i++) {
-      float[] candScore = candidates[i].score();
-      for (int j = 0; j < types.size(); j++) {
-        if (map[j] != NON_MAPPING) {
-          scores[i][map[j]] = candScore[j];
-        }
-      }
+      scores[i] = candidates[i].scores(types);
     }
     return scores;
   }
 
   public List<FeatureType> types() {
-    return types;
+    return featureRegistry.types();
   }
 
   @Override
   protected HashCodeBuilder buildHash() {
-    return super.buildHash().append(candidates).append(types);
+    return super.buildHash().append(candidates).append(featureRegistry);
   }
 
   /**
@@ -307,7 +294,11 @@ public class Suggestion extends LocatedTextualUnit implements Serializable {
           .collect(Collectors.toList());
       fsByFeatsByWords.forEach(fsByWords -> {
         for (int i = 0; i < words.size(); i++) {
-          sbList.get(i).add(fsByWords.get(i));
+          try {
+            sbList.get(i).add(fsByWords.get(i));
+          } catch (DuplicateFeatureException e) {
+            throw new RuntimeException(e);
+          }
         }
       });
       return sbList
@@ -452,6 +443,61 @@ public class Suggestion extends LocatedTextualUnit implements Serializable {
   }
 
   /**
+   * Write suggestions to a TSV file. A label will be assigned to each candidate if a labeler is
+   * given.
+   *
+   * @param suggests a list of suggestions.
+   * @param labeler a candidate correctness labeler.
+   * @param path the output path.
+   * @throws IOException if I/O error occurs.
+   */
+  public static void writeTSV(List<Suggestion> suggests, Labeler labeler, Path path)
+      throws IOException {
+    try (BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.CREATE)) {
+      // Write the header line.
+      ArrayList<String> headers = new ArrayList<>(Arrays.asList("position", "name", "candidate"));
+      suggests.get(0).types()
+              .stream()
+              .map(FeatureType::toString)
+              .forEachOrdered(headers::add);
+      if (labeler != null) {
+        headers.add("label");
+      }
+      bw.write(String.join("\t", headers) + "\n");
+      // Write candidate suggestion records. Each candidate is recorded as one line in the output
+      // file. The entire suggestion is written to the output file once.
+      for (Suggestion suggest: suggests) {
+        StringBuilder sb = new StringBuilder();
+        for (Candidate c: suggest.candidates) {
+          sb.append(suggest.position()).append('\t')
+            .append(suggest.text()).append('\t')
+            .append(c.text()).append('\t');
+          for (int i = 0; i < c.scores().length; i++) {
+            sb.append(c.scores()[i]).append('\t');
+          }
+          if (labeler == null) {
+            sb.deleteCharAt(sb.length() - 1).append('\n');
+          } else {
+            sb.append(labeler.isCorrect(suggest.text(), c.text()) ? '1' : '0').append('\n');
+          }
+        }
+        bw.write(sb.toString());
+      }
+    }
+  }
+
+  /**
+   * Write suggestions to a TSV file.
+   *
+   * @param suggests a list of suggestions.
+   * @param path the output path.
+   * @throws IOException if I/O error occurs.
+   */
+  public static void writeTSV(List<Suggestion> suggests, Path path) throws IOException {
+    writeTSV(suggests, null, path);
+  }
+
+  /**
    * Read suggestions from path.
    *
    * @param path the read path. It could be either a folder that contains a list
@@ -561,16 +607,22 @@ public class Suggestion extends LocatedTextualUnit implements Serializable {
   public static Suggestion top(Suggestion suggest, int top) {
     String word = suggest.text();
     Set<Candidate> selected = new HashSet<>();
-    Candidate[] candidates = suggest.candidates();
-    for (FeatureType type : suggest.types()) {
-      Stream.of(candidates)
+    List<Candidate> candidates = Stream.of(suggest.candidates())
           .sorted(sortByFreq(word))
           .sorted(sortByMetric(word))
+          .collect(Collectors.toList());
+    for (FeatureType type : suggest.types()) {
+      ArrayList<Candidate> cloned = new ArrayList<>(candidates.size());
+      for (Candidate c: candidates) {
+        cloned.add(c);
+      }
+      cloned
+          .stream()
           .sorted(sortByScore(type))
           .limit(top)
           .forEach(c -> selected.add(c));
     }
-    return new Suggestion(suggest.text(), suggest.position(), suggest.types(),
+    return new Suggestion(suggest.text(), suggest.position(), suggest.featureRegistry,
         selected.toArray(new Candidate[selected.size()]));
   }
 

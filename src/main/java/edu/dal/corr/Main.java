@@ -1,7 +1,6 @@
 package edu.dal.corr;
 
 import edu.dal.corr.eval.GroundTruthError;
-import edu.dal.corr.eval.GroundTruthErrors;
 import edu.dal.corr.suggest.Candidate;
 import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
 import edu.dal.corr.suggest.Scoreable;
@@ -19,7 +18,6 @@ import edu.dal.corr.util.ResourceUtils;
 import edu.dal.corr.util.Unigram;
 import edu.dal.corr.word.GoogleTokenizer;
 import edu.dal.corr.word.Word;
-import edu.dal.corr.word.filter.WordFilter;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import java.io.BufferedWriter;
@@ -107,7 +105,7 @@ public class Main {
 
     // Generate suggestions.
     new DocumentCorrector()
-        .correct(new GoogleTokenizer(), null, Arrays.asList(features), text, TOP);
+        .correct(new GoogleTokenizer(), Arrays.asList(features), text, TOP);
   }
 
   private static List<Integer> TOP_VALS = Arrays.asList(3, 5, 10, 20, 50, 100);
@@ -116,7 +114,7 @@ public class Main {
     if (!TOP_VALS.contains(top)) {
       throw new RuntimeException();
     }
-    List<GroundTruthError> errors = GroundTruthErrors.read(Paths.get("data/error.gt.tsv"));
+    List<GroundTruthError> errors = GroundTruthError.read(Paths.get("data/error.gt.tsv"));
     List<Path> files =
         ResourceUtils.getPathsInDir("suggestion.part***.top." + top, "tmp")
             .stream()
@@ -165,7 +163,7 @@ public class Main {
 
   public static void evaluateSuggestRecall(int top) throws IOException {
     // Map each error starting position to the according error.
-    List<GroundTruthError> errors = GroundTruthErrors.read(Paths.get("data/error.gt.tsv"));
+    List<GroundTruthError> errors = GroundTruthError.read(Paths.get("data/error.gt.tsv"));
     TIntObjectMap<GroundTruthError> errMap = new TIntObjectHashMap<>();
     for (GroundTruthError err : errors) {
       errMap.put(err.position(), err);
@@ -199,7 +197,7 @@ public class Main {
 
   public static void evaluateSuggestRecall(int top, String folder) throws IOException {
     // Map each error starting position to the according error.
-    List<GroundTruthError> errors = GroundTruthErrors.read(Paths.get("data/error.gt.tsv"));
+    List<GroundTruthError> errors = GroundTruthError.read(Paths.get("data/error.gt.tsv"));
     TIntObjectMap<GroundTruthError> errMap = new TIntObjectHashMap<>();
     for (GroundTruthError err : errors) {
       errMap.put(err.position(), err);
@@ -235,7 +233,7 @@ public class Main {
     System.out.println("print undetected");
 
     // Map each error starting position to the according error.
-    List<GroundTruthError> errors = GroundTruthErrors.read(Paths.get("data/error.gt.tsv"));
+    List<GroundTruthError> errors = GroundTruthError.read(Paths.get("data/error.gt.tsv"));
     TIntObjectMap<GroundTruthError> errMap = new TIntObjectHashMap<>();
     for (GroundTruthError err : errors) {
       errMap.put(err.position(), err);
@@ -276,7 +274,7 @@ public class Main {
   }
 
   public static void writeWords(String text) throws IOException {
-    List<Word> words = Word.get(text, new GoogleTokenizer(), new WordFilter[] {});
+    List<Word> words = Word.tokenize(text, new GoogleTokenizer());
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("words.log"))) {
       for (Word word : words) {
         bw.write(word.text() + "\t" + word.position() + "\n");

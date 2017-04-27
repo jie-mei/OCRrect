@@ -11,4 +11,8 @@ public abstract class ContextSensitiveFeature extends Feature
         ContextSensitiveBatchScoreMixin,
         ContextSensitiveBatchSuggestMixin {
   private static final long serialVersionUID = 6802336749995466573L;
+  
+  public ContextSensitiveFeature(String name) {
+	  super(name);
+  }
 }

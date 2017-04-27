@@ -4,6 +4,7 @@
 **/etc
 **/target
 **/tmp*
+**/temp*
 **/log*
 **/.ipynb_checkpoints
 

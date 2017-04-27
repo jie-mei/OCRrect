@@ -5,7 +5,6 @@ import edu.dal.corr.suggest.feature.Feature;
 import edu.dal.corr.util.Timer;
 import edu.dal.corr.word.Word;
 import edu.dal.corr.word.WordTokenizer;
-import edu.dal.corr.word.filter.WordFilter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -23,17 +22,12 @@ public class DocumentCorrector {
 
   public void correct(
       WordTokenizer tokenizer,
-      List<WordFilter> filters,
       List<Feature> features,
       String content,
       int top)
       throws IOException {
     Timer t = new Timer();
-    if (filters == null) {
-      filters = new ArrayList<>();
-    }
-    List<Word> words = Word.get(content, tokenizer,
-        filters.toArray(new WordFilter[filters.size()]));
+    List<Word> words = Word.tokenize(content, tokenizer);
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
           "Generate words\n" +

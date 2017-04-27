@@ -24,6 +24,9 @@ public class PathUtils {
   }
 
   public static Path getTempFile() throws IOException {
+    if (! Files.exists(TEMP_DIR)) {
+      Files.createDirectories(TEMP_DIR);
+    }
     Path temp = Files.createTempFile(TEMP_DIR, null, ".tmp");
     temp.toFile().deleteOnExit();
     return temp;

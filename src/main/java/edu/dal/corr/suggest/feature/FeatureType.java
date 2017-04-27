@@ -2,6 +2,14 @@ package edu.dal.corr.suggest.feature;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
+/**
+ * An abstract type of the feature.
+ *
+ * @author Jie Mei
+ * @since 2017.04.23
+ */
 public class FeatureType implements Serializable {
   private static final long serialVersionUID = 4420562096131275711L;
 
@@ -47,5 +55,10 @@ public class FeatureType implements Serializable {
     return name == null
         ? cls.getSimpleName()
         : String.format("%s$%s", cls.getSimpleName(), name());
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder().append(cls).append(name).toHashCode();
   }
 }

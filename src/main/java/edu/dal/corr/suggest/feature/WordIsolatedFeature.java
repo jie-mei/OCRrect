@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Set;
 
 /**
- * @since 2017.04.20
+ * @since 2017.04.21
  */
 abstract class WordIsolatedFeature extends Feature
     implements WordIsolatedBatchDetectMixin,
@@ -30,7 +30,9 @@ abstract class WordIsolatedFeature extends Feature
   private THashSet<String> vocab;
 
   /**
-   * @param  unigram  a unigram that limit the candidate search space.
+   * Construct a word isolated feature with a vocabulary.
+   *
+   * @param unigram a unigram that limit the candidate search space.
    */
   WordIsolatedFeature(THashSet<String> vocab) {
     this.vocab = vocab;

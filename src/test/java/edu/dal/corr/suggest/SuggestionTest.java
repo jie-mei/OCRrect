@@ -3,6 +3,20 @@ package edu.dal.corr.suggest;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
+import edu.dal.corr.eval.GroundTruthError;
+import edu.dal.corr.suggest.feature.ApproximateContextCoherenceFeature;
+import edu.dal.corr.suggest.feature.ContextCoherenceFeature;
+import edu.dal.corr.suggest.feature.DistanceFeature;
+import edu.dal.corr.suggest.feature.DuplicateFeatureException;
+import edu.dal.corr.suggest.feature.Feature;
+import edu.dal.corr.suggest.feature.FeatureType;
+import edu.dal.corr.suggest.feature.LanguagePopularityFeature;
+import edu.dal.corr.util.IOUtils;
+import edu.dal.corr.util.PathUtils;
+import edu.dal.corr.util.ResourceUtils;
+import edu.dal.corr.util.Unigram;
+import edu.dal.corr.word.GoogleTokenizer;
+import edu.dal.corr.word.Word;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +29,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
@@ -23,22 +36,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import edu.dal.corr.suggest.feature.ContextCoherenceFeature;
-import edu.dal.corr.suggest.feature.DistanceFeature;
-import edu.dal.corr.suggest.feature.Feature;
-import edu.dal.corr.suggest.feature.FeatureType;
-import edu.dal.corr.suggest.feature.LanguagePopularityFeature;
-import edu.dal.corr.eval.GroundTruthError;
-import edu.dal.corr.suggest.feature.ApproximateContextCoherenceFeature;
-import edu.dal.corr.util.IOUtils;
-import edu.dal.corr.util.PathUtils;
-import edu.dal.corr.util.ResourceUtils;
-import edu.dal.corr.util.Unigram;
-import edu.dal.corr.word.GoogleTokenizer;
-import edu.dal.corr.word.Word;
-
 public class SuggestionTest {
-  
+
   private static final Path VOCAB_PATH =
       ResourceUtils.getResource("test.suggest/vocab.test.txt");
   private static final Path UNIGRAM_PATH =
@@ -60,7 +59,7 @@ public class SuggestionTest {
 
   @Rule
   public TemporaryFolder tempFolder = new TemporaryFolder();
-  
+
   @BeforeClass
   public static void beforeClass()
     throws Exception
@@ -71,7 +70,7 @@ public class SuggestionTest {
 //    Unigram.register(unigram);
     ResourceUtils.VOCAB = VOCAB_PATH;
     ResourceUtils.UNIGRAM = UNIGRAM_PATH;
-    
+
     features = Arrays.asList(new Feature[] {
             new DistanceFeature("Levenstein",
                 Scoreable.levenshteinDist()),
@@ -88,13 +87,13 @@ public class SuggestionTest {
 
     // Generate suggestions.
     List<Suggestion> suggests = Suggestion.suggest(
-        Word.get(IOUtils.read(TXT_PATH), new GoogleTokenizer()),
+        Word.tokenize(IOUtils.read(TXT_PATH), new GoogleTokenizer()),
         features,
         99
     );
     suggests.forEach(suggest -> {
       for (Candidate cand : suggest.candidates()) {
-        System.out.println(cand.text() + "\t" + Arrays.toString(cand.score(types)));
+        System.out.println(cand.text() + "\t" + Arrays.toString(cand.scores(types)));
       }
     });
 
@@ -112,16 +111,15 @@ public class SuggestionTest {
   }
 
   @Test
-  public void testEquals()
-  {
+  public void testEquals() throws DuplicateFeatureException {
     for (Suggestion sug: Arrays.asList(top3, top10, top100)) {
       Suggestion copy = new Suggestion(
-          sug.text(), sug.position(), sug.types(), sug.candidates());
+          sug.text(), sug.position(), new FeatureRegistry(sug.types()), sug.candidates());
       assertThat(copy, is(sug));
       assertThat(copy.hashCode(), is(sug.hashCode()));
     }
   }
-  
+
   private float[] array(float... values) { return values; }
 
   private float tf(int max, int min, int freq) {
@@ -138,7 +136,6 @@ public class SuggestionTest {
         .of(top3.candidates())
         .map(Candidate::text)
         .collect(Collectors.toSet());
-    System.out.println(candNameSet);
 
     assertThat(candNameSet.contains("word"), is(true));
     assertThat(candNameSet.contains("word1"), is(true));
@@ -164,7 +161,7 @@ public class SuggestionTest {
   @Test
   public void testSuggest() throws IOException {
     for (Candidate cand: all.candidates()) {
-      float[] scores = cand.score(types);
+      float[] scores = cand.scores(types);
       switch (cand.text()) {
         case "word":    assertThat(scores, is(array(1 - 0.0f,  tf(10000, 0, 100),   tf(500, 50, 50),  tf(100, 10, 100), tf(500, 10, 100)))); break;
         case "x":       assertThat(scores, is(array(1 - 2/3f,  tf(10000, 0, 100),   tf(500, 50, 100), tf(100, 10, 10),  tf(500, 10, 10)))); break;
@@ -208,9 +205,7 @@ public class SuggestionTest {
   }
 
   @Test
-  public void testReadAndWrite()
-    throws IOException
-  {
+  public void testReadAndWrite() throws IOException {
     for (Suggestion sug: Arrays.asList(top3, top10, top100)) {
       Path file = tempFolder.newFile().toPath();
       Suggestion.write(sug, file);
@@ -219,9 +214,7 @@ public class SuggestionTest {
   }
 
   @Test
-  public void testWriteToFolder()
-    throws IOException
-  {
+  public void testWriteToFolder() throws IOException {
     List<Suggestion> data = Arrays.asList(top3, top10, top100);
     Path folder = tempFolder.newFolder().toPath();
     String prefix = "suggest";
@@ -233,17 +226,56 @@ public class SuggestionTest {
   }
 
   @Test
-  public void testReadAndWriteToSingleFile()
-    throws IOException
-  {
+  public void testReadAndWriteToSingleFile() throws IOException {
     List<Suggestion> data = Arrays.asList(top3, top10, top100);
     Path file = tempFolder.newFile().toPath();
     Suggestion.write(data, file);
     assertEquals(data, Suggestion.readList(file));
   }
-  
+
+  private void testWriteTSV(Labeler labeler) throws IOException {
+    Path out = PathUtils.getTempFile();
+    List<Suggestion> data = Arrays.asList(top3, top10, top100);
+    Suggestion.writeTSV(data, labeler, out);
+    try (BufferedReader br = Files.newBufferedReader(out)) {
+      // Test the header line.
+      String[] fields = br.readLine().split("\t");
+      assertEquals(fields[0], "position");
+      assertEquals(fields[1], "name");
+      assertEquals(fields[2], "candidate");
+      for (int i = 0; i < top3.types().size(); i++) {
+        assertEquals(fields[i + 3], top3.types().get(i).toString());
+      }
+      if (labeler != null) {
+        assertEquals(fields[top3.types().size() + 3], "label");
+      }
+      // Test the suggestion candidates.
+      for (Suggestion sug: data) {
+        for (Candidate c: sug.candidates()) {
+          fields = br.readLine().split("\t");
+          assertEquals(fields[0], Integer.toString(sug.position()));
+          assertEquals(fields[1], sug.text());
+          assertEquals(fields[2], c.text());
+          for (int i = 0; i < c.scores().length; i++) {
+            assertEquals(fields[i + 3], Float.toString(c.scores()[i]));
+          }
+          if (labeler != null) {
+            assertEquals(fields[top3.types().size() + 3],
+                labeler.isCorrect(sug.text(), c.text()) ? "1" : "0");
+          }
+        }
+      }
+    }
+  }
+
+  @Test
+  public void testWriteTSV() throws IOException {
+    testWriteTSV(null);
+    testWriteTSV((error, candidate) -> error.equals(candidate));
+  }
+
   /*
-   * 
+   *
    */
   private int compareCandidates(String error, FeatureType type, Candidate c1, Candidate c2) {
     int diff = Suggestion.sortByScore(type).compare(c1, c2);
@@ -256,8 +288,7 @@ public class SuggestionTest {
   /*
    * Test the correctness of rewriting serialized suggestion data.
    */
-  private void testRewriteImpl(Suggestion from, Suggestion to, int rewriteSize)
-  {
+  private void testRewriteImpl(Suggestion from, Suggestion to, int rewriteSize) {
     HashSet<Candidate> topCandidates = new HashSet<Candidate>(
         Arrays.asList(to.candidates()));
 
@@ -269,7 +300,7 @@ public class SuggestionTest {
       List<Candidate> sorted = Arrays.asList(from.candidates());
       sorted.sort(Suggestion.sortByMetric(errorWord));
       sorted.sort(Suggestion.sortByScore(features.get(i)));
-      
+
       // Add all possible candidate selections, i.e., add candidate that equals
       // to the 3rd sorted candidate but ranks lower.
       int total = sorted.size();
@@ -287,24 +318,21 @@ public class SuggestionTest {
       assertThat(selected.contains(top3Cand), is(true));
     }
   }
-  
+
   /**
    * Test the correctness of {@code Suggestion#rewriteTop(Path, Path, int)}.
    */
   @Test
-  public void testRewrite()
-  {
+  public void testRewrite() {
     testRewriteImpl(top100, top10, 10);
     testRewriteImpl(top100, top3,  3);
     testRewriteImpl(top10,  top3,  3);
   }
-  
+
   /*
    * Test the format of one error in a text buffer.
    */
-  private void testSuggestFormatInText(BufferedReader br, Suggestion suggest)
-    throws IOException
-  {
+  private void testSuggestFormatInText(BufferedReader br, Suggestion suggest) throws IOException {
     // Check error name.
     String suggestName = br.readLine().split("\t")[0];
     assertThat(suggestName, is(suggest.text()));
@@ -330,13 +358,11 @@ public class SuggestionTest {
 
   /**
    * Test {@link Suggestion#writeText(List, Path)} method.
-   * 
+   *
    * @throws Exception
    */
   @Test
-  public void testWriteText()
-    throws Exception
-  {
+  public void testWriteText() throws Exception {
     Path out = PathUtils.getTempFile();
     Suggestion.writeText(Arrays.asList(top3, top10, top100),
         new ArrayList<GroundTruthError>(), out);

@@ -14,7 +14,7 @@
   <description>
     Automatic correction for OCR texts
   </description>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jdk.version>1.8</jdk.version>
@@ -183,6 +183,11 @@
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
         <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>21.0</version>
     </dependency>
     <dependency>
         <groupId>info.debatty</groupId>

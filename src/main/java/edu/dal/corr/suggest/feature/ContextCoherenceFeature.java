@@ -30,7 +30,7 @@ public class ContextCoherenceFeature extends ContextSensitiveFeature {
   private int ngramSize;
 
   public ContextCoherenceFeature(String name, NgramBoundedReaderSearcher reader, int ngramSize) {
-    setName(name);
+    super(name);
     this.reader = reader;
     this.ngramSize = ngramSize;
   }

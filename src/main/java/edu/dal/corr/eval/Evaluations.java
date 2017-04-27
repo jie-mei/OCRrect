@@ -1,23 +1,22 @@
 package edu.dal.corr.eval;
 
+import edu.dal.corr.util.LogUtils;
+import edu.dal.corr.word.Word;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import edu.dal.corr.util.LogUtils;
-import edu.dal.corr.word.Word;
-
 /**
  * This class defines the static procedures used for evaluation.
  *
- * @since 2017.01.18
+ * @since 2017.04.24
  */
 public class Evaluations
 {
   private Evaluations() {}
-  
+
   /**
    * Evaluate the error detection process. The evaluation result will be stored
    * in {@code log} directory with the following names:
@@ -46,27 +45,27 @@ public class Evaluations
     List<GroundTruthError> undetected = new ArrayList<>();
     Map<Word, GroundTruthError> wordMatch = new HashMap<>();
     words.forEach(s -> wordMatch.put(s, null));
-    
+
     // An unbounded detection may let one word match to multiple errors.
     int overlapUnbound = 0;
-    
+
     for (GroundTruthError error : errors) {
       int errStr = error.position();
       String errText = error.errorText();
       int errEnd = errStr + errText.length();
       boolean match = false;
-      
+
       for (Word word : words) {
         int wStr = word.position();
         String wText = word.text();
         int wEnd = wStr + wText.length();
-        
+
         // Bounded detect.
         if (wStr == errStr && wText.equals(errText)) {
           bounded.put(error, word);
           match = true;
           wordMatch.put(word, error);
-        
+
         // Unbounded detect.
         } else if ((errStr <= wStr && errEnd > wStr)
             || (errStr < wEnd && errEnd >= wEnd)) {
@@ -83,14 +82,14 @@ public class Evaluations
           wordMatch.put(word, error);
         }
       }
-      
+
       if (! match) {
         undetected.add(error);
       }
     }
-    
+
     String pnamePrefix = "eval.detect." + prefix + ".";
-    
+
     LogUtils.logToFile(pnamePrefix + "bounded", false, (logger) -> {
       bounded.keySet()
         .stream()
@@ -101,7 +100,7 @@ public class Evaluations
               err.position(), err.errorText(), w.text()));
         });
     });
-    
+
     LogUtils.logToFile(pnamePrefix + "unbounded", false, (logger) -> {
       unbounded.keySet()
         .stream()
@@ -115,7 +114,7 @@ public class Evaluations
               err.position(), err.errorText(), str));
         });
     });
-    
+
     LogUtils.logToFile(pnamePrefix + "undetected", false, (logger) -> {
       undetected.stream()
         .sorted((a, b) -> a.position() - b.position())
@@ -124,7 +123,7 @@ public class Evaluations
               err.position(), err.errorText(), err.text()));
         });
     });
-    
+
     LogUtils.logToFile(pnamePrefix + "unmatched", false, (logger) -> {
       wordMatch.keySet()
         .stream()
@@ -135,7 +134,7 @@ public class Evaluations
               w.position(), w.text()));
         });
     });
-    
+
     LogUtils.logToFile(pnamePrefix + "matchState", false, (logger) -> {
       words
         .stream()
@@ -155,7 +154,7 @@ public class Evaluations
               err == null ? "" : err.errorText()));
         });
     });
-    
+
     final int overlapUnboundSug = overlapUnbound;
     LogUtils.logToFile(pnamePrefix + "result", true, (logger) -> {
       logger.debug(String.format("Total:      %4d %4d",

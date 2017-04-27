@@ -36,7 +36,7 @@ public class WordTest
   public void setUp()
     throws IOException
   {
-    tokens = Token.read(TOKEN_PATH);
+    tokens = Token.readTSV(TOKEN_PATH);
     grams = new String[]{
         "", "", "", "", "Hello", ",", "world", "!", "", "", ""};
   }
@@ -50,7 +50,7 @@ public class WordTest
   @Test
   public void testGetContexts()
   {
-    List<Word> words = Word.get(tokens, null);
+    List<Word> words = Token.toWords(tokens);
     Word w = words.get(0);
     assertThat(w.getContexts(2), is(Arrays.asList(
         new Context(1, w.position(), Arrays.copyOfRange(grams, 3, 5))
@@ -83,7 +83,7 @@ public class WordTest
   public void testGetWithTokens()
     throws IOException
   {
-    List<Word> words = Word.get(tokens, null);
+    List<Word> words = Token.toWords(tokens);
     for (int i = 0; i < 4; i++) {
       assertThat(words.get(i), is(new Word(
               tokens.get(i).position(), Arrays.copyOfRange(grams, i, i + 8))));
@@ -95,7 +95,7 @@ public class WordTest
     throws IOException
   {
     String text = IOUtils.read(TEXT_PATH);
-    List<Word> words = Word.get(text, new GoogleTokenizer(), null);
+    List<Word> words = Word.tokenize(text, new GoogleTokenizer());
     for (int i = 0; i < 4; i++) {
       assertThat(words.get(i),
           is(new Word(tokens.get(i).position(),
