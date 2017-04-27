@@ -5,9 +5,10 @@ import edu.dal.corr.word.Word;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -50,12 +51,9 @@ public class SVMEstimator extends DetectionEstimator {
 
   public void train(float[][] scores, boolean[] labels) {
     try {
-      Files.createDirectories(Paths.get(modelPath).getParent());
-      Process p = Runtime.getRuntime().exec(new String[]{
-          pythonPath, SCRIPT_PATH, "train", modelPath
-        });
-      try (BufferedWriter stdin = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()))) {
-        // Convert scores to an TSV string.
+      // Write TSV into a temp file.
+      File temp = File.createTempFile("tmp", "");
+      try (BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < scores.length; i++) {
           for (float s: scores[i]) {
@@ -63,9 +61,17 @@ public class SVMEstimator extends DetectionEstimator {
           }
           sb.append(labels[i] ? '1' : '0').append('\n');
         }
-        stdin.write(sb.toString());
+        bw.write(sb.toString());
       }
-    } catch (IOException e) {
+      // Run process.
+      Files.createDirectories(Paths.get(modelPath).getParent());
+      Process p = Runtime.getRuntime().exec(new String[]{
+          pythonPath, SCRIPT_PATH, "train", temp.getCanonicalPath(), modelPath
+        });
+      p.waitFor();
+      // Remove the temp file.
+      temp.delete();
+    } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
   }
@@ -77,11 +83,9 @@ public class SVMEstimator extends DetectionEstimator {
   @Override
   public boolean[] predict(float[][] scores) {
     try {
-      Process p = Runtime.getRuntime().exec(new String[]{
-          pythonPath, SCRIPT_PATH, "predict", modelPath
-        });
-      try (BufferedWriter stdin = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()))) {
-        // Convert scores to an TSV string.
+      // Write TSV into a temp file.
+      File temp = File.createTempFile("tmp", "");
+      try (BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
         StringBuilder sb = new StringBuilder();
         for (float[] score: scores) {
           for (float s: score) {
@@ -89,8 +93,13 @@ public class SVMEstimator extends DetectionEstimator {
           }
           sb.deleteCharAt(sb.length() - 1).append('\n');
         }
-        stdin.write(sb.toString());
+        bw.write(sb.toString());
       }
+      // Run process.
+      Process p = Runtime.getRuntime().exec(new String[]{
+          pythonPath, SCRIPT_PATH, "predict", temp.getCanonicalPath(), modelPath
+        });
+      boolean[] labels = new boolean[scores.length];
       try (BufferedReader stdout = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
         StringBuilder sb = new StringBuilder();
         for (String line = stdout.readLine(); line != null; line = stdout.readLine()) {
@@ -98,12 +107,13 @@ public class SVMEstimator extends DetectionEstimator {
         }
         System.out.println("output: " + sb.toString());
         String[] fields = sb.toString().split("\t");
-        boolean[] labels = new boolean[fields.length];
         for (int i = 0; i < fields.length; i++) {
           labels[i] = fields[i].equals("1");
         }
-        return labels;
       }
+      // Remove the temp file.
+      temp.delete();
+      return labels;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
