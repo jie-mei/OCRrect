@@ -78,11 +78,11 @@ public class Test {
     int lastTrain = 0; // exclusive
     while (lastTrain < words.size() && words.get(lastTrain).position() < SPLIT_POS) lastTrain++;
     List<Word> trainWords = words.subList(0, lastTrain);
-    //List<Word> testWords = words.subList(lastTrain, words.size());
-    
+    List<Word> testWords = words.subList(lastTrain, words.size());
+
     List<Boolean> trainLabels = labelWords(trainWords);
-    //List<Boolean> testLabels = labelWords(testWords);
-    
+    List<Boolean> testLabels = labelWords(testWords);
+
     DetectionFeature[] features = {
       new WordValidityFeature(IOUtils.readList(ResourceUtils.VOCAB)),
       new CharacterExistenceFeature((char)32),
@@ -119,17 +119,27 @@ public class Test {
       new CharacterExistenceFeature((char)125),
       new CharacterExistenceFeature((char)126),
       new CharacterExistenceFeature((char)127),
-//      new ContextCoherenceFeature(bigram, 2),
-//      new ContextCoherenceFeature(trigram, 3),
-//      new ContextCoherenceFeature(fourgram, 4),
-//      new ContextCoherenceFeature(fivegram, 5),
-//      new ApproximateContextCoherenceFeature(bigram, 2),
-//      new ApproximateContextCoherenceFeature(trigram, 3),
-//      new ApproximateContextCoherenceFeature(fourgram, 4),
-//      new ApproximateContextCoherenceFeature(fivegram, 5),
+      new ContextCoherenceFeature(bigram, 2),
+      new ContextCoherenceFeature(trigram, 3),
+      new ContextCoherenceFeature(fourgram, 4),
+      new ContextCoherenceFeature(fivegram, 5),
+      new ApproximateContextCoherenceFeature(bigram, 2),
+      new ApproximateContextCoherenceFeature(trigram, 3),
+      new ApproximateContextCoherenceFeature(fourgram, 4),
+      new ApproximateContextCoherenceFeature(fivegram, 5),
     };
-    
-    SVMEstimator svm = new SVMEstimator("/Users/Porzire/miniconda3/bin/python", features);
+
+    SVMEstimator svm = new SVMEstimator("/raid6/user/jmei/miniconda3/bin/python", features);
     svm.train(trainWords, trainLabels);
+
+    boolean[] predLabels = svm.predict(testWords);
+    float correct = 0;
+    for (int i = 0; i < predLabels.length; i++) {
+      if (testLabels.get(i) == predLabels[i]) {
+        correct++;
+      }
+    }
+    System.out.println(String.format("%d / %d = %.4f",
+        (int)correct, predLabels.length, correct / predLabels.length));
   }
 }

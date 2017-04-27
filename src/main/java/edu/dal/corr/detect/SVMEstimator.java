@@ -25,7 +25,7 @@ import com.google.common.primitives.Booleans;
  *   <li>pandas
  * </ul>
  *
- * @since 2017.04.26
+ * @since 2017.04.27
  */
 public class SVMEstimator extends DetectionEstimator {
 
@@ -47,7 +47,7 @@ public class SVMEstimator extends DetectionEstimator {
   }
 
   public SVMEstimator(String pythonPath, DetectionFeature...features) {
-    this(pythonPath, DEAFULT_MODEL_PATH);
+    this(pythonPath, DEAFULT_MODEL_PATH, features);
   }
 
   public void train(float[][] scores, boolean[] labels) {
@@ -76,7 +76,7 @@ public class SVMEstimator extends DetectionEstimator {
       throw new RuntimeException(e);
     }
   }
-  
+
   public void train(List<Word> words, List<Boolean> labels) {
     train(toScores(words), Booleans.toArray(labels));
   }
