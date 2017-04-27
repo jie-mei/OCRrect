@@ -10,8 +10,11 @@ import java.util.List;
 public abstract class DetectionEstimator {
   List<DetectionFeature> detectables;
 
-  public DetectionEstimator(DetectionFeature...detectables) {
-    this.detectables = Arrays.asList(detectables);
+  public DetectionEstimator(DetectionFeature...features) {
+    if (features.length == 0) {
+      throw new IllegalArgumentException("At least one feature is required");
+    }
+    this.detectables = Arrays.asList(features);
   }
   
   protected float[] toScores(Word word) {

@@ -40,12 +40,13 @@ public class SVMEstimator extends DetectionEstimator {
    * @param python the absolute pathname to the python executable that contains all the required
    *     packages.
    */
-  public SVMEstimator(String pythonPath, String modelPath) {
+  public SVMEstimator(String pythonPath, String modelPath, DetectionFeature...features) {
+    super(features);
     this.pythonPath = pythonPath;
     this.modelPath = modelPath;
   }
 
-  public SVMEstimator(String pythonPath) {
+  public SVMEstimator(String pythonPath, DetectionFeature...features) {
     this(pythonPath, DEAFULT_MODEL_PATH);
   }
 
