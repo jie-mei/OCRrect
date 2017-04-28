@@ -5,11 +5,12 @@ import edu.dal.corr.word.Word;
 /**
  * @since 2017.04.26
  */
-public class CharacterExistenceFeature implements DetectionFeature {
+public class CharacterExistenceFeature extends DetectionFeature {
   private char chr;
 
   public CharacterExistenceFeature(char character) {
     chr = character;
+    setName(Character.toString(chr));
   }
 
   @Override

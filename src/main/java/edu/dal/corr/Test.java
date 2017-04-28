@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import edu.dal.corr.detect.ApproximateContextCoherenceFeature;
 import edu.dal.corr.detect.CharacterExistenceFeature;
 import edu.dal.corr.detect.ContextCoherenceFeature;
-import edu.dal.corr.detect.DetectionFeature;
+import edu.dal.corr.detect.Detectable;
 import edu.dal.corr.detect.SVMEstimator;
 import edu.dal.corr.detect.WordValidityFeature;
 import edu.dal.corr.suggest.NgramBoundedReaderSearcher;
@@ -83,7 +83,7 @@ public class Test {
     List<Boolean> trainLabels = labelWords(trainWords);
     List<Boolean> testLabels = labelWords(testWords);
 
-    DetectionFeature[] features = {
+    Detectable[] features = {
       new WordValidityFeature(IOUtils.readList(ResourceUtils.VOCAB)),
       new CharacterExistenceFeature((char)32),
       new CharacterExistenceFeature((char)33),
@@ -119,17 +119,17 @@ public class Test {
       new CharacterExistenceFeature((char)125),
       new CharacterExistenceFeature((char)126),
       new CharacterExistenceFeature((char)127),
-      new ContextCoherenceFeature(bigram, 2),
-      new ContextCoherenceFeature(trigram, 3),
-      new ContextCoherenceFeature(fourgram, 4),
-      new ContextCoherenceFeature(fivegram, 5),
-      new ApproximateContextCoherenceFeature(bigram, 2),
-      new ApproximateContextCoherenceFeature(trigram, 3),
-      new ApproximateContextCoherenceFeature(fourgram, 4),
-      new ApproximateContextCoherenceFeature(fivegram, 5),
+      new ContextCoherenceFeature("bigram", bigram, 2),
+      new ContextCoherenceFeature("trigram", trigram, 3),
+      new ContextCoherenceFeature("fourgram", fourgram, 4),
+      new ContextCoherenceFeature("fivegram", fivegram, 5),
+      new ApproximateContextCoherenceFeature("bigram", bigram, 2),
+      new ApproximateContextCoherenceFeature("trigram", trigram, 3),
+      new ApproximateContextCoherenceFeature("fourgram", fourgram, 4),
+      new ApproximateContextCoherenceFeature("fivegram", fivegram, 5),
     };
 
-    SVMEstimator svm = new SVMEstimator("/raid6/user/jmei/miniconda3/bin/python", features);
+    SVMEstimator svm = new SVMEstimator("/home/default/miniconda3/bin/python", features);
     svm.train(trainWords, trainLabels);
 
     boolean[] predLabels = svm.predict(testWords);

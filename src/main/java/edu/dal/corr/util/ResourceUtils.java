@@ -114,10 +114,12 @@ public class ResourceUtils {
     for (String pathname : pathnames) {
       try {
         return getPath(pathname);
-      } catch(ResourceNotFoundException e) {
+      } catch(ResourceNotFoundException ok) {
+        // try next pathname
       }
     }
-    throw new ResourceNotFoundException();
+    return null;
+    // throw new ResourceNotFoundException();
   }
 
   /**

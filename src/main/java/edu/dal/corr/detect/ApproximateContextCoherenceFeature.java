@@ -7,9 +7,9 @@ import edu.dal.corr.word.Context;
  * @since 2017.04.26
  */
 public class ApproximateContextCoherenceFeature extends ContextCoherenceFeature
-    implements DetectionFeature {
-  public ApproximateContextCoherenceFeature(NgramBoundedReaderSearcher reader, int ngramSize) {
-    super(reader, ngramSize);
+    implements Detectable {
+  public ApproximateContextCoherenceFeature(String name, NgramBoundedReaderSearcher reader, int ngramSize) {
+    super(name, reader, ngramSize);
   }
 
   @Override

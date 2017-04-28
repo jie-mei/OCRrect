@@ -11,11 +11,12 @@ import java.util.List;
 /**
  * @since 2017.04.27
  */
-public class ContextCoherenceFeature implements DetectionFeature {
+public class ContextCoherenceFeature extends DetectionFeature {
   private NgramBoundedReaderSearcher reader;
   private int ngramSize;
 
-  public ContextCoherenceFeature(NgramBoundedReaderSearcher reader, int ngramSize) {
+  public ContextCoherenceFeature(String name, NgramBoundedReaderSearcher reader, int ngramSize) {
+    setName(name);
     this.reader = reader;
     this.ngramSize = ngramSize;
   }
