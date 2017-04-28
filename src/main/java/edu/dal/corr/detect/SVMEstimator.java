@@ -50,7 +50,7 @@ public class SVMEstimator extends SupervisedDetectionEstimator {
   public void train(float[][] scores, boolean[] labels) {
     try {
       // Write TSV into a temp file.
-      File temp = File.createTempFile("tmp", "");
+      File temp = Files.createTempFile(Paths.get("temp"), "train-detect-", "").toFile();
       try (BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < scores.length; i++) {
@@ -68,7 +68,7 @@ public class SVMEstimator extends SupervisedDetectionEstimator {
         });
       p.waitFor();
       // Remove the temp file.
-      temp.delete();
+      // temp.delete();
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
@@ -78,7 +78,7 @@ public class SVMEstimator extends SupervisedDetectionEstimator {
   public boolean[] predict(float[][] scores) {
     try {
       // Write TSV into a temp file.
-      File temp = File.createTempFile("tmp", "");
+      File temp = Files.createTempFile(Paths.get("temp"), "predict-detect-", "").toFile();
       try (BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
         StringBuilder sb = new StringBuilder();
         for (float[] score: scores) {
@@ -106,7 +106,7 @@ public class SVMEstimator extends SupervisedDetectionEstimator {
         }
       }
       // Remove the temp file.
-      temp.delete();
+      // temp.delete();
       return labels;
     } catch (IOException e) {
       throw new RuntimeException(e);
