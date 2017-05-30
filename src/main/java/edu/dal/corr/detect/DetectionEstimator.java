@@ -1,5 +1,6 @@
 package edu.dal.corr.detect;
 
+import edu.dal.corr.util.LogUtils;
 import edu.dal.corr.word.Word;
 import java.util.Arrays;
 import java.util.List;
@@ -8,27 +9,29 @@ import java.util.List;
  * @since 2017.04.26
  */
 public abstract class DetectionEstimator {
-  List<DetectionFeature> detectables;
+  List<Detectable> features;
 
-  public DetectionEstimator(DetectionFeature...features) {
+  public DetectionEstimator(Detectable...features) {
     if (features.length == 0) {
       throw new IllegalArgumentException("At least one feature is required");
     }
-    this.detectables = Arrays.asList(features);
-  }
-  
-  protected float[] toScores(Word word) {
-    float[] scores = new float[detectables.size()];
-    for (int i = 0; i < detectables.size(); i++) {
-      scores[i] = detectables.get(i).detect(word);
-    }
-    return scores;
+    this.features = Arrays.asList(features);
   }
   
   protected float[][] toScores(List<Word> words) {
     float[][] scores = new float[words.size()][];
     for (int i = 0; i < words.size(); i++) {
-      scores[i] = toScores(words.get(i));
+      scores[i] = new float[features.size()];
+    }
+    for (int i = 0; i < features.size(); i++) {
+      final int fidx = i;
+      LogUtils.logTime(3, ()-> {
+        // make detections by each feature.
+        float[] vals = features.get(fidx).detect(words);
+        for (int j = 0; j < words.size(); j++) {
+          scores[j][fidx] = vals[j];
+        }
+      }, features.get(i) + ".detect()");
     }
     return scores;
   }
@@ -36,6 +39,6 @@ public abstract class DetectionEstimator {
   public abstract boolean[] predict(float[][] scores);
 
   public boolean[] predict(List<Word> words) {
-    return predict(toScores(words));
+    return LogUtils.logMethodTime(2, () -> predict(toScores(words)));
   }
 }

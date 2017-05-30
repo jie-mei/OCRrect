@@ -1,7 +1,6 @@
 package edu.dal.corr.detect;
 
 import edu.dal.corr.util.ResourceUtils;
-import edu.dal.corr.word.Word;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,9 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-
-import com.google.common.primitives.Booleans;
 
 /**
  * Use scikit-learn SVM model. Methods in this class calls python and requires the following python
@@ -25,9 +21,9 @@ import com.google.common.primitives.Booleans;
  *   <li>pandas
  * </ul>
  *
- * @since 2017.04.26
+ * @since 2017.04.27
  */
-public class SVMEstimator extends DetectionEstimator {
+public class SVMEstimator extends SupervisedDetectionEstimator {
 
   private static final String SCRIPT_PATH =
       ResourceUtils.getResource("scripts/svm_detect.py").toAbsolutePath().toString();
@@ -40,20 +36,21 @@ public class SVMEstimator extends DetectionEstimator {
    * @param python the absolute pathname to the python executable that contains all the required
    *     packages.
    */
-  public SVMEstimator(String pythonPath, String modelPath, DetectionFeature...features) {
+  public SVMEstimator(String pythonPath, String modelPath, Detectable...features) {
     super(features);
     this.pythonPath = pythonPath;
     this.modelPath = modelPath;
   }
 
-  public SVMEstimator(String pythonPath, DetectionFeature...features) {
-    this(pythonPath, DEAFULT_MODEL_PATH);
+  public SVMEstimator(String pythonPath, Detectable...features) {
+    this(pythonPath, DEAFULT_MODEL_PATH, features);
   }
 
+  @Override
   public void train(float[][] scores, boolean[] labels) {
     try {
       // Write TSV into a temp file.
-      File temp = File.createTempFile("tmp", "");
+      File temp = Files.createTempFile(Paths.get("temp"), "train-detect-", "").toFile();
       try (BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < scores.length; i++) {
@@ -71,21 +68,17 @@ public class SVMEstimator extends DetectionEstimator {
         });
       p.waitFor();
       // Remove the temp file.
-      temp.delete();
+      // temp.delete();
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
-  }
-  
-  public void train(List<Word> words, List<Boolean> labels) {
-    train(toScores(words), Booleans.toArray(labels));
   }
 
   @Override
   public boolean[] predict(float[][] scores) {
     try {
       // Write TSV into a temp file.
-      File temp = File.createTempFile("tmp", "");
+      File temp = Files.createTempFile(Paths.get("temp"), "predict-detect-", "").toFile();
       try (BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
         StringBuilder sb = new StringBuilder();
         for (float[] score: scores) {
@@ -113,7 +106,7 @@ public class SVMEstimator extends DetectionEstimator {
         }
       }
       // Remove the temp file.
-      temp.delete();
+      // temp.delete();
       return labels;
     } catch (IOException e) {
       throw new RuntimeException(e);

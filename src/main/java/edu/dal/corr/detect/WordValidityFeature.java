@@ -6,7 +6,7 @@ import gnu.trove.set.hash.THashSet;
 /**
  * @since 2017.04.26
  */
-public class WordValidityFeature implements DetectionFeature {
+public class WordValidityFeature extends DetectionFeature {
   private THashSet<String> vocab;
 
   public WordValidityFeature(THashSet<String> vocabulary) {

@@ -1,18 +1,18 @@
 package edu.dal.corr.detect;
 
-import edu.dal.corr.word.Word;
+public abstract class DetectionFeature implements Detectable {
+  private String name;
+  
+  protected void setName(String name) {
+    this.name = name;
+  }
+  
+  protected String getName() {
+    return name;
+  }
 
-/**
- * A interface for quantitive calculation of word correctness.
- * 
- * @since 2017.04.20
- */
-public interface DetectionFeature {
-  /**
-   * Quantitive analysis the correctness of a word.
-   *
-   * @param word A word.
-   * @return a float value in the range from 0 to 1.
-   */
-  float detect(Word word);
+  @Override
+  public String toString() {
+    return name == null ? getClass().getName() : String.format("%s$%s", getClass().getName(), name);
+  }
 }
