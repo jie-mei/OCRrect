@@ -61,11 +61,7 @@ public class ContextCoherenceFeature extends DetectionFeature {
             String sub = substitueWord(splits[0], c);
             if (sub != null) {
               // Records the sum of log n-gram frequencies of the possible word substitutions.
-<<<<<<< HEAD
               float val = (float)Math.log(Integer.parseInt(splits[1]));
-=======
-              float val = (float)Math.log(Long.parseLong(splits[1]));
->>>>>>> 5a3f448b3aab392f85b965535717df56657c8b52
               wordMap.adjustOrPutValue(sub, val, val);
             }
           }
