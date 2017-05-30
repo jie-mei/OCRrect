@@ -48,13 +48,15 @@ public class ContextCoherenceFeature implements DetectionFeature {
     List<Context> contexts = word.getContexts(ngramSize);
     for (Context c: contexts) {
       try (BufferedReader br = reader.openBufferedRecordsWithFirstWord(c.words()[0])) {
-        for (String line = br.readLine(); line != null; line = br.readLine()) {
-          String[] splits = line.split("\t");
-          String sub = substitueWord(splits[0], c);
-          if (sub != null) {
-            // Records the sum of log n-gram frequencies of the possible word substitutions.
-            float val = (float)Math.log(Integer.parseInt(splits[1]));
-            wordMap.adjustOrPutValue(sub, val, val);
+        if (br != null) {
+          for (String line = br.readLine(); line != null; line = br.readLine()) {
+            String[] splits = line.split("\t");
+            String sub = substitueWord(splits[0], c);
+            if (sub != null) {
+              // Records the sum of log n-gram frequencies of the possible word substitutions.
+              float val = (float)Math.log(Integer.parseInt(splits[1]));
+              wordMap.adjustOrPutValue(sub, val, val);
+            }
           }
         }
       } catch (IOException e) {
