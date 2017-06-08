@@ -27,14 +27,17 @@
 **.ear
 **.jar
 
-# Eclipse Settings
+# IDE Settings
 
+**.iml
+**.idea
 **.classpath
 **.project
 **.settings
 **/eclipse-classes/
 
 # Python cache files.
+
 **/*.pyc
 **/__pycache__/
 
