@@ -11,22 +11,22 @@ class TokensSpec extends Specification {
 
   def "test construct"() {
     expect:
-    new Tokens()
+      new Tokens()
   }
 
   def "test tokens to words"() {
     given:
-    def cvrted = Tokens.toWords(tokens)
+      def cvrted = Tokens.toWords(tokens)
 
     expect:
-    cvrted[idx].position() == pos
-    cvrted[idx].context() == context
+      cvrted[idx].position() == pos
+      cvrted[idx].context() == context
 
     where:
-    idx | pos | context
-    0   | 0   | ["", "", "", "", "Hello", ",", "world", "!"]
-    1   | 5   | ["", "", "", "Hello", ",", "world", "!", ""]
-    2   | 7   | ["", "", "Hello", ",", "world", "!", "", ""]
-    3   | 12  | ["", "Hello", ",", "world", "!", "", "", ""]
+      idx || pos || context
+      0   || 0   || ["", "", "", "", "Hello", ",", "world", "!"]
+      1   || 5   || ["", "", "", "Hello", ",", "world", "!", ""]
+      2   || 7   || ["", "", "Hello", ",", "world", "!", "", ""]
+      3   || 12  || ["", "Hello", ",", "world", "!", "", "", ""]
   }
 }

@@ -18,18 +18,18 @@ class TokenTSVFileSpec extends Specification {
 
   def "test read token TSV file"() {
     setup:
-    def tsv = new TokenTSVFile(ResourceUtils.getResource("test.tokens.tsv"))
+      def tsv = new TokenTSVFile(ResourceUtils.getResource("test.tokens.tsv"))
 
     expect:
-    tsv.read() == tk
+      tsv.read() == tk
   }
 
   def "test write token TSV file"() {
     setup:
-    def tsv = new TokenTSVFile(tempFolder.newFile().toPath())
-    tsv.write(tk)
+      def tsv = new TokenTSVFile(tempFolder.newFile().toPath())
+      tsv.write(tk)
 
     expect:
-    tsv.read() == tk
+      tsv.read() == tk
   }
 }

@@ -5,9 +5,9 @@ import spock.lang.Specification
 class TextSpec extends Specification {
   def "test construct"() {
     given:
-    def txt = "Hello, world!"
+      def txt = "Hello, world!"
 
     expect:
-    new Text(txt).text() == txt
+      new Text(txt).text() == txt
   }
 }

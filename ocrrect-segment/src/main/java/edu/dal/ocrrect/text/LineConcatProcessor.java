@@ -52,15 +52,18 @@ public class LineConcatProcessor implements Processor {
             String fixedWord2 = bkPart1 + "-" + bkPart2;
             // LogUtils.info(">>> " + fixedWord1 + ", " + fixedWord2);
 
-            if (dict.contains(fixedWord2.toLowerCase())) {
+            if (dict.contains(fixedWord2)
+                || dict.contains(fixedWord2.toLowerCase())) {
               curr = "-" + bkPart2 + bkPart3 + repeat(" ", pad) + remain;
               // LogUtils.info("F2: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
 
-            } else if (dict.contains(fixedWord1.toLowerCase())) {
+            } else if (dict.contains(fixedWord1)
+                || dict.contains(fixedWord1.toLowerCase())) {
               curr = bkPart2 + bkPart3 + repeat(" ", pad + 1) + remain;
               // LogUtils.info("F1: " + fixedWord1 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
 
-            } else if (dict.contains(bkPart1.toLowerCase())
+            } else if ((dict.contains(bkPart1)
+                || dict.contains(bkPart1.toLowerCase()))
                 && dict.contains(bkPart2.toLowerCase())) {
               curr = "-" + bkPart2 + bkPart3 + repeat(" ", pad) + remain;
               // LogUtils.info("F2: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + bkPart2);

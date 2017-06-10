@@ -18,22 +18,22 @@ class WordTSVFileSpec extends Specification {
 
   def "test read word TSV file"() {
     setup:
-    def tsvWords = new WordTSVFile(ResourceUtils.getResource("test.words.tsv")).read()
+      def tsvWords = new WordTSVFile(ResourceUtils.getResource("test.words.tsv")).read()
 
-    expect:
-    tsvWords[idx].position() == words[idx].position()
-    tsvWords[idx].context() == words[idx].context()
+      expect:
+      tsvWords[idx].position() == words[idx].position()
+      tsvWords[idx].context() == words[idx].context()
 
     where:
-    idx << (0..(words.size() - 1))
+      idx << (0..(words.size() - 1))
   }
 
   def "test write word TSV file"() {
     setup:
-    def tsv = new WordTSVFile(tempFolder.newFile().toPath())
-    tsv.write(words)
+      def tsv = new WordTSVFile(tempFolder.newFile().toPath())
+      tsv.write(words)
 
     expect:
-    tsv.read() == words
+      tsv.read() == words
   }
 }
