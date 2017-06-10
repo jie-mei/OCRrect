@@ -4,7 +4,7 @@ import edu.dal.ocrrect.suggest.feature.Feature;
 import edu.dal.ocrrect.suggest.feature.FeatureType;
 import edu.dal.ocrrect.util.LocatedTextualUnit;
 import edu.dal.ocrrect.util.Unigram;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 
 import java.util.ArrayList;
 import java.util.List;

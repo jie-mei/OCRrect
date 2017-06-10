@@ -1,7 +1,7 @@
 package edu.dal.ocrrect.suggest;
 
 import edu.dal.ocrrect.suggest.feature.Feature;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 import gnu.trove.list.array.TFloatArrayList;
 import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.set.hash.THashSet;

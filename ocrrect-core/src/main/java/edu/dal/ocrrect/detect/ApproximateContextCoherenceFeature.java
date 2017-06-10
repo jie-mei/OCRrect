@@ -1,7 +1,7 @@
 package edu.dal.ocrrect.detect;
 
 import edu.dal.ocrrect.suggest.NgramBoundedReaderSearcher;
-import edu.dal.ocrrect.word.Context;
+import edu.dal.ocrrect.util.Context;
 
 /**
  * @since 2017.04.26

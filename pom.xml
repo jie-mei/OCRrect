@@ -16,29 +16,20 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jdk.version>1.8</jdk.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <modules>
     <module>ocrrect-core</module>
     <module>ocrrect-io</module>
-    <module>ocrrect-tokenize</module>
+    <module>ocrrect-segment</module>
     <module>ocrrect-experiment</module>
   </modules>
 
   <build>
     <pluginManagement>
       <plugins>
-        <!-- Compile using JDK 8. -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.1</version>
-          <configuration>
-            <source>${jdk.version}</source>
-            <target>${jdk.version}</target>
-          </configuration>
-        </plugin>
         <!-- Apply JVM options. -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -140,6 +131,20 @@
             </links>
           </configuration>
         </plugin>
+        <!-- Use spock testing framework. -->
+        <plugin>
+          <groupId>org.codehaus.gmavenplus</groupId>
+          <artifactId>gmavenplus-plugin</artifactId>
+          <version>1.5</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>compile</goal>
+                <goal>testCompile</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -155,6 +160,24 @@
     <dependencies>
       <dependency>
         <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.11</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.spockframework</groupId>
+        <artifactId>spock-core</artifactId>
+        <version>1.1-groovy-2.4</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy-all</artifactId>
+        <version>2.4.11</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.</groupId>
         <artifactId>junit</artifactId>
         <version>4.11</version>
         <scope>test</scope>

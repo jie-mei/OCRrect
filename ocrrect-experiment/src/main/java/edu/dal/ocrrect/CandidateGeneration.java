@@ -13,15 +13,15 @@ import java.util.List;
 import edu.dal.ocrrect.suggest.NgramBoundedReaderSearcher;
 import edu.dal.ocrrect.util.PathUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
-import edu.dal.ocrrect.word.Context;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Context;
+import edu.dal.ocrrect.util.Word;
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TObjectLongHashMap;
 
 public class CandidateGeneration {
   private static Path errorPath = ResourceUtils.getPath("data/error.gt.tsv");
   private static Path tokenPath = ResourceUtils.getPath("data/ocr.token.tsv");
-  
+
   /*
    * Constructs words from data. Note that:
    * -  Line-broken tokens are fixed when used in context.
@@ -58,7 +58,7 @@ public class CandidateGeneration {
               + token + ", " + splits[1]);
         }
         int tidx = posTidxMap.get(pos);
-        words.add(new Word(pos, 
+        words.add(new Word(pos,
             tokens.get(tidx - 4),
             tokens.get(tidx - 3),
             tokens.get(tidx - 2),
@@ -117,7 +117,7 @@ public class CandidateGeneration {
     return sub;
   }
 
-  
+
   /*
    * Find candidates with according frequencies.
    */
@@ -154,7 +154,7 @@ public class CandidateGeneration {
     }
     return new TObjectLongHashMap[]{ exactFreqMap, approxFreqMap };
   }
-  
+
   /*
    * Write to error candidates to file. Candidates are sorted according to the frequency.
    */
@@ -172,12 +172,12 @@ public class CandidateGeneration {
       bw.write(sb.toString());
     }
   }
-  
+
   /*
    * Search and write exact candidates to files. Performed in parallel.
    */
   private static void searchAndWriteCandidates(
-      Path exactOutFolder, Path approxOutFolder, List<Word> words, 
+      Path exactOutFolder, Path approxOutFolder, List<Word> words,
       NgramBoundedReaderSearcher reader, int ngramSize)
       throws IOException {
     Files.createDirectories(exactOutFolder);

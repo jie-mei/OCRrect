@@ -1,7 +1,7 @@
 package edu.dal.ocrrect.eval;
 
 import edu.dal.ocrrect.util.LogUtils;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 
 import java.util.ArrayList;
 import java.util.HashMap;

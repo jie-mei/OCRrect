@@ -1,7 +1,7 @@
 package edu.dal.ocrrect.suggest;
 
 import edu.dal.ocrrect.suggest.feature.DuplicateFeatureException;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 import gnu.trove.list.array.TFloatArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +32,7 @@ class SuggestionBuilder {
    *
    * @param fs a feature suggestion.
    * @return this builder object.
-   * @throws DuplicateFeatureException 
+   * @throws DuplicateFeatureException
    */
   SuggestionBuilder add(FeatureSuggestion fs) throws DuplicateFeatureException {
     featureRegistry.register(fs.type());

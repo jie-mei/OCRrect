@@ -3,7 +3,7 @@ package edu.dal.ocrrect.suggest.feature;
 import java.io.IOException;
 import java.util.List;
 
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 import gnu.trove.set.hash.THashSet;
 
 /**
@@ -15,7 +15,7 @@ public class LexiconExistenceFeature
   private static final long serialVersionUID = -1167737697256350689L;
 
   private THashSet<String> lexicon;
-  
+
   public LexiconExistenceFeature(String name, THashSet<String> lexicon) throws IOException {
     this.lexicon = lexicon;
     setName(name);

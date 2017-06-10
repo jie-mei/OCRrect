@@ -15,7 +15,6 @@ import edu.dal.ocrrect.util.IOUtils;
 import edu.dal.ocrrect.util.PathUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
 import edu.dal.ocrrect.util.Unigram;
-import edu.dal.ocrrect.word.Word;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -86,11 +85,12 @@ public class SuggestionTest {
     types = features.stream().map(f -> f.type()).collect(Collectors.toList());
 
     // Generate suggestions.
-    List<Suggestion> suggests = Suggestion.suggest(
-        Word.tokenize(IOUtils.read(TXT_PATH), new GoogleTokenizer()),
-        features,
-        99
-    );
+    List<Suggestion> suggests = null;
+//     Suggestion.suggest(
+//        Word.tokenize(IOUtils.read(TXT_PATH), new GoogleTokenizer()),
+//        features,
+//        99
+//    );
     suggests.forEach(suggest -> {
       for (Candidate cand : suggest.candidates()) {
         System.out.println(cand.text() + "\t" + Arrays.toString(cand.scores(types)));
@@ -356,11 +356,6 @@ public class SuggestionTest {
     assertThat(br.readLine(), anyOf(is(""), is(nullValue())));
   }
 
-  /**
-   * Test {@link Suggestion#writeText(List, Path)} method.
-   *
-   * @throws Exception
-   */
   @Test
   public void testWriteText() throws Exception {
     Path out = PathUtils.getTempFile();

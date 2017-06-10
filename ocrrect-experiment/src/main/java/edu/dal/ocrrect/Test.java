@@ -16,7 +16,7 @@ import edu.dal.ocrrect.util.IOUtils;
 import edu.dal.ocrrect.util.PathUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
 import edu.dal.ocrrect.word.GoogleTokenizer;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 import edu.dal.ocrrect.word.WordTokenizer;
 
 public class Test {

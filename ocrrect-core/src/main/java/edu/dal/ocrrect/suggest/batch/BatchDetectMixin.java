@@ -1,7 +1,7 @@
 package edu.dal.ocrrect.suggest.batch;
 
 import edu.dal.ocrrect.suggest.feature.Detectable;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 
 import java.util.List;
 import java.util.stream.Collectors;

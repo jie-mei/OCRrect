@@ -3,12 +3,12 @@ package edu.dal.ocrrect.detect;
 import com.google.common.primitives.Booleans;
 
 import edu.dal.ocrrect.util.LogUtils;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 
 import java.util.List;
 
 public abstract class SupervisedDetectionEstimator extends DetectionEstimator {
-  
+
   public SupervisedDetectionEstimator(Detectable...features) {
     super(features);
   }

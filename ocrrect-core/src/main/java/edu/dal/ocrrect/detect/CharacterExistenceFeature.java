@@ -1,6 +1,6 @@
 package edu.dal.ocrrect.detect;
 
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 
 /**
  * @since 2017.04.26

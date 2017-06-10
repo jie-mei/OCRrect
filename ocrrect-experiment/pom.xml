@@ -71,7 +71,7 @@
     </dependency>
     <dependency>
       <groupId>edu.dal.ocrrect</groupId>
-      <artifactId>ocrrect-tokenize</artifactId>
+      <artifactId>ocrrect-segment</artifactId>
       <version>0.1</version>
     </dependency>
   </dependencies>

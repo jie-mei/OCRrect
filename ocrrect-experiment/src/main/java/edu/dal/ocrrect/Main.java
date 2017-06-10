@@ -17,7 +17,7 @@ import edu.dal.ocrrect.util.PathUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
 import edu.dal.ocrrect.util.Unigram;
 import edu.dal.ocrrect.word.GoogleTokenizer;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 import edu.dal.ocrrect.word.WordTokenizer;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;

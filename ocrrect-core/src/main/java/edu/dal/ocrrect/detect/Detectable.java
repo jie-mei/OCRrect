@@ -5,11 +5,11 @@ import java.util.stream.Collectors;
 
 import com.google.common.primitives.Floats;
 
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 
 /**
  * A interface for quantitive calculation of word correctness.
- * 
+ *
  * @since 2017.04.20
  */
 public interface Detectable {

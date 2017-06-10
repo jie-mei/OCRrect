@@ -3,7 +3,7 @@ package edu.dal.ocrrect.suggest.feature;
 import java.io.IOException;
 
 import edu.dal.ocrrect.metric.LCS;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 
 /**
  * @since 2017.04.20

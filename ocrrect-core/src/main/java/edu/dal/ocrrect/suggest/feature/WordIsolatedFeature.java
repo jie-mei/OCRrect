@@ -5,7 +5,7 @@ import edu.dal.ocrrect.suggest.batch.WordIsolatedBatchScoreMixin;
 import edu.dal.ocrrect.suggest.batch.WordIsolatedBatchSearchMixin;
 import edu.dal.ocrrect.util.IOUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 import gnu.trove.set.hash.THashSet;
 import java.io.IOException;
 import java.util.Set;

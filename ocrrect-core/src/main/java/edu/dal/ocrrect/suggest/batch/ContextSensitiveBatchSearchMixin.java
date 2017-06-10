@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import edu.dal.ocrrect.word.Context;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Context;
+import edu.dal.ocrrect.util.Word;
 
 /**
  * @since 2017.04.20

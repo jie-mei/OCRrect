@@ -2,7 +2,7 @@ package edu.dal.ocrrect.suggest.feature;
 
 import edu.dal.ocrrect.suggest.NormalizationOption;
 import edu.dal.ocrrect.suggest.Scoreable;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 
 import java.io.IOException;
 

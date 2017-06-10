@@ -1,7 +1,7 @@
 package edu.dal.ocrrect.detect;
 
 import edu.dal.ocrrect.util.LogUtils;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +18,7 @@ public abstract class DetectionEstimator {
     }
     this.features = Arrays.asList(features);
   }
-  
+
   protected float[][] toScores(List<Word> words) {
     float[][] scores = new float[words.size()][];
     for (int i = 0; i < words.size(); i++) {

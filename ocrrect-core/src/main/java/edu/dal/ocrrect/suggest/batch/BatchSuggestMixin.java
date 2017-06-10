@@ -1,7 +1,7 @@
 package edu.dal.ocrrect.suggest.batch;
 
 import edu.dal.ocrrect.suggest.Suggestable;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 import gnu.trove.map.TObjectFloatMap;
 import java.util.List;
 import java.util.stream.Collectors;

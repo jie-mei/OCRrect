@@ -11,7 +11,7 @@ import edu.dal.ocrrect.util.LocatedTextualUnit;
 import edu.dal.ocrrect.util.LogUtils;
 import edu.dal.ocrrect.util.PathUtils;
 import edu.dal.ocrrect.util.Unigram;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import java.io.BufferedWriter;

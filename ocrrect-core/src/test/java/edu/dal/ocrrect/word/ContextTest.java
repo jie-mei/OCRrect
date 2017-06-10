@@ -14,7 +14,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import edu.dal.ocrrect.util.LocatedTextualUnitTest;
 import edu.dal.ocrrect.util.Random;
-import edu.dal.ocrrect.word.Context;
+import edu.dal.ocrrect.util.Context;
 
 @RunWith(Parameterized.class)
 public class ContextTest
@@ -39,7 +39,7 @@ public class ContextTest
 
   private String[] contextWords;
   private int index;
-  
+
   public ContextTest(String[] contextWords, int index, int position)
   {
     super(contextWords[index],
@@ -53,7 +53,7 @@ public class ContextTest
   public Object newInstance() {
     return new Context(index, position(), contextWords);
   }
-  
+
   @Override
   public Context instance() {
     return (Context) super.instance();

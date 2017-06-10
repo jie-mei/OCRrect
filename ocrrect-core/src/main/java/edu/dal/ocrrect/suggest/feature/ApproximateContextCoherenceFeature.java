@@ -1,7 +1,7 @@
 package edu.dal.ocrrect.suggest.feature;
 
 import edu.dal.ocrrect.suggest.NgramBoundedReaderSearcher;
-import edu.dal.ocrrect.word.Context;
+import edu.dal.ocrrect.util.Context;
 import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.map.hash.TObjectFloatHashMap;
 import java.io.BufferedReader;

@@ -1,7 +1,7 @@
 package edu.dal.ocrrect.suggest;
 
 import edu.dal.ocrrect.metric.NGram;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 import info.debatty.java.stringsimilarity.Damerau;
 import info.debatty.java.stringsimilarity.Jaccard;
 import info.debatty.java.stringsimilarity.JaroWinkler;

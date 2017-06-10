@@ -2,8 +2,8 @@ package edu.dal.ocrrect.suggest.feature;
 
 import edu.dal.ocrrect.suggest.NgramBoundedReaderSearcher;
 import edu.dal.ocrrect.suggest.NormalizationOption;
-import edu.dal.ocrrect.word.Context;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Context;
+import edu.dal.ocrrect.util.Word;
 import gnu.trove.map.TObjectByteMap;
 import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.map.hash.TObjectByteHashMap;

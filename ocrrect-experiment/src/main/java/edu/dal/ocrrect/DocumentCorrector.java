@@ -3,7 +3,7 @@ package edu.dal.ocrrect;
 import edu.dal.ocrrect.suggest.Suggestion;
 import edu.dal.ocrrect.suggest.feature.Feature;
 import edu.dal.ocrrect.util.Timer;
-import edu.dal.ocrrect.word.Word;
+import edu.dal.ocrrect.util.Word;
 import edu.dal.ocrrect.word.WordTokenizer;
 
 import java.io.IOException;

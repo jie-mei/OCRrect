@@ -12,11 +12,10 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.dal.ocrrect.suggest.NgramBoundedReaderSearcher;
 import edu.dal.ocrrect.suggest.feature.ContextCoherenceFeature;
 import edu.dal.ocrrect.util.IOUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
-import edu.dal.ocrrect.word.Context;
+import edu.dal.ocrrect.util.Context;
 import gnu.trove.map.TObjectByteMap;
 import gnu.trove.map.TObjectFloatMap;
 import gnu.trove.map.hash.TObjectByteHashMap;
