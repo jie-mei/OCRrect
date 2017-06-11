@@ -1,5 +1,5 @@
 package edu.dal.ocrrect.text;
 
-public interface Processor {
+public interface TextProcessor {
   Text process(Text text);
 }

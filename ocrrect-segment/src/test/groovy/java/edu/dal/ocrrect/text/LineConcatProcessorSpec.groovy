@@ -7,11 +7,10 @@ class LineConcatProcessorSpec extends Specification {
   def "test process"() {
     given:
       def proc = new LineConcatProcessor(new THashSet<String>(vocab))
-      def actual = proc.process(new Text(before))
-      def expect = new Text(after)
 
     expect:
-      actual.text() == expect.text()
+      proc.process(new Text(before)).text() == new Text(after).text()
+      proc.process(before) == after
 
     where:
       vocab || before || after

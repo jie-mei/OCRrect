@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 import static org.apache.commons.lang.StringUtils.repeat;
 
-public class LineConcatProcessor implements Processor {
+public class LineConcatProcessor implements TextProcessor, StringProcessMixin {
 
   private static final Pattern BROKEN_WORD = Pattern.compile("([a-zA-Z]+)(-\\s*)$");
   private static final Pattern FIRST_WORD = Pattern.compile("^([a-zA-Z]*)(\\S*)(.*)$");
@@ -22,9 +22,9 @@ public class LineConcatProcessor implements Processor {
   }
 
   @Override
-  public Text process(Text text) {
+  public String process(String text) {
     StringBuilder sb = new StringBuilder();
-    try (BufferedReader br = new BufferedReader(new StringReader(text.text()))) {
+    try (BufferedReader br = new BufferedReader(new StringReader(text))) {
 
       String bkPart1 = null;
       int pad = 0;
@@ -96,6 +96,6 @@ public class LineConcatProcessor implements Processor {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    return new Text(sb.toString());
+    return sb.toString();
   }
 }

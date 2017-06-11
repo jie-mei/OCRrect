@@ -10,4 +10,8 @@ class TextSpec extends Specification {
     expect:
       new Text(txt).text() == txt
   }
+
+  def "test process"() {
+    // TODO add test
+  }
 }
