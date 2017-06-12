@@ -10,11 +10,11 @@ public class Text extends TextualUnit {
     super(text);
   }
 
-  public Text process(TextProcessor processor) {
+  public Text process(Processor<Text> processor) {
     return processor.process(this);
   }
 
-  public List<Token> segment(TextSegmenter segmentor) {
+  public TextSegments segment(TextSegmenter segmentor) {
     return segmentor.segment(this);
   }
 }

@@ -10,6 +10,6 @@ public class TextSegments {
   }
 
   public TextSegments process(Processor<TextSegments> processor) {
-    return processor.process(segments);
+    return processor.process(this);
   }
 }
