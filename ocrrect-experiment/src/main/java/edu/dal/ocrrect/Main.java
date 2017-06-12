@@ -12,13 +12,11 @@ import edu.dal.ocrrect.suggest.feature.Feature;
 import edu.dal.ocrrect.suggest.feature.LanguagePopularityFeature;
 import edu.dal.ocrrect.suggest.feature.LexiconExistenceFeature;
 import edu.dal.ocrrect.suggest.feature.StringSimilarityFeature;
-import edu.dal.ocrrect.util.IOUtils;
-import edu.dal.ocrrect.util.PathUtils;
-import edu.dal.ocrrect.util.ResourceUtils;
-import edu.dal.ocrrect.util.Unigram;
-import edu.dal.ocrrect.word.GoogleTokenizer;
-import edu.dal.ocrrect.util.Word;
-import edu.dal.ocrrect.word.WordTokenizer;
+import edu.dal.ocrrect.text.GoogleGramSegmenter;
+import edu.dal.ocrrect.text.LineConcatTextProcessor;
+import edu.dal.ocrrect.text.Text;
+import edu.dal.ocrrect.util.*;
+import edu.dal.ocrrect.util.lexicon.GoogleUnigramLexicon;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import java.io.BufferedWriter;
@@ -105,8 +103,7 @@ public class Main {
         };
 
     // Generate suggestions.
-    new DocumentCorrector()
-        .correct(new GoogleTokenizer(), Arrays.asList(features), text, TOP);
+    new DocumentCorrector().correct(Arrays.asList(features), text, TOP);
   }
 
   private static List<Integer> TOP_VALS = Arrays.asList(3, 5, 10, 20, 50, 100);
@@ -275,7 +272,10 @@ public class Main {
   }
 
   public static void writeWords(String text) throws IOException {
-    List<Word> words = WordTokenizer.tokenize(text, new GoogleTokenizer());
+    List<Word> words = Words.toWords(
+      new Text(text)
+        .process(new LineConcatTextProcessor(new GoogleUnigramLexicon()))
+        .segment(new GoogleGramSegmenter()));
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("words.log"))) {
       for (Word word : words) {
         bw.write(word.text() + "\t" + word.position() + "\n");

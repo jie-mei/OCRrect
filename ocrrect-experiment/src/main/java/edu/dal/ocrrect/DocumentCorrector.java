@@ -2,14 +2,19 @@ package edu.dal.ocrrect;
 
 import edu.dal.ocrrect.suggest.Suggestion;
 import edu.dal.ocrrect.suggest.feature.Feature;
+import edu.dal.ocrrect.text.GoogleGramSegmenter;
+import edu.dal.ocrrect.text.LineConcatTextProcessor;
+import edu.dal.ocrrect.text.Text;
 import edu.dal.ocrrect.util.Timer;
+import edu.dal.ocrrect.util.Words;
 import edu.dal.ocrrect.util.Word;
-import edu.dal.ocrrect.word.WordTokenizer;
 
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.dal.ocrrect.util.lexicon.GoogleUnigramLexicon;
 import org.apache.log4j.Logger;
 
 /**
@@ -22,13 +27,15 @@ public class DocumentCorrector {
   public static final Logger LOG = Logger.getLogger(DocumentCorrector.class);
 
   public void correct(
-      WordTokenizer tokenizer,
       List<Feature> features,
       String content,
       int top)
       throws IOException {
     Timer t = new Timer();
-    List<Word> words = WordTokenizer.tokenize(content, tokenizer);
+    List<Word> words = Words.toWords(
+      new Text(content)
+        .process(new LineConcatTextProcessor(new GoogleUnigramLexicon()))
+        .segment(new GoogleGramSegmenter()));
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
           "Generate words\n" +

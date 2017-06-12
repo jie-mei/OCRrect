@@ -12,12 +12,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.dal.ocrrect.suggest.NgramBoundedReaderSearcher;
-import edu.dal.ocrrect.util.IOUtils;
-import edu.dal.ocrrect.util.PathUtils;
-import edu.dal.ocrrect.util.ResourceUtils;
-import edu.dal.ocrrect.word.GoogleTokenizer;
-import edu.dal.ocrrect.util.Word;
-import edu.dal.ocrrect.word.WordTokenizer;
+import edu.dal.ocrrect.text.GoogleGramSegmenter;
+import edu.dal.ocrrect.text.LineConcatTextProcessor;
+import edu.dal.ocrrect.text.Text;
+import edu.dal.ocrrect.util.*;
+import edu.dal.ocrrect.util.lexicon.GoogleUnigramLexicon;
 
 public class Test {
   // word that position smaller than this is used for training
@@ -69,9 +68,11 @@ public class Test {
 //    NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM);
 
     // Read words from input text.
-    List<Word> words = WordTokenizer.tokenize(
-        IOUtils.read(ResourceUtils.getResourceInDir("*.txt", "mibio-ocr/ocr")),
-        new GoogleTokenizer());
+    List<Word> words = Words.toWords(
+        new Text(IOUtils.read(ResourceUtils.getResourceInDir("*.txt", "mibio-ocr/ocr")))
+            .process(new LineConcatTextProcessor(new GoogleUnigramLexicon()))
+            .segment(new GoogleGramSegmenter()));
+
     int lastTrain = 0; // exclusive
     while (lastTrain < words.size() && words.get(lastTrain).position() < SPLIT_POS) lastTrain++;
     List<Word> trainWords = words.subList(0, lastTrain);

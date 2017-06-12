@@ -1,6 +1,6 @@
 package edu.dal.ocrrect.text;
 
-interface StringProcessMixin extends TextProcessor {
+interface StringProcessMixin extends Processor<Text> {
   default Text process(Text text) {
     return new Text(process(text.text()));
   }
