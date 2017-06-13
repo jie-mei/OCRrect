@@ -10,15 +10,14 @@ import java.util.regex.Pattern;
 
 import static org.apache.commons.lang.StringUtils.repeat;
 
-public class LineConcatTextProcessor implements Processor<Text>, StringProcessMixin {
+public class TextLineConcatProcessor implements Processor<Text>, StringProcessMixin {
 
   private static final Pattern BROKEN_WORD = Pattern.compile("([a-zA-Z]+)(-\\s*)$");
   private static final Pattern FIRST_WORD = Pattern.compile("^([a-zA-Z]*)(\\S*)(.*)$");
 
-//  private THashSet<String> dict;
   private Lexicon vocab;
 
-  public LineConcatTextProcessor(Lexicon lexicon) {
+  public TextLineConcatProcessor(Lexicon lexicon) {
     this.vocab = lexicon;
   }
 

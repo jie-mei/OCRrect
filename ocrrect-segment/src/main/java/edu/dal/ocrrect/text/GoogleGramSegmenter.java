@@ -11,15 +11,14 @@ public class GoogleGramSegmenter extends PennTreebankSegmenter {
   private final static Pattern SPLIT_PATTERN = Pattern.compile("([^-]+|-)");
 
   @Override
-  public List<Token> segment(Text text) {
-    List<Token> tokens = new ArrayList<>();
+  public TextSegments segment(Text text) {
+    List<Segment> segments = new ArrayList<>();
     for (Token tk : super.segment(text)) {
       Matcher m = SPLIT_PATTERN.matcher(tk.text());
       while (m.find()) {
-        System.out.println(m.group());
-        tokens.add(new Token(m.group(), tk.position() + m.start()));
+        segments.add(new Segment(m.group(), tk.position() + m.start()));
       }
     }
-    return tokens;
+    return new TextSegments(segments);
   }
 }

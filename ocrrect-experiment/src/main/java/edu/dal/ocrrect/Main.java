@@ -13,8 +13,9 @@ import edu.dal.ocrrect.suggest.feature.LanguagePopularityFeature;
 import edu.dal.ocrrect.suggest.feature.LexiconExistenceFeature;
 import edu.dal.ocrrect.suggest.feature.StringSimilarityFeature;
 import edu.dal.ocrrect.text.GoogleGramSegmenter;
-import edu.dal.ocrrect.text.LineConcatTextProcessor;
+import edu.dal.ocrrect.text.TextLineConcatProcessor;
 import edu.dal.ocrrect.text.Text;
+import edu.dal.ocrrect.text.TextSegmentsConcatProcessor;
 import edu.dal.ocrrect.util.*;
 import edu.dal.ocrrect.util.lexicon.GoogleUnigramLexicon;
 import gnu.trove.map.TIntObjectMap;
@@ -272,10 +273,11 @@ public class Main {
   }
 
   public static void writeWords(String text) throws IOException {
-    List<Word> words = Words.toWords(
-      new Text(text)
-        .process(new LineConcatTextProcessor(new GoogleUnigramLexicon()))
-        .segment(new GoogleGramSegmenter()));
+    List<Word> words = new Text(text)
+      .process(new TextLineConcatProcessor(new GoogleUnigramLexicon()))
+      .segment(new GoogleGramSegmenter())
+      .process(new TextSegmentsConcatProcessor())
+      .toWords();
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("words.log"))) {
       for (Word word : words) {
         bw.write(word.text() + "\t" + word.position() + "\n");

@@ -3,7 +3,7 @@ package edu.dal.ocrrect;
 import edu.dal.ocrrect.suggest.Suggestion;
 import edu.dal.ocrrect.suggest.feature.Feature;
 import edu.dal.ocrrect.text.GoogleGramSegmenter;
-import edu.dal.ocrrect.text.LineConcatTextProcessor;
+import edu.dal.ocrrect.text.TextLineConcatProcessor;
 import edu.dal.ocrrect.text.Text;
 import edu.dal.ocrrect.util.Timer;
 import edu.dal.ocrrect.util.Words;
@@ -32,10 +32,10 @@ public class DocumentCorrector {
       int top)
       throws IOException {
     Timer t = new Timer();
-    List<Word> words = Words.toWords(
-      new Text(content)
-        .process(new LineConcatTextProcessor(new GoogleUnigramLexicon()))
-        .segment(new GoogleGramSegmenter()));
+    List<Word> words = new Text(content)
+        .process(new TextLineConcatProcessor(new GoogleUnigramLexicon()))
+        .segment(new GoogleGramSegmenter())
+        .toWords();
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(
           "Generate words\n" +

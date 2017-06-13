@@ -2,7 +2,7 @@ package edu.dal.ocrrect;
 
 import edu.dal.ocrrect.suggest.NgramBoundedReaderSearcher;
 import edu.dal.ocrrect.text.GoogleGramSegmenter;
-import edu.dal.ocrrect.text.LineConcatTextProcessor;
+import edu.dal.ocrrect.text.TextLineConcatProcessor;
 import edu.dal.ocrrect.text.Text;
 import edu.dal.ocrrect.util.*;
 import edu.dal.ocrrect.util.lexicon.GoogleUnigramLexicon;
@@ -68,10 +68,11 @@ public class SmallTest {
 //    NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM);
 
     // Read words from input text.
-    List<Word> words = Words.toWords(
+    List<Word> words =
       new Text(IOUtils.read(ResourceUtils.getResourceInDir("*.txt", "mibio-ocr/ocr")))
-        .process(new LineConcatTextProcessor(new GoogleUnigramLexicon()))
-        .segment(new GoogleGramSegmenter()));
+        .process(new TextLineConcatProcessor(new GoogleUnigramLexicon()))
+        .segment(new GoogleGramSegmenter())
+        .toWords();
 //    List<Word> words = WordTokenizer.tokenize(
 //        IOUtils.read(ResourceUtils.getResourceInDir("*.txt", "mibio-ocr/ocr")),
 //        new GoogleTokenizer());

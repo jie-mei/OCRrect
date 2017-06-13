@@ -3,10 +3,10 @@ package edu.dal.ocrrect.text
 import gnu.trove.set.hash.THashSet
 import spock.lang.Specification
 
-class LineConcatTextProcessorSpec extends Specification {
+class TextLineConcatProcessorSpec extends Specification {
   def "test process"() {
     given:
-      def proc = new LineConcatTextProcessor(new THashSet<String>(vocab))
+      def proc = new TextLineConcatProcessor(new THashSet<String>(vocab))
 
     expect:
       proc.process(new Text(before)).text() == new Text(after).text()
