@@ -45,14 +45,16 @@ public class SegmentationExperiment {
   }
 
 //  private static Pattern LINE_BROKEN = Pattern.compile("(.*)-\\s*↵(.*)");
-  private static Pattern LINE_BROKEN = Pattern.compile("(.*)-↵(.*)");
+  private static Pattern LINE_BROKEN = Pattern.compile("(.*)-\\s↵(.*)");
 
   private static boolean matches(String gt, String segmented) {
     if (gt.contains("↵")) {
       System.out.println(gt);
       Matcher m = LINE_BROKEN.matcher(gt);
-      System.out.println(gt + ":" + m.group(1) + m.group(2));
-      return gt.equals(segmented);
+      m.matches();
+      String concat = m.group(1) + m.group(2);
+//      System.out.println(gt + ":" + m.group(1) + m.group(2));
+      return gt.equals(segmented) || gt.equals(concat);
     } else {
       return gt.equals(segmented);
     }
