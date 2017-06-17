@@ -274,7 +274,7 @@ public class Main {
 
   public static void writeWords(String text) throws IOException {
     List<Word> words = new Text(text)
-      .process(new TextLineConcatProcessor(new GoogleUnigramLexicon()))
+      .process(new TextLineConcatProcessor(new GoogleUnigramLexicon(), true, true))
       .segment(new GoogleGramSegmenter())
       .process(new TextSegmentsConcatProcessor())
       .toWords();

@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -43,8 +44,8 @@ public class TokenTSVFile extends TSVFile<Token> {
   }
 
   @Override
-  public void write(List<Token> elements) throws IOException {
-    try (BufferedWriter bw = IOUtils.newBufferedWriter(this.path(), StandardOpenOption.CREATE)){
+  public void write(List<Token> elements, OpenOption... options) throws IOException {
+    try (BufferedWriter bw = IOUtils.newBufferedWriter(this.path(), options)){
       elements.sort(Comparator.comparing(Token::position));
       for (Token t: elements) {
         bw.write(t.text() + "\t" + t.position() + "\n");

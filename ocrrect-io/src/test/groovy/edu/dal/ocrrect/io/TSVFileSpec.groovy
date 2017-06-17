@@ -4,6 +4,8 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
+import java.nio.file.OpenOption
+
 class TSVFileSpec extends Specification {
   @Rule
   TemporaryFolder tempFolder
@@ -15,7 +17,7 @@ class TSVFileSpec extends Specification {
         @Override
         List read() throws IOException {}
         @Override
-        void write(List elements) throws IOException {}
+        void write(List elements, OpenOption... options) throws IOException {}
       }
 
     expect:

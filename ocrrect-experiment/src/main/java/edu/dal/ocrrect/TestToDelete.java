@@ -5,16 +5,44 @@ import java.util.regex.Pattern;
 
 public class TestToDelete {
 
-  private static Pattern LINE_BROKEN = Pattern.compile("(.*)-↵(.*)");
+  private static final Pattern FRAGMENT = Pattern.compile("^"
+    + "(?<bracketLeft>[('\"]?)"
+    + "(?<content>.*?)"
+    + "(?<punctTail>(([)'\"]?[:;,.!?]?|[:;,.!?][)'\"])\\*?)?)$"
+  );
+
+  private static final Pattern PARTS = Pattern.compile("^"
+    + "(?<part>.*?)"
+    + "(?<hyphen>-)"
+    + "(?<remain>.*?)$"
+  );
 
   public static void main(String[] args) {
-    String s = "hello-↵world";
-    Matcher m = LINE_BROKEN.matcher(s);
-    System.out.println(m);
-    System.out.println(m.matches());
-//    System.out.println(m.toMatchResult().group(2));
-    System.out.println(m);
-    System.out.println(m.group(1) + m.group(2));
+    print("'hello-our-world)!");
+    System.out.println();
+    print("'hello-our-world.\"");
+    System.out.println();
+    print("'hello-our-world!");
+  }
 
+  private static void print(String s) {
+    Matcher m = FRAGMENT.matcher(s);
+
+    if (m.matches()) {
+      for (int i = 0; i <= m.groupCount(); i++) {
+        System.out.println(i + ": " + m.group(i));
+      }
+      System.out.println("bracketLeft: " + m.group("bracketLeft"));
+      System.out.println("content:     " + m.group("content"));
+      System.out.println("punctTail:   " + m.group("punctTail"));
+    }
+    String content = m.group("content");
+    System.out.println(content);
+    for (Matcher pm = PARTS.matcher(content); pm.matches();
+         content = pm.group("remain"), pm = PARTS.matcher(content)) {
+      System.out.println(pm.group("part"));
+      System.out.println(pm.group("hyphen"));
+    }
+    System.out.println(content);
   }
 }

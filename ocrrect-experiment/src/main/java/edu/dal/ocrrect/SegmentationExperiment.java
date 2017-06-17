@@ -6,6 +6,8 @@ import edu.dal.ocrrect.util.IOUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
 import edu.dal.ocrrect.util.Token;
 import edu.dal.ocrrect.util.lexicon.GoogleUnigramLexicon;
+import edu.dal.ocrrect.util.lexicon.Lexicon;
+import edu.dal.ocrrect.util.lexicon.Lexicons;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 import java.io.BufferedReader;
@@ -21,8 +23,8 @@ import java.util.stream.Collectors;
 
 public class SegmentationExperiment {
 
-  public static final String GT_OCR_SEGMENT_PATH = "mibio-ocr/ocr.token.tsv";
-  public static final String GT_OCR_HYPHEN_SEGMENT_PATH = "mibio-ocr/ocr.token.hyphen.tsv";
+  private static final String GT_OCR_SEGMENT_PATH = "mibio-ocr/ocr.token.tsv";
+  private static final String GT_OCR_HYPHEN_SEGMENT_PATH = "mibio-ocr/ocr.token.hyphen.tsv";
 
   private static TextSegments readGTOCRSegments(String pathname) throws IOException {
     List<Segment> segments = new ArrayList<>();
@@ -37,24 +39,14 @@ public class SegmentationExperiment {
     return new TextSegments(segments);
   }
 
-  private static TextSegments segmentText(Text text) throws IOException {
-      return text
-          .process(new TextLineConcatProcessor(new GoogleUnigramLexicon()))
-          .segment(new GoogleGramSegmenter())
-          .process(new TextSegmentsConcatProcessor());
-  }
-
-//  private static Pattern LINE_BROKEN = Pattern.compile("(.*)-\\s*↵(.*)");
-  private static Pattern LINE_BROKEN = Pattern.compile("(.*)-\\s↵(.*)");
+  private static Pattern LINE_BROKEN = Pattern.compile("(.*)-\\s*↵(.*)");
 
   private static boolean matches(String gt, String segmented) {
     if (gt.contains("↵")) {
-      System.out.println(gt);
       Matcher m = LINE_BROKEN.matcher(gt);
       m.matches();
       String concat = m.group(1) + m.group(2);
-//      System.out.println(gt + ":" + m.group(1) + m.group(2));
-      return gt.equals(segmented) || gt.equals(concat);
+      return gt.equals(segmented) || concat.equals(segmented);
     } else {
       return gt.equals(segmented);
     }
@@ -68,20 +60,29 @@ public class SegmentationExperiment {
       gtPosMap.put(s.position(), s);
     }
     int same = 0;
+    List<Segment> errors = new ArrayList<>();
     for (int i = 0; i < predicted.size(); i++) {
       Segment s = predicted.get(i);
       if (gtPosMap.contains(s.position()) &&
           matches(gtPosMap.get(s.position()).text(), s.text())) {
         same += 1;
         correct[i] = true;
+      } else {
+        errors.add(s);
       }
     }
 
-    // Write segments into a TSV file.
     Path temp = Paths.get("tmp");
     Files.createDirectories(temp);
-    new TokenTSVFile(temp.resolve(title + ".tsv")).write(
+    // Write segments into a TSV file.
+    new TokenTSVFile(temp.resolve("token." + title + ".tsv")).write(
         predicted
+            .stream()
+            .map(s -> new Token(s.text(), s.position()))
+            .collect(Collectors.toList()));
+    // Write erroneous segments into a TSV file.
+    new TokenTSVFile(temp.resolve("token." + title + ".error.tsv")).write(
+        errors
             .stream()
             .map(s -> new Token(s.text(), s.position()))
             .collect(Collectors.toList()));
@@ -117,21 +118,44 @@ public class SegmentationExperiment {
 
     Text text = new Text(IOUtils
         .read(ResourceUtils.getResourceInDir("*.txt", "mibio-ocr/ocr")));
+    Lexicon vocab = Lexicons.toLexicon(ResourceUtils.getResource(
+        "dictionary/12dicts-6.0.2/International/2of4brif.txt"));
 
+    eval(gtSeg, "no.whitespace.no",
+      text.segment(new WhiteSpaceSegmenter())
+    );
     eval(gtSeg, "no.PennTreebank.no",
       text.segment(new PennTreebankSegmenter())
     );
     eval(gtSeg, "no.Google.no",
       text.segment(new GoogleGramSegmenter())
     );
-    eval(gtSeg, "concat.Google.no",
-      text.process(new TextLineConcatProcessor(new GoogleUnigramLexicon()))
+    eval(gtSeg, "concat-dic.Google.no",
+      text.process(new TextLineConcatProcessor(vocab, false, true))
           .segment(new GoogleGramSegmenter())
     );
-    eval(gtSeg, "concat.Google.concat",
-      text.process(new TextLineConcatProcessor(new GoogleUnigramLexicon()))
+    eval(gtSeg, "concat-dic.Google.non-concat-cs",
+      text.process(new TextLineConcatProcessor(vocab, false, true))
+          .segment(new GoogleGramSegmenter())
+          .process(new NonWordConcatProcessor(vocab, true))
+    );
+    eval(gtSeg, "concat-dic.Google.non-concat-ci",
+      text.process(new TextLineConcatProcessor(vocab, false, true))
+          .segment(new GoogleGramSegmenter())
+          .process(new CommonAbbrProcessor())
+          .process(new NonWordConcatProcessor(vocab, false))
+    );
+    eval(gtSeg, "concat-dic.Google.concat",
+      text.process(new TextLineConcatProcessor(vocab, false, true))
+          .segment(new GoogleGramSegmenter())
+          .process(new CommonAbbrProcessor())
+          .process(new TextSegmentsConcatProcessor())
+    );
+    eval(gtSeg, "concat-dic.Google.frag-concat",
+      text.process(new TextLineConcatProcessor(vocab, false, true))
         .segment(new GoogleGramSegmenter())
-        .process(new TextSegmentsConcatProcessor())
+        .process(new FragmentConcatProcessor())
+        .process(new CommonAbbrProcessor())
     );
   }
 }

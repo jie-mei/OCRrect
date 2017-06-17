@@ -1,8 +1,10 @@
 package edu.dal.ocrrect.io;
 
 import java.io.IOException;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 /**
@@ -32,5 +34,9 @@ abstract class TSVFile<T> {
    * @param elements an element list.
    * @throws IOException
    */
-  public abstract void write(List<T> elements) throws IOException;
+  public abstract void write(List<T> elements, OpenOption... options) throws IOException;
+
+  public void write(List<T> elements) throws IOException {
+    write(elements, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+  }
 }

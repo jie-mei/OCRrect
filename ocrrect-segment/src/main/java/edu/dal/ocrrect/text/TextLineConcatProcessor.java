@@ -13,12 +13,30 @@ import static org.apache.commons.lang.StringUtils.repeat;
 public class TextLineConcatProcessor implements Processor<Text>, StringProcessMixin {
 
   private static final Pattern BROKEN_WORD = Pattern.compile("([a-zA-Z]+)(-\\s*)$");
-  private static final Pattern FIRST_WORD = Pattern.compile("^([a-zA-Z]*)(\\S*)(.*)$");
+  private static final Pattern FIRST_WORD = Pattern.compile("^(([a-zA-Z]*)\\S*)(.*)$");
 
   private Lexicon vocab;
+  private boolean caseSensitive;
+  private boolean splitHyphenWord;
+
+  /**
+   * @param lexicon a vocabulary lexicon.
+   * @param caseSensitive {@code true} if adopt case sensitive matching with vocabulary.
+   * @param splitHyphenWord {@code true} if treat hyphenated word as one unit.
+   */
+  public TextLineConcatProcessor(Lexicon lexicon, boolean caseSensitive, boolean splitHyphenWord) {
+    this.vocab = lexicon;
+    this.caseSensitive = caseSensitive;
+    this.splitHyphenWord = splitHyphenWord;
+  }
 
   public TextLineConcatProcessor(Lexicon lexicon) {
-    this.vocab = lexicon;
+    this(lexicon, true, true);
+  }
+
+  private boolean contains(String word) {
+    return vocab.contains(word)
+        || (! caseSensitive && vocab.contains(word.toLowerCase()));
   }
 
   @Override
@@ -36,7 +54,7 @@ public class TextLineConcatProcessor implements Processor<Text>, StringProcessMi
           Matcher m = FIRST_WORD.matcher(curr);
           m.find();
           String bkPart2 = m.group(1);
-          String bkPart3 = m.group(2);
+          String bkPart2En = m.group(2);
           String remain = m.group(3);
 
           if (bkPart2.length() == 0) {
@@ -45,31 +63,21 @@ public class TextLineConcatProcessor implements Processor<Text>, StringProcessMi
             sb.append('-').append(repeat(" ", pad));
 
           } else {
-            // Check if the combining word is a valid word in the dictionary.  Otherwise keep the
-            // character sequence in the original text.
-            String fixedWord1 = bkPart1 + bkPart2;
-            String fixedWord2 = bkPart1 + "-" + bkPart2;
-            // LogUtils.info(">>> " + fixedWord1 + ", " + fixedWord2);
+            // If either part is a real word, the two parts is heuristically regarded as one
+            // hyphenated word. This rule is set to best identify potential hyphenated words.
+            if (contains(bkPart1) && contains(bkPart2En)) {
+              if (splitHyphenWord) {
+                curr = "-" + repeat(" ", pad) + bkPart2 + remain;
+              } else {
+                curr = "-" + bkPart2 + repeat(" ", pad) + remain;
+              }
+            } else if (contains(bkPart1 + "-" + bkPart2En)) {
+              curr = "-" + bkPart2 + repeat(" ", pad) + remain;
 
-            if (vocab.contains(fixedWord2)
-                || vocab.contains(fixedWord2.toLowerCase())) {
-              curr = "-" + bkPart2 + bkPart3 + repeat(" ", pad) + remain;
-              // LogUtils.info("F2: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
-
-            } else if (vocab.contains(fixedWord1)
-                || vocab.contains(fixedWord1.toLowerCase())) {
-              curr = bkPart2 + bkPart3 + repeat(" ", pad + 1) + remain;
-              // LogUtils.info("F1: " + fixedWord1 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
-
-            } else if ((vocab.contains(bkPart1)
-                || vocab.contains(bkPart1.toLowerCase()))
-                && vocab.contains(bkPart2.toLowerCase())) {
-              curr = "-" + bkPart2 + bkPart3 + repeat(" ", pad) + remain;
-              // LogUtils.info("F2: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + bkPart2);
-
+            // Otherwise, the two parts are regarded as broken pieces. Thus we merge these two
+            // pieces with hyphen character removed.
             } else {
-              curr = "-" + repeat(" ", pad) + curr;
-              // LogUtils.info("F3: " + fixedWord2 + bkPart3 + " = " + bkPart1 + "," + repeat(" ", pad) + "," + bkPart2);
+              curr = bkPart2 + repeat(" ", pad + 1) + remain;
             }
           }
           pad = 0;
