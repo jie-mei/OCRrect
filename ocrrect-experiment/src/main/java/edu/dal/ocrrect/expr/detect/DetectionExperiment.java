@@ -152,22 +152,22 @@ public class DetectionExperiment {
       computeFeatureValues(words, new WordValidityFeature(vocab));
     }
     {
-      NgramBoundedReaderSearcher bigram = getNgramSearch("2gm.search", ResourceUtils.BIGRAM);
+      NgramBoundedReaderSearcher bigram = getNgramSearch("2gm.search.bin", ResourceUtils.BIGRAM);
       computeFeatureValues(words, new ContextCoherenceFeature("bigram", bigram, 2));
       computeFeatureValues(words, new ApproximateContextCoherenceFeature("bigram", bigram, 2));
     }
     {
-      NgramBoundedReaderSearcher trigram = getNgramSearch("3gm.search", ResourceUtils.TRIGRAM);
+      NgramBoundedReaderSearcher trigram = getNgramSearch("3gm.search.bin", ResourceUtils.TRIGRAM);
       computeFeatureValues(words, new ContextCoherenceFeature("trigram", trigram, 3));
       computeFeatureValues(words, new ApproximateContextCoherenceFeature("trigram", trigram, 3));
     }
     {
-      NgramBoundedReaderSearcher fourgram = getNgramSearch("4gm.search", ResourceUtils.FOURGRAM);
+      NgramBoundedReaderSearcher fourgram = getNgramSearch("4gm.search.bin", ResourceUtils.FOURGRAM);
       computeFeatureValues(words, new ContextCoherenceFeature("fourgram", fourgram, 4));
       computeFeatureValues(words, new ApproximateContextCoherenceFeature("fourgram", fourgram, 4));
     }
     {
-      NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM);
+      NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search.bin", ResourceUtils.FIVEGRAM);
       computeFeatureValues(words, new ContextCoherenceFeature("fivegram", fivegram, 5));
       computeFeatureValues(words, new ApproximateContextCoherenceFeature("fivegram", fivegram, 5));
     }
