@@ -31,10 +31,12 @@ import java.util.stream.Stream;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+@Ignore
 public class SuggestionTest {
 
   private static final Path VOCAB_PATH =
@@ -86,6 +88,7 @@ public class SuggestionTest {
 
     // Generate suggestions.
     List<Suggestion> suggests = null;
+//    suggests = Suggestion.suggest(new IOUtils.read(TXT_PATH))
 //     Suggestion.suggest(
 //        Word.tokenize(IOUtils.read(TXT_PATH), new GoogleTokenizer()),
 //        features,

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.dal.ocrrect.suggest.NgramBoundedReaderSearcher;
@@ -17,6 +18,7 @@ import edu.dal.ocrrect.util.PathUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
 import edu.stanford.nlp.io.IOUtils;
 
+@Ignore
 public class NgramBoundedReaderSearcherTest
 {
   private static List<Path> ngrams;
@@ -87,7 +89,7 @@ public class NgramBoundedReaderSearcherTest
     String word = "xyz"; // not exist as the first word of any records in input.
     assertEquals(searcher.openBufferedRecordsWithFirstWord(word), null);
   }
-  
+
   private String extractFirstWord(String line)
   {
     String word = "";
@@ -102,7 +104,7 @@ public class NgramBoundedReaderSearcherTest
     }
     return word;
   }
-  
+
   @Test
   public void testReadWrite()
     throws Exception

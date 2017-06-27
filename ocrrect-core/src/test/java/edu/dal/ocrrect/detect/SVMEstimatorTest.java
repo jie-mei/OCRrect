@@ -3,10 +3,13 @@ package edu.dal.ocrrect.detect;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+
+import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.dal.ocrrect.detect.SVMEstimator;
 
+@Ignore
 public class SVMEstimatorTest {
 
   @Test

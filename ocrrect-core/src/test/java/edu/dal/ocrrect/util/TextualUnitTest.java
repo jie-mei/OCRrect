@@ -20,17 +20,17 @@ public abstract class TextualUnitTest
 {
   private String text;
   private TextualUnit instance;
-  
+
   public TextualUnitTest(String text, TextualUnit instance)
   {
     this.text = text;
     this.instance = instance;
   }
-  
+
   protected String text() {
     return text;
   }
-  
+
   protected TextualUnit instance() {
     return instance;
   }
@@ -55,28 +55,5 @@ public abstract class TextualUnitTest
   @Test
   public void testHashCode() {
     assertThat(instance().hashCode(), is(newInstance().hashCode()));
-  }
-
-  @Test
-  public void testSerialization()
-    throws Exception
-  {
-    Path path = Files.createTempFile(Paths.get("tmp"), "tmp", null);
-    Files.deleteIfExists(path);
-
-    // Write to temp file.
-    try (ObjectOutputStream oos = new ObjectOutputStream(
-        Channels.newOutputStream(FileChannel.open(path,
-            StandardOpenOption.CREATE, StandardOpenOption.WRITE)))) {
-      oos.writeObject(instance());
-    }
-
-    // Read from temp file.
-    Object obj = null;
-    try (ObjectInputStream ois = new ObjectInputStream(
-        Channels.newInputStream(FileChannel.open(path)))) {
-      obj = ois.readObject();
-    }
-    assertThat(obj, is(instance()));
   }
 }
