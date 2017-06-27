@@ -167,10 +167,12 @@ public class DetectionExperiment {
         .toWords();
   }
 
+  private static final Path DATA_PATH = Paths.get("data");
+
   private static NgramBoundedReaderSearcher getNgramSearch(String pathname, List<Path> dataPath) {
     try {
       NgramBoundedReaderSearcher ngramSearch =
-          NgramBoundedReaderSearcher.read(PathUtils.TEMP_DIR.resolve(Paths.get(pathname)));
+          NgramBoundedReaderSearcher.read(DATA_PATH.resolve(Paths.get(pathname)));
       ngramSearch.setNgramPath(dataPath);
       return ngramSearch;
     } catch (IOException e) {
