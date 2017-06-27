@@ -1,15 +1,9 @@
-package edu.dal.ocrrect.suggest;
+package edu.dal.corr.suggest;
 
 import gnu.trove.list.array.TLongArrayList;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.RandomAccessFile;
-import java.io.Serializable;
+import org.apache.commons.io.input.BoundedInputStream;
+
+import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
@@ -18,12 +12,11 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.apache.commons.io.input.BoundedInputStream;
 
 /**
  * @since 2017.04.20
  */
-public class NgramBoundedReaderSearcher implements Serializable {
+public class NgramBoundedReaderSearcherBackup implements Serializable {
   private static final long serialVersionUID = -2835908801171656852L;
 
   /**
@@ -50,7 +43,7 @@ public class NgramBoundedReaderSearcher implements Serializable {
    * @param ngrams  the path to ngram folder.
    * @throws IOException  if I/O error occurs.
    */
-  public NgramBoundedReaderSearcher(List<Path> ngrams) throws IOException {
+  public NgramBoundedReaderSearcherBackup(List<Path> ngrams) throws FileNotFoundException, IOException {
     ngramPaths = ngrams.stream()
         .map(p -> p.toAbsolutePath().toString())
         .collect(Collectors.toList())
@@ -91,16 +84,6 @@ public class NgramBoundedReaderSearcher implements Serializable {
       }
     }
     fileOffsets = offsets.toArray();
-  }
-
-  public NgramBoundedReaderSearcher(edu.dal.corr.suggest.NgramBoundedReaderSearcher searcher) throws IOException {
-    ngramPaths = searcher.ngramPaths;
-    offsetMap = new HashMap<>();
-    for (String key: searcher.offsetMap.keySet()) {
-      edu.dal.corr.suggest.NgramBoundedReaderSearcher.CorpusSubset subset = searcher.offsetMap.get(key);
-      offsetMap.put(key, new CorpusSubset(subset.offset, subset.size));
-    }
-    fileOffsets = searcher.fileOffsets;
   }
 
   private void addToOffsetMap(String prevWord, long prevFileOffset, long prevLineEndPos, long
@@ -198,8 +181,8 @@ public class NgramBoundedReaderSearcher implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof NgramBoundedReaderSearcher) {
-      NgramBoundedReaderSearcher another = (NgramBoundedReaderSearcher) obj;
+    if (obj instanceof NgramBoundedReaderSearcherBackup) {
+      NgramBoundedReaderSearcherBackup another = (NgramBoundedReaderSearcherBackup) obj;
 
       for (int i = 0; i < ngramPaths.length; i++) {
         if (! ngramPaths[i].equals((another.ngramPaths[i]))) {
@@ -222,7 +205,7 @@ public class NgramBoundedReaderSearcher implements Serializable {
     return true;
   }
 
-  public static void write(NgramBoundedReaderSearcher searcher, Path out)
+  public static void write(NgramBoundedReaderSearcherBackup searcher, Path out)
     throws IOException
   {
     Files.createDirectories(out.getParent());
@@ -236,12 +219,14 @@ public class NgramBoundedReaderSearcher implements Serializable {
    * Construct the object from serialized file.
    *
    * @param path a serialized file.
+   * @param ngramData ngram data pathnames. It is used to overwrite the ngram reading path in the
+   *     constructed object.
    * @throws IOException if I/O error occurs.
    */
-  public static NgramBoundedReaderSearcher read(Path path) throws IOException {
+  public static NgramBoundedReaderSearcherBackup read(Path path) throws IOException {
     try (ObjectInputStream ois = new ObjectInputStream(Channels.newInputStream(
         FileChannel.open(path)))) {
-      NgramBoundedReaderSearcher searcher = (NgramBoundedReaderSearcher) ois.readObject();
+      NgramBoundedReaderSearcherBackup searcher = (NgramBoundedReaderSearcherBackup) ois.readObject();
       return searcher;
     } catch (ClassNotFoundException e) {
       throw new RuntimeException(e);

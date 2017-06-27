@@ -1,15 +1,9 @@
-package edu.dal.ocrrect.suggest;
+package edu.dal.corr.suggest;
 
 import gnu.trove.list.array.TLongArrayList;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.RandomAccessFile;
-import java.io.Serializable;
+import org.apache.commons.io.input.BoundedInputStream;
+
+import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
@@ -18,7 +12,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.apache.commons.io.input.BoundedInputStream;
 
 /**
  * @since 2017.04.20
@@ -29,18 +22,18 @@ public class NgramBoundedReaderSearcher implements Serializable {
   /**
    * The path of ngram corpus.
    */
-  private String[] ngramPaths;
+  public String[] ngramPaths;
 
   /**
    * Offset before each file.
    */
-  private long[] fileOffsets;
+  public long[] fileOffsets;
 
   /**
    * The mapping from words to their according offset. The offset indicate the
    * starting position for reading ngram records in files.
    */
-  private HashMap<String, CorpusSubset> offsetMap;
+  public HashMap<String, CorpusSubset> offsetMap;
 
   /**
    * Construct n-gram searcher.
@@ -91,16 +84,6 @@ public class NgramBoundedReaderSearcher implements Serializable {
       }
     }
     fileOffsets = offsets.toArray();
-  }
-
-  public NgramBoundedReaderSearcher(edu.dal.corr.suggest.NgramBoundedReaderSearcher searcher) throws IOException {
-    ngramPaths = searcher.ngramPaths;
-    offsetMap = new HashMap<>();
-    for (String key: searcher.offsetMap.keySet()) {
-      edu.dal.corr.suggest.NgramBoundedReaderSearcher.CorpusSubset subset = searcher.offsetMap.get(key);
-      offsetMap.put(key, new CorpusSubset(subset.offset, subset.size));
-    }
-    fileOffsets = searcher.fileOffsets;
   }
 
   private void addToOffsetMap(String prevWord, long prevFileOffset, long prevLineEndPos, long
@@ -154,11 +137,11 @@ public class NgramBoundedReaderSearcher implements Serializable {
         new BoundedInputStream(fis, subset.size)));
   }
 
-  private class CorpusSubset implements Serializable {
+  public class CorpusSubset implements Serializable {
     private static final long serialVersionUID = 5288864428787553815L;
 
-    private final long offset;
-    private final int size;
+    public final long offset;
+    public final int size;
 
     private CorpusSubset(long offset, int size) {
       this.offset = offset;
@@ -236,6 +219,8 @@ public class NgramBoundedReaderSearcher implements Serializable {
    * Construct the object from serialized file.
    *
    * @param path a serialized file.
+   * @param ngramData ngram data pathnames. It is used to overwrite the ngram reading path in the
+   *     constructed object.
    * @throws IOException if I/O error occurs.
    */
   public static NgramBoundedReaderSearcher read(Path path) throws IOException {
