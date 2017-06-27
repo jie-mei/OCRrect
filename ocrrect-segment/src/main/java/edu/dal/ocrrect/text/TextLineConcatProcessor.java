@@ -17,21 +17,18 @@ public class TextLineConcatProcessor implements Processor<Text>, StringProcessMi
 
   private Lexicon vocab;
   private boolean caseSensitive;
-  private boolean splitHyphenWord;
 
   /**
    * @param lexicon a vocabulary lexicon.
    * @param caseSensitive {@code true} if adopt case sensitive matching with vocabulary.
-   * @param splitHyphenWord {@code true} if treat hyphenated word as one unit.
    */
-  public TextLineConcatProcessor(Lexicon lexicon, boolean caseSensitive, boolean splitHyphenWord) {
+  public TextLineConcatProcessor(Lexicon lexicon, boolean caseSensitive) {
     this.vocab = lexicon;
     this.caseSensitive = caseSensitive;
-    this.splitHyphenWord = splitHyphenWord;
   }
 
   public TextLineConcatProcessor(Lexicon lexicon) {
-    this(lexicon, true, true);
+    this(lexicon, true);
   }
 
   private boolean contains(String word) {
@@ -65,13 +62,7 @@ public class TextLineConcatProcessor implements Processor<Text>, StringProcessMi
           } else {
             // If either part is a real word, the two parts is heuristically regarded as one
             // hyphenated word. This rule is set to best identify potential hyphenated words.
-            if (contains(bkPart1) && contains(bkPart2En)) {
-              if (splitHyphenWord) {
-                curr = "-" + repeat(" ", pad) + bkPart2 + remain;
-              } else {
-                curr = "-" + bkPart2 + repeat(" ", pad) + remain;
-              }
-            } else if (contains(bkPart1 + "-" + bkPart2En)) {
+            if ((contains(bkPart1) && contains(bkPart2En)) || contains(bkPart1 + "-" + bkPart2En)) {
               curr = "-" + bkPart2 + repeat(" ", pad) + remain;
 
             // Otherwise, the two parts are regarded as broken pieces. Thus we merge these two

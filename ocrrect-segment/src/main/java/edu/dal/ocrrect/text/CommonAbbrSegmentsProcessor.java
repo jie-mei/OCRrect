@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class CommonAbbrProcessor implements Processor<TextSegments> {
+public class CommonAbbrSegmentsProcessor implements Processor<TextSegments> {
 
   private static final HashSet<String> ABBR = new HashSet<>(Arrays.asList(
       // volume
@@ -14,24 +14,30 @@ public class CommonAbbrProcessor implements Processor<TextSegments> {
       // page
       "p", "pp", "PP",
       // title
-      "Mr.", "Dr.", "Prof.",
+      "Mr", "Dr", "Prof",
       // edition
-      "Ed.",
+      "Ed",
       // month
-      "Jan.", "Feb.", "Mar.", "Apr.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec.",
+      "Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
       // time
-      "a.m.", "p.m.",
+      "a.m", "p.m",
+      // figure
+      "Fig", "fig", "Figs", "figs",
       // etc
-      "etc.",
-      "St."
+      "Co", "co",  // country
+      "etc",
+      "St"
   ));
+
+  private static final Pattern NAME_ABBR = Pattern.compile("[A-Z][a-z]*");
 
   @Override
   public TextSegments process(TextSegments textSegments) {
     List<Segment> segments = new ArrayList<>();
     Segment prev = null;
     for (Segment curr: textSegments) {
-      if (curr.text().equals(".") && ABBR.contains(prev.text())
+      if (curr.text().equals(".")
+          && ABBR.contains(prev.text())
           && prev.position() + prev.text().length() == curr.position()) {
         // Update the previously added semgent in the list.
         prev = new Segment(prev.text() + curr.text(), prev.position());

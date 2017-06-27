@@ -1,15 +1,16 @@
 package edu.dal.ocrrect.detect;
 
 import edu.dal.ocrrect.util.Word;
+import edu.dal.ocrrect.util.lexicon.Lexicon;
 import gnu.trove.set.hash.THashSet;
 
 /**
  * @since 2017.04.26
  */
 public class WordValidityFeature extends DetectionFeature {
-  private THashSet<String> vocab;
+  private Lexicon vocab;
 
-  public WordValidityFeature(THashSet<String> vocabulary) {
+  public WordValidityFeature(Lexicon vocabulary) {
     vocab = vocabulary;
   }
 

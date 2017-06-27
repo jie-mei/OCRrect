@@ -18,6 +18,8 @@ import edu.dal.ocrrect.text.Text;
 import edu.dal.ocrrect.text.TextSegmentsConcatProcessor;
 import edu.dal.ocrrect.util.*;
 import edu.dal.ocrrect.util.lexicon.GoogleUnigramLexicon;
+import edu.dal.ocrrect.util.lexicon.Lexicon;
+import edu.dal.ocrrect.util.lexicon.Lexicons;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import java.io.BufferedWriter;
@@ -273,11 +275,13 @@ public class Main {
   }
 
   public static void writeWords(String text) throws IOException {
+    Lexicon vocab = Lexicons.toLexicon(ResourceUtils.getResource(
+        "dictionary/12dicts-6.0.2/International/2of4brif.txt"));
     List<Word> words = new Text(text)
-      .process(new TextLineConcatProcessor(new GoogleUnigramLexicon(), true, true))
-      .segment(new GoogleGramSegmenter())
-      .process(new TextSegmentsConcatProcessor())
-      .toWords();
+        .process(new TextLineConcatProcessor(new GoogleUnigramLexicon(), true))
+        .segment(new GoogleGramSegmenter(vocab))
+        .process(new TextSegmentsConcatProcessor())
+        .toWords();
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("words.log"))) {
       for (Word word : words) {
         bw.write(word.text() + "\t" + word.position() + "\n");

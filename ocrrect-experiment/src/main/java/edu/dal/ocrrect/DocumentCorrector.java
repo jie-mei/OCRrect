@@ -5,6 +5,7 @@ import edu.dal.ocrrect.suggest.feature.Feature;
 import edu.dal.ocrrect.text.GoogleGramSegmenter;
 import edu.dal.ocrrect.text.TextLineConcatProcessor;
 import edu.dal.ocrrect.text.Text;
+import edu.dal.ocrrect.util.ResourceUtils;
 import edu.dal.ocrrect.util.Timer;
 import edu.dal.ocrrect.util.Words;
 import edu.dal.ocrrect.util.Word;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.dal.ocrrect.util.lexicon.GoogleUnigramLexicon;
+import edu.dal.ocrrect.util.lexicon.Lexicon;
+import edu.dal.ocrrect.util.lexicon.Lexicons;
 import org.apache.log4j.Logger;
 
 /**
@@ -32,9 +35,11 @@ public class DocumentCorrector {
       int top)
       throws IOException {
     Timer t = new Timer();
+    Lexicon vocab = Lexicons.toLexicon(ResourceUtils.getResource(
+        "dictionary/12dicts-6.0.2/International/2of4brif.txt"));
     List<Word> words = new Text(content)
         .process(new TextLineConcatProcessor(new GoogleUnigramLexicon()))
-        .segment(new GoogleGramSegmenter())
+        .segment(new GoogleGramSegmenter(vocab))
         .toWords();
     if (LOG.isInfoEnabled()) {
       LOG.info(String.format(

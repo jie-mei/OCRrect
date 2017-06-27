@@ -40,9 +40,9 @@ public class WordTSVFile extends TSVFile<Word> {
   public void write(List<Word> elements, OpenOption... options) throws IOException {
     // Concatenate the CSV records and write the entire string at once.
     String tsvStr = elements
-      .stream()
-      .map(w -> String.join("\t", w.context()) + "\t" + w.position())
-      .collect(Collectors.joining("\n"));
+        .stream()
+        .map(w -> String.join("\t", w.context()) + "\t" + w.position())
+        .collect(Collectors.joining("\n"));
     try (BufferedWriter bw = Files.newBufferedWriter(this.path(), options)) {
       bw.write(tsvStr);
     }

@@ -41,15 +41,36 @@ public class SegmentationExperiment {
 
   private static Pattern LINE_BROKEN = Pattern.compile("(.*)-\\s*↵(.*)");
 
-  private static boolean matches(String gt, String segmented) {
-    if (gt.contains("↵")) {
-      Matcher m = LINE_BROKEN.matcher(gt);
-      m.matches();
-      String concat = m.group(1) + m.group(2);
-      return gt.equals(segmented) || concat.equals(segmented);
-    } else {
-      return gt.equals(segmented);
+  private static boolean matches(String segmented, List<String> gts) {
+    boolean matches = false;
+    for (String gt: gts) {
+      if (gt.contains("↵")) {
+        Matcher m = LINE_BROKEN.matcher(gt);
+        m.matches();
+        String concat = m.group(1) + m.group(2);
+        matches = gt.equals(segmented) || concat.equals(segmented);
+      } else {
+        matches = gt.equals(segmented);
+      }
+      if (matches) {
+        return true;
+      }
     }
+    return matches;
+  }
+
+  private static final int MAX_OFFSET = 4;
+
+  private static List<String> getGT(TIntObjectHashMap<Segment> map, int position) {
+    // Find ground truth text. It allows at most four whitespace offsets when looking-up. This
+    // mechanism is used to deal with the position inconsistency generated in line concatenation.
+    List<String> gts = new ArrayList<>();
+    for (int offset = 0; offset < MAX_OFFSET; offset++) {
+      if (map.containsKey(position + offset)) {
+        gts.add(map.get(position + offset).text());
+      }
+    }
+    return gts;
   }
 
   private static void eval(List<Segment> gt, String title, List<Segment> predicted, boolean detail)
@@ -63,8 +84,7 @@ public class SegmentationExperiment {
     List<Segment> errors = new ArrayList<>();
     for (int i = 0; i < predicted.size(); i++) {
       Segment s = predicted.get(i);
-      if (gtPosMap.contains(s.position()) &&
-          matches(gtPosMap.get(s.position()).text(), s.text())) {
+      if (matches(s.text(), getGT(gtPosMap, s.position()))) {
         same += 1;
         correct[i] = true;
       } else {
@@ -118,44 +138,103 @@ public class SegmentationExperiment {
 
     Text text = new Text(IOUtils
         .read(ResourceUtils.getResourceInDir("*.txt", "mibio-ocr/ocr")));
-    Lexicon vocab = Lexicons.toLexicon(ResourceUtils.getResource(
+
+    Lexicon vocab = Lexicons.includeNumericWords(
+        Lexicons.toLexicon(ResourceUtils.getResource(
+            "dictionary/12dicts-6.0.2/International/2of4brif.txt")));
+
+    Lexicon vocabNoNum =
+      Lexicons.toLexicon(ResourceUtils.getResource(
         "dictionary/12dicts-6.0.2/International/2of4brif.txt"));
 
-    eval(gtSeg, "no.whitespace.no",
-      text.segment(new WhiteSpaceSegmenter())
+//    Lexicon univocab = new GoogleUnigramLexicon();
+//    Lexicon wordVocab = Lexicons.includeNumericWords(
+//      Lexicons.toLexicon(ResourceUtils.getPath(
+//        "/home/default/Downloads/words.txt")));
+//    Lexicon merged = Lexicons.merge(vocab, wordVocab, univocab);
+//    Lexicon vocab =
+//        Lexicons.toLexicon(ResourceUtils.getResource(
+//            "dictionary/12dicts-6.0.2/International/2of4brif.txt"));
+
+//    eval(gtSeg, "no.whitespace.no",
+//      text.segment(new WhiteSpaceSegmenter())
+//    );
+//    eval(gtSeg, "no.PennTreebank.no",
+//      text.segment(new PennTreebankSegmenter())
+//    );
+//    eval(gtSeg, "no.Google.no",
+//      text.segment(new GoogleGramSegmenter())
+//    );
+//    eval(gtSeg, "concat-dic.Google.no",
+//      text.process(new TextLineConcatProcessor(vocab, false, true))
+//          .segment(new GoogleGramSegmenter())
+//    );
+//    eval(gtSeg, "concat-dic.Google.non-concat-cs",
+//      text.process(new TextLineConcatProcessor(vocab, false, true))
+//          .segment(new GoogleGramSegmenter())
+//          .process(new NonWordConcatProcessor(vocab, true))
+//    );
+//    eval(gtSeg, "concat-dic.Google.non-concat-ci",
+//      text.process(new TextLineConcatProcessor(vocab, false, true))
+//          .segment(new GoogleGramSegmenter())
+//          .process(new CommonAbbrSegmentsProcessor())
+//          .process(new NonWordConcatProcessor(vocab, false))
+//    );
+//    eval(gtSeg, "concat-dic.Google.concat",
+//      text.process(new TextLineConcatProcessor(vocab, false, true))
+//          .segment(new GoogleGramSegmenter())
+//          .process(new CommonAbbrSegmentsProcessor())
+//          .process(new TextSegmentsConcatProcessor())
+//    );
+//    eval(gtSeg, "concat-dic.split.frag-concat.common",
+//      text.process(new TextLineConcatProcessor(vocab, false, true))
+//        .segment(new SplitSegmenter())
+//        .process(new FragmentConcatSegmentsProcessor())
+//        .process(new CommonAbbrSegmentsProcessor())
+//    );
+//    eval(gtSeg, "concat-dic.Google.frag-concat",
+//      text.process(new TextLineConcatProcessor(vocab, false))
+//        .segment(new GoogleGramSegmenter(vocab))
+//        .process(new FragmentConcatSegmentsProcessor(vocab, false, ""))
+//        .process(new CommonAbbrSegmentsProcessor())
+//    );
+
+    eval(gtSeg, "concat-dic.Google.frag-concat-and",
+      text.process(new TextLineConcatProcessor(vocabNoNum, false))
+        .segment(new GoogleGramSegmenter(vocabNoNum))
+        .process(new FragmentConcatSegmentsProcessor(vocabNoNum, false, ",.:;?!"))
+        .process(new CommonAbbrSegmentsProcessor())
     );
-    eval(gtSeg, "no.PennTreebank.no",
-      text.segment(new PennTreebankSegmenter())
+    eval(gtSeg, "concat-dic.Google.frag-concat-and",
+      text.process(new TextLineConcatProcessor(vocab, false))
+        .segment(new GoogleGramSegmenter(vocabNoNum))
+        .process(new FragmentConcatSegmentsProcessor(vocabNoNum, false, ",.:;?!"))
+        .process(new CommonAbbrSegmentsProcessor())
     );
-    eval(gtSeg, "no.Google.no",
-      text.segment(new GoogleGramSegmenter())
+    eval(gtSeg, "concat-dic.Google.frag-concat-and",
+      text.process(new TextLineConcatProcessor(vocab, false))
+        .segment(new GoogleGramSegmenter(vocab))
+        .process(new FragmentConcatSegmentsProcessor(vocabNoNum, false, ",.:;?!"))
+        .process(new CommonAbbrSegmentsProcessor())
     );
-    eval(gtSeg, "concat-dic.Google.no",
-      text.process(new TextLineConcatProcessor(vocab, false, true))
-          .segment(new GoogleGramSegmenter())
+    eval(gtSeg, "concat-dic.Google.frag-concat-and",
+      text.process(new TextLineConcatProcessor(vocab, false))
+        .segment(new GoogleGramSegmenter(vocab))
+        .process(new FragmentConcatSegmentsProcessor(vocab, false, ",.:;?!"))
+        .process(new CommonAbbrSegmentsProcessor())
     );
-    eval(gtSeg, "concat-dic.Google.non-concat-cs",
-      text.process(new TextLineConcatProcessor(vocab, false, true))
-          .segment(new GoogleGramSegmenter())
-          .process(new NonWordConcatProcessor(vocab, true))
-    );
-    eval(gtSeg, "concat-dic.Google.non-concat-ci",
-      text.process(new TextLineConcatProcessor(vocab, false, true))
-          .segment(new GoogleGramSegmenter())
-          .process(new CommonAbbrProcessor())
-          .process(new NonWordConcatProcessor(vocab, false))
-    );
-    eval(gtSeg, "concat-dic.Google.concat",
-      text.process(new TextLineConcatProcessor(vocab, false, true))
-          .segment(new GoogleGramSegmenter())
-          .process(new CommonAbbrProcessor())
-          .process(new TextSegmentsConcatProcessor())
-    );
-    eval(gtSeg, "concat-dic.Google.frag-concat",
-      text.process(new TextLineConcatProcessor(vocab, false, true))
-        .segment(new GoogleGramSegmenter())
-        .process(new FragmentConcatProcessor())
-        .process(new CommonAbbrProcessor())
-    );
+//    eval(gtSeg, "concat-dic.Google.frag-concat-uni",
+//      text.process(new TextLineConcatProcessor(vocab, false))
+//        .segment(new GoogleGramSegmenter(vocab))
+//        .process(new FragmentConcatSegmentsProcessor(univocab, false, ",.:;?!"))
+//        .process(new CommonAbbrSegmentsProcessor())
+//    );
+//    eval(gtSeg, "concat-dic.Google.frag-concat",
+//      text.process(new TextLineConcatProcessor(vocab, false))
+//        .segment(new GoogleGramSegmenter(vocab))
+//        .process(new FragmentConcatSegmentsProcessor(vocab, false, ",.:;?!"))
+//        .process(new CommonAbbrSegmentsProcessor())
+//        .process(new NeighbourConcatSegmentsProcessor(univocab))
+//    );
   }
 }

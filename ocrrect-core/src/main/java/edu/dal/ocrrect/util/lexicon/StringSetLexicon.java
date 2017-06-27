@@ -16,6 +16,12 @@ class StringSetLexicon implements Lexicon {
     dict = set;
   }
 
+  private static THashSet<String> toTHashSet(List<String> list) {
+    THashSet<String> set = new THashSet<>();
+    list.forEach(w -> set.add(w));
+    return set;
+  }
+
   /**
    * Construct the dictionary with a list of words.
    *
@@ -23,12 +29,6 @@ class StringSetLexicon implements Lexicon {
    */
   public StringSetLexicon(List<String> list) {
     this(toTHashSet(list));
-  }
-
-  private static THashSet<String> toTHashSet(List<String> list) {
-    THashSet<String> set = new THashSet<>();
-    list.forEach(w -> set.add(w));
-    return set;
   }
 
   public boolean contains(String word) {

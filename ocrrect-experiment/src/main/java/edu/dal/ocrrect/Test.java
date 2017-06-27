@@ -17,6 +17,8 @@ import edu.dal.ocrrect.text.TextLineConcatProcessor;
 import edu.dal.ocrrect.text.Text;
 import edu.dal.ocrrect.util.*;
 import edu.dal.ocrrect.util.lexicon.GoogleUnigramLexicon;
+import edu.dal.ocrrect.util.lexicon.Lexicon;
+import edu.dal.ocrrect.util.lexicon.Lexicons;
 
 public class Test {
   // word that position smaller than this is used for training
@@ -68,10 +70,12 @@ public class Test {
 //    NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM);
 
     // Read words from input text.
+    Lexicon vocab = Lexicons.toLexicon(ResourceUtils.getResource(
+        "dictionary/12dicts-6.0.2/International/2of4brif.txt"));
     List<Word> words =
         new Text(IOUtils.read(ResourceUtils.getResourceInDir("*.txt", "mibio-ocr/ocr")))
             .process(new TextLineConcatProcessor(new GoogleUnigramLexicon()))
-            .segment(new GoogleGramSegmenter())
+            .segment(new GoogleGramSegmenter(vocab))
             .toWords();
 
     int lastTrain = 0; // exclusive

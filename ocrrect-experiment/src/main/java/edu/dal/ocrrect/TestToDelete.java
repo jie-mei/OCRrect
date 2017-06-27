@@ -17,12 +17,20 @@ public class TestToDelete {
     + "(?<remain>.*?)$"
   );
 
+  private static final Pattern ERROR = Pattern.compile("[^\\p{Alnum}]");
+
+  private static boolean isError(String part) {
+    return ! ERROR.matcher(part).find();
+  }
+
   public static void main(String[] args) {
     print("'hello-our-world)!");
     System.out.println();
     print("'hello-our-world.\"");
     System.out.println();
     print("'hello-our-world!");
+    System.out.println();
+    print("(Kent),");
   }
 
   private static void print(String s) {
