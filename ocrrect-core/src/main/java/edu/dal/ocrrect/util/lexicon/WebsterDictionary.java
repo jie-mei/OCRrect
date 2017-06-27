@@ -1,11 +1,7 @@
 package edu.dal.ocrrect.util.lexicon;
 
-import edu.dal.ocrrect.text.PennTreebankSegmenter;
-import edu.dal.ocrrect.text.Text;
-import edu.dal.ocrrect.text.TextSegmenter;
 import edu.dal.ocrrect.util.IOUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
-import edu.dal.ocrrect.util.Token;
 import gnu.trove.set.hash.THashSet;
 
 import java.io.BufferedReader;
@@ -14,6 +10,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class WebsterDictionary extends StringSetLexicon {
   private static WebsterDictionary instance;
@@ -30,8 +27,6 @@ public class WebsterDictionary extends StringSetLexicon {
   }
 
   private static THashSet<String> readSet(Path file) {
-    TextSegmenter segmenter = new PennTreebankSegmenter();
-
     THashSet<String> set = new THashSet<>();
     try (BufferedReader br = IOUtils.newBufferedReader(file)) {
 
@@ -58,8 +53,9 @@ public class WebsterDictionary extends StringSetLexicon {
           // For the previous word, find derivations from the content.
           if (sb != null) {
             String content = sb.toString();
-            for (Token token: segmenter.segment(new Text(content))) {
-              String word = token.text().toLowerCase();
+            StringTokenizer stk = new StringTokenizer(content);
+            for (String token = stk.nextToken(); stk.hasMoreTokens(); token = stk.nextToken()) {
+              String word = token.toLowerCase();
               if (derivations.contains(word)) {
                 set.add(word);
                 derivations.remove(word);

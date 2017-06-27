@@ -10,7 +10,7 @@ public class CharacterExistenceFeature extends DetectionFeature {
 
   public CharacterExistenceFeature(char character) {
     chr = character;
-    setName(Character.toString(chr));
+    setName(Integer.toString((int)chr));
   }
 
   @Override
