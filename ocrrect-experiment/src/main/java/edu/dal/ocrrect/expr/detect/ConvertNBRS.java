@@ -32,9 +32,9 @@ public class ConvertNBRS {
   private static final Path DATA_PATH = Paths.get("data");
 
   public static void main(String[] args) throws IOException {
-    convertAndWrite(getNgramSearch("2gm.search", ResourceUtils.BIGRAM),   "2gm.search.bin");
-    convertAndWrite(getNgramSearch("3gm.search", ResourceUtils.TRIGRAM),  "3gm.search.bin");
-    convertAndWrite(getNgramSearch("4gm.search", ResourceUtils.FOURGRAM), "4gm.search.bin");
-    convertAndWrite(getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM), "5gm.search.bin");
+    convertAndWrite(getNgramSearch("2gm.search", ResourceUtils.BIGRAM),   "tmp/2gm.search.bin");
+    convertAndWrite(getNgramSearch("3gm.search", ResourceUtils.TRIGRAM),  "tmp/3gm.search.bin");
+    convertAndWrite(getNgramSearch("4gm.search", ResourceUtils.FOURGRAM), "tmp/4gm.search.bin");
+    convertAndWrite(getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM), "tmp/5gm.search.bin");
   }
 }

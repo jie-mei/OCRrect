@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 import com.google.common.primitives.Floats;
 
 /**
- * @since 2017.04.27
+ * @since 2017.06.27
  */
 public class ContextCoherenceFeature extends DetectionFeature {
   private NgramBoundedReaderSearcher reader;
@@ -61,7 +61,7 @@ public class ContextCoherenceFeature extends DetectionFeature {
             String sub = substitueWord(splits[0], c);
             if (sub != null) {
               // Records the sum of log n-gram frequencies of the possible word substitutions.
-              float val = (float)Math.log(Integer.parseInt(splits[1]));
+              float val = (float)Math.log(Long.parseLong(splits[1]));
               wordMap.adjustOrPutValue(sub, val, val);
             }
           }
