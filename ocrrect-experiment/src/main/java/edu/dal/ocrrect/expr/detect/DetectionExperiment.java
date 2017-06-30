@@ -3,6 +3,8 @@ package edu.dal.ocrrect.expr.detect;
 import edu.dal.ocrrect.detect.*;
 import edu.dal.ocrrect.expr.ExprUtils;
 import edu.dal.ocrrect.io.FloatTSVFile;
+import edu.dal.ocrrect.io.IntegerTSVFile;
+import edu.dal.ocrrect.io.WordTSVFile;
 import edu.dal.ocrrect.suggest.NgramBoundedReaderSearcher;
 import edu.dal.ocrrect.text.*;
 import edu.dal.ocrrect.util.IOUtils;
@@ -49,6 +51,7 @@ public class DetectionExperiment {
     {
       Word last = ocrWords.get(ocrWords.size() - 1);
       errPos = new BitSet(last.position() + last.text().length());
+
       // Read the ground-truth errors.
       try (BufferedReader br = Files.newBufferedReader(gtError)) {
         for (String line = br.readLine(); line != null; line = br.readLine()) {
@@ -72,13 +75,13 @@ public class DetectionExperiment {
         .collect(Collectors.toList());
   }
 
-  private static final String PATHNAME_PREFIX = "detect";
+  private static final String PATHNAME_PREFIX = "detectAndWrite";
 
   /*
    * Compute feature values and write to the TSV file. The computational procedure will be skipped
    * if the TSV file already exists.
    */
-  private static void computeFeatureValues(List<Word> words, DetectionFeature feature)
+  private static void computeAndWriteFeatureValues(List<Word> words, DetectionFeature feature)
       throws IOException {
     ExprUtils.ensureTempPath();
     String featName;
@@ -88,7 +91,7 @@ public class DetectionExperiment {
     }
     Path path;
     {
-      String filename = String.join(".", PATHNAME_PREFIX, featName, "txt");
+      String filename = String.join(".", PATHNAME_PREFIX, featName, "tsv");
       path = ExprUtils.TEMP_DIR.resolve(filename);
     }
     if (Files.exists(path)) {
@@ -141,39 +144,62 @@ public class DetectionExperiment {
     FEATURED_CHARS.addAll(IntStream.range(123, 128).boxed().collect(Collectors.toList()));
   }
 
-  private static void detect() throws IOException {
+  private static void detectAndWrite() throws IOException {
     List<Word> words = segmentText(OCR_TEXT_PATH, VOCAB_PATH);
-    List<Boolean> labels = labelWords(words, GT_ERRORS_PATH);
     for (Integer val: FEATURED_CHARS) {
-      computeFeatureValues(words, new CharacterExistenceFeature((char) val.intValue()));
+      computeAndWriteFeatureValues(words, new CharacterExistenceFeature((char) val.intValue()));
     }
     {
       Lexicon vocab = new GoogleUnigramLexicon();
-      computeFeatureValues(words, new WordValidityFeature(vocab));
+      computeAndWriteFeatureValues(words, new WordValidityFeature(vocab));
     }
     {
       NgramBoundedReaderSearcher bigram = getNgramSearch("2gm.search", ResourceUtils.BIGRAM);
-      computeFeatureValues(words, new ContextCoherenceFeature("bigram", bigram, 2));
-      computeFeatureValues(words, new ApproximateContextCoherenceFeature("bigram", bigram, 2));
+      computeAndWriteFeatureValues(words, new ContextCoherenceFeature("bigram", bigram, 2));
+      computeAndWriteFeatureValues(words, new ApproximateContextCoherenceFeature("bigram", bigram, 2));
     }
     {
       NgramBoundedReaderSearcher trigram = getNgramSearch("3gm.search", ResourceUtils.TRIGRAM);
-      computeFeatureValues(words, new ContextCoherenceFeature("trigram", trigram, 3));
-      computeFeatureValues(words, new ApproximateContextCoherenceFeature("trigram", trigram, 3));
+      computeAndWriteFeatureValues(words, new ContextCoherenceFeature("trigram", trigram, 3));
+      computeAndWriteFeatureValues(words, new ApproximateContextCoherenceFeature("trigram", trigram, 3));
     }
     {
       NgramBoundedReaderSearcher fourgram = getNgramSearch("4gm.search", ResourceUtils.FOURGRAM);
-      computeFeatureValues(words, new ContextCoherenceFeature("fourgram", fourgram, 4));
-      computeFeatureValues(words, new ApproximateContextCoherenceFeature("fourgram", fourgram, 4));
+      computeAndWriteFeatureValues(words, new ContextCoherenceFeature("fourgram", fourgram, 4));
+      computeAndWriteFeatureValues(words, new ApproximateContextCoherenceFeature("fourgram", fourgram, 4));
     }
     {
       NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM);
-      computeFeatureValues(words, new ContextCoherenceFeature("fivegram", fivegram, 5));
-      computeFeatureValues(words, new ApproximateContextCoherenceFeature("fivegram", fivegram, 5));
+      computeAndWriteFeatureValues(words, new ContextCoherenceFeature("fivegram", fivegram, 5));
+      computeAndWriteFeatureValues(words, new ApproximateContextCoherenceFeature("fivegram", fivegram, 5));
     }
   }
 
+  private static void splitAndWriteMeta() throws IOException {
+    List<Word> words = segmentText(OCR_TEXT_PATH, VOCAB_PATH);
+    List<Integer> labels = labelWords(words, GT_ERRORS_PATH)
+        .stream().map(b -> b ? 1 : 0).collect(Collectors.toList());
+
+    // Find the split index
+    int splitIdx = 0;
+    for (int i = 0; i < words.size(); i++) {
+      if (words.get(i).position() > SPLIT_POS) {
+        splitIdx  = i;
+        break;
+      }
+    }
+
+    // Write the words and labels for training and testing into different files.
+    ExprUtils.ensureTempPath();
+    Path temp = ExprUtils.TEMP_DIR;
+    new WordTSVFile(temp.resolve("words.train.tsv")).write(words.subList(0, splitIdx));
+    new WordTSVFile(temp.resolve("words.test.tsv")).write(words.subList(splitIdx, words.size()));
+    new IntegerTSVFile(temp.resolve("labels.train.tsv")).write(labels.subList(0, splitIdx));
+    new IntegerTSVFile(temp.resolve("labels.test.tsv")).write(labels.subList(splitIdx, words.size()));
+  }
+
   public static void main(String[] args) throws IOException {
-    detect();
+    detectAndWrite();
+    splitAndWriteMeta();
   }
 }
