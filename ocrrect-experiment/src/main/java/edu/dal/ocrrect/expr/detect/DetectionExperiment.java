@@ -75,7 +75,7 @@ public class DetectionExperiment {
         .collect(Collectors.toList());
   }
 
-  private static final String PATHNAME_PREFIX = "detectAndWrite";
+  private static final Path OUTPUT_DIR = ExprUtils.TEMP_DIR.resolve("detect").resolve("data");
 
   /*
    * Compute feature values and write to the TSV file. The computational procedure will be skipped
@@ -91,8 +91,8 @@ public class DetectionExperiment {
     }
     Path path;
     {
-      String filename = String.join(".", PATHNAME_PREFIX, featName, "tsv");
-      path = ExprUtils.TEMP_DIR.resolve(filename);
+      String filename = String.join(".", featName, "tsv");
+      path = OUTPUT_DIR.resolve(filename);
     }
     if (Files.exists(path)) {
       LOG.info(feature.toString() + " SKIP");
@@ -191,11 +191,10 @@ public class DetectionExperiment {
 
     // Write the words and labels for training and testing into different files.
     ExprUtils.ensureTempPath();
-    Path temp = ExprUtils.TEMP_DIR;
-    new WordTSVFile(temp.resolve("words.train.tsv")).write(words.subList(0, splitIdx));
-    new WordTSVFile(temp.resolve("words.test.tsv")).write(words.subList(splitIdx, words.size()));
-    new IntegerTSVFile(temp.resolve("labels.train.tsv")).write(labels.subList(0, splitIdx));
-    new IntegerTSVFile(temp.resolve("labels.test.tsv")).write(labels.subList(splitIdx, words.size()));
+    new WordTSVFile(OUTPUT_DIR.resolve("words.train.tsv")).write(words.subList(0, splitIdx));
+    new WordTSVFile(OUTPUT_DIR.resolve("words.test.tsv")).write(words.subList(splitIdx, words.size()));
+    new IntegerTSVFile(OUTPUT_DIR.resolve("labels.train.tsv")).write(labels.subList(0, splitIdx));
+    new IntegerTSVFile(OUTPUT_DIR.resolve("labels.test.tsv")).write(labels.subList(splitIdx, words.size()));
   }
 
   public static void main(String[] args) throws IOException {
