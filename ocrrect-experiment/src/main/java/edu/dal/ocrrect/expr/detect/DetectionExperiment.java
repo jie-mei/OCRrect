@@ -1,6 +1,7 @@
 package edu.dal.ocrrect.expr.detect;
 
 import edu.dal.ocrrect.detect.*;
+import edu.dal.ocrrect.expr.Constants;
 import edu.dal.ocrrect.expr.ExprUtils;
 import edu.dal.ocrrect.io.FloatTSVFile;
 import edu.dal.ocrrect.io.IntegerTSVFile;
@@ -31,9 +32,6 @@ import java.util.stream.IntStream;
 public class DetectionExperiment {
 
   private static Logger LOG = Logger.getLogger(DetectionExperiment.class.toString());
-
-  // word that position smaller than this is used for training
-  private static final int SPLIT_POS = 407369;
 
   private static final Path GT_ERRORS_PATH = ResourceUtils.getResource(
       "mibio-ocr/error.gt.tsv");
@@ -183,7 +181,7 @@ public class DetectionExperiment {
     // Find the split index
     int splitIdx = 0;
     for (int i = 0; i < words.size(); i++) {
-      if (words.get(i).position() > SPLIT_POS) {
+      if (words.get(i).position() > Constants.SPLIT_POS) {
         splitIdx  = i;
         break;
       }
