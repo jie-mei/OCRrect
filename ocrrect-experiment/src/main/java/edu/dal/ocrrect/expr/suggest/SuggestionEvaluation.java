@@ -21,11 +21,12 @@ import java.util.List;
 public class SuggestionEvaluation {
 
   private static int TOP = 100;
+  private static Path DATA_PATH = Paths.get("data");
 
   private static NgramBoundedReaderSearcher getNgramSearch(String pathname, List<Path> dataPath) {
     try {
       NgramBoundedReaderSearcher ngramSearch =
-        NgramBoundedReaderSearcher.read(ExprUtils.TEMP_DIR.resolve(Paths.get(pathname)));
+        NgramBoundedReaderSearcher.read(DATA_PATH.resolve(Paths.get(pathname)));
       ngramSearch.setNgramPath(dataPath);
       return ngramSearch;
     } catch (IOException e) {
@@ -35,14 +36,20 @@ public class SuggestionEvaluation {
   }
 
   private static List<Feature> constructFeatures() {
+    // TODO: fix jar resource error.
+    ResourceUtils.VOCAB = Paths.get("ocrrect-core/src/main/resources/search_vocab.txt");
+    ResourceUtils.SPECIAL_LEXICON = Paths.get("ocrrect-core/src/main/resources/lexicon/special.txt");
+    ResourceUtils.LEXI_LEXICON = Paths.get("ocrrect-core/src/main/resources/lexicon/lexicon.txt");
+    ResourceUtils.WIKI_LEXICON = Paths.get("ocrrect-core/src/main/resources/lexicon/wiki.txt");
+
     // Construct unigram.
     Unigram unigram = Unigram.getInstance();
 
     // Read pre-processed 5-gram search indexing.
-    NgramBoundedReaderSearcher bigram = getNgramSearch("2gm.search", ResourceUtils.BIGRAM);
-    NgramBoundedReaderSearcher trigram = getNgramSearch("3gm.search", ResourceUtils.TRIGRAM);
-    NgramBoundedReaderSearcher fourgram = getNgramSearch("4gm.search", ResourceUtils.FOURGRAM);
-    NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM);
+    NgramBoundedReaderSearcher bigram = getNgramSearch("2gm.search.bin", ResourceUtils.BIGRAM);
+    NgramBoundedReaderSearcher trigram = getNgramSearch("3gm.search.bin", ResourceUtils.TRIGRAM);
+    NgramBoundedReaderSearcher fourgram = getNgramSearch("4gm.search.bin", ResourceUtils.FOURGRAM);
+    NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search.bin", ResourceUtils.FIVEGRAM);
 
     try {
       return Arrays.asList(
@@ -87,7 +94,7 @@ public class SuggestionEvaluation {
           new ApproximateContextCoherenceFeature("Fivegram", fivegram, 5)
       );
     } catch (IOException e) {
-      throw new RuntimeException(); // expect no error
+      throw new RuntimeException(e); // expect no error
     }
   }
 
