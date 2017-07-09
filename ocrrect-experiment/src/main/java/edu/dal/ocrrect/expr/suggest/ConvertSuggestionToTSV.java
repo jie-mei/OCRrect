@@ -12,11 +12,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ConvertSuggestionToTSV {
   /*
@@ -89,10 +87,15 @@ public class ConvertSuggestionToTSV {
 
   public static void main(String[] args) throws IOException {
     List<Suggestion> trainSuggests = Suggestion.readList(SuggestConstants.TRAIN_BINARY_PATH);
-    writeSuggestToTSV(trainSuggests, SuggestConstants.TRAIN_SUGGESTS_MAPPED_TSV_PATH);
+
+    System.out.println("Train mapped");
+    writeSuggestToTSV(trainSuggests,
+        SuggestConstants.TRAIN_SUGGESTS_MAPPED_TSV_PATH);
     writeLabelToTSV(trainSuggests,
         SuggestConstants.TRAIN_CORRS_MAPPED_TSV_PATH,
-        SuggestConstants.TRAIN_SUGGESTS_MAPPED_TSV_PATH);
+        SuggestConstants.TRAIN_LABELS_MAPPED_TSV_PATH);
+
+    System.out.println("Train mapped identical");
     List<Word> mappedIdentical =
         new WordTSVFile(SuggestConstants.TRAIN_WORDS_MAPPED_IDENTICAL_TSV_PATH).read();
     List<Suggestion> suggestsIdentical =
@@ -101,6 +104,6 @@ public class ConvertSuggestionToTSV {
         SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TSV_PATH);
     writeLabelToTSV(suggestsIdentical,
         SuggestConstants.TRAIN_CORRS_MAPPED_IDENTICAL_TSV_PATH,
-        SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TSV_PATH);
+        SuggestConstants.TRAIN_LABELS_MAPPED_IDENTICAL_TSV_PATH);
   }
 }
