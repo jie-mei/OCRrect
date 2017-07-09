@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class PathUtils {
@@ -48,7 +49,7 @@ public class PathUtils {
         paths.add(p);
       }
     }
-    paths.sort((a, b) -> a.getFileName().compareTo(b.getFileName()));
+    paths.sort(Comparator.comparing(Path::getFileName));
     return paths;
   }
 }

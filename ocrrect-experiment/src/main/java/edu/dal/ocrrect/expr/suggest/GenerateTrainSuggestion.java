@@ -13,20 +13,19 @@ import edu.dal.ocrrect.util.Unigram;
 import edu.dal.ocrrect.util.Word;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-public class SuggestionEvaluation {
+public class GenerateTrainSuggestion {
 
-  private static int TOP = 100;
-  private static Path DATA_PATH = Paths.get("data");
 
   private static NgramBoundedReaderSearcher getNgramSearch(String pathname, List<Path> dataPath) {
     try {
       NgramBoundedReaderSearcher ngramSearch =
-        NgramBoundedReaderSearcher.read(DATA_PATH.resolve(Paths.get(pathname)));
+        NgramBoundedReaderSearcher.read(Constants.DATA_PATH.resolve(Paths.get(pathname)));
       ngramSearch.setNgramPath(dataPath);
       return ngramSearch;
     } catch (IOException e) {
@@ -36,6 +35,7 @@ public class SuggestionEvaluation {
   }
 
   private static List<Feature> constructFeatures() {
+    // Override the default resource paths.
     // TODO: fix jar resource error.
     ResourceUtils.VOCAB = Paths.get("ocrrect-core/src/main/resources/search_vocab.txt");
     ResourceUtils.SPECIAL_LEXICON = Paths.get("ocrrect-core/src/main/resources/lexicon/special.txt");
@@ -100,8 +100,14 @@ public class SuggestionEvaluation {
 
   public static void main(String arg[]) throws IOException {
     // Use mapped words for suggesting in batch mode (mappedIdentical is the subset of mapped).
-    List<Word> mapped = new WordTSVFile(PrepareTrainWords.WORDS_MAPPED_PATH).read();
-    List<Suggestion> suggests = Suggestion.suggest(mapped, constructFeatures(), TOP, false);
-    Suggestion.write(suggests, Constants.SUGGEST_DATA_PATH.resolve("suggest.top" + TOP), "suggest");
+    List<Word> mapped = new WordTSVFile(SuggestConstants.TRAIN_WORDS_MAPPED_TSV_PATH).read();
+    List<Suggestion> suggests = Suggestion.suggest(mapped, constructFeatures(),
+        SuggestConstants.SUGGEST_TOP_NUM, false);
+    if (Files.notExists(SuggestConstants.TRAIN_BINARY_PATH)) {
+      Suggestion.write(suggests, SuggestConstants.TRAIN_BINARY_PATH, "suggest");
+    }
+    if (Files.notExists(SuggestConstants.TEST_BINARY_PATH)) {
+      Suggestion.write(suggests, SuggestConstants.TEST_BINARY_PATH, "suggest");
+    }
   }
 }
