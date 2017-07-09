@@ -14,8 +14,8 @@ public class SuggestConstants {
   public static Path TRAIN_CORRS_MAPPED_TSV_PATH = DATA_PATH.resolve("corrs.train.mapped.tsv");
   public static Path TRAIN_WORDS_MAPPED_IDENTICAL_TSV_PATH = DATA_PATH.resolve("words.train.mapped.identical.tsv");
   public static Path TRAIN_CORRS_MAPPED_IDENTICAL_TSV_PATH = DATA_PATH.resolve("corrs.train.mapped.identical.tsv");
-  public static Path TEST_WORDS_MAPPED_TSV_PATH = DATA_PATH.resolve("words.test.mapped.tsv");
-  public static Path TEST_CORRS_MAPPED_TSV_PATH = DATA_PATH.resolve("corrs.test.mapped.tsv");
+  public static Path TEST_WORDS_MAPPED_TSV_PATH = DATA_PATH.resolve("words.test.tsv");
+  public static Path TEST_CORRS_MAPPED_TSV_PATH = DATA_PATH.resolve("corrs.test.tsv");
 
   // Train suggestion generation.
   public static Path TRAIN_BINARY_PATH = DATA_PATH.resolve("suggest.train.top" + SUGGEST_TOP_NUM);

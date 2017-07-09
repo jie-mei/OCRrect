@@ -145,12 +145,6 @@ public class PrepareWords {
 
   public static void main(String[] args) throws IOException {
     List<ErrorToken> errorTokens = extractGTErrorTokens();
-    List<Word> testErrorWords = extractTestWords();
-    List<String> corrections = matchCorrections(testErrorWords, errorTokens);
-  }
-
-  public static void main2(String[] args) throws IOException {
-    List<ErrorToken> errorTokens = extractGTErrorTokens();
 
     {
       // Extract the ground truth errors from file.

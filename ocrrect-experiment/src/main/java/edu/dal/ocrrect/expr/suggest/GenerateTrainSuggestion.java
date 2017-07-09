@@ -100,13 +100,23 @@ public class GenerateTrainSuggestion {
 
   public static void main(String arg[]) throws IOException {
     // Use mapped words for suggesting in batch mode (mappedIdentical is the subset of mapped).
-    List<Word> mapped = new WordTSVFile(SuggestConstants.TRAIN_WORDS_MAPPED_TSV_PATH).read();
-    List<Suggestion> suggests = Suggestion.suggest(mapped, constructFeatures(),
-        SuggestConstants.SUGGEST_TOP_NUM, false);
     if (Files.notExists(SuggestConstants.TRAIN_BINARY_PATH)) {
+      System.out.println("Generate train suggestions");
+    }
+    if (Files.notExists(SuggestConstants.TEST_BINARY_PATH)) {
+      System.out.println("Generate test suggestions");
+    }
+    List<Feature> features = constructFeatures();
+    if (Files.notExists(SuggestConstants.TRAIN_BINARY_PATH)) {
+      List<Word> mapped = new WordTSVFile(SuggestConstants.TRAIN_WORDS_MAPPED_TSV_PATH).read();
+      List<Suggestion> suggests = Suggestion.suggest(mapped, features,
+          SuggestConstants.SUGGEST_TOP_NUM, false);
       Suggestion.write(suggests, SuggestConstants.TRAIN_BINARY_PATH, "suggest");
     }
     if (Files.notExists(SuggestConstants.TEST_BINARY_PATH)) {
+      List<Word> testWords = new WordTSVFile(SuggestConstants.TEST_WORDS_MAPPED_TSV_PATH).read();
+      List<Suggestion> suggests = Suggestion.suggest(testWords, features,
+          SuggestConstants.SUGGEST_TOP_NUM, false);
       Suggestion.write(suggests, SuggestConstants.TEST_BINARY_PATH, "suggest");
     }
   }
