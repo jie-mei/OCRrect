@@ -26,8 +26,8 @@ public class SuggestConstants {
   public static Path TEST_BINARY_TOP10_PATH = DATA_PATH.resolve("suggest.test.top10");
 
   // TSV suggestion conversion.
-  public static Path TRAIN_SUGGESTS_MAPPED_TSV_PATH = DATA_PATH.resolve("suggests.train.mapped.tsv");
-  public static Path TRAIN_LABELS_MAPPED_TSV_PATH = DATA_PATH.resolve("labels.train.mapped.tsv");
-  public static Path TRAIN_SUGGESTS_MAPPED_IDENTICAL_TSV_PATH = DATA_PATH.resolve("suggests.train.mapped.identical.tsv");
-  public static Path TRAIN_LABELS_MAPPED_IDENTICAL_TSV_PATH = DATA_PATH.resolve("labels.train.mapped.identical.tsv");
+  public static Path TRAIN_SUGGESTS_MAPPED_TOP10_TSV_PATH = DATA_PATH.resolve("suggests.train.mapped.top10.tsv");
+  public static Path TRAIN_LABELS_MAPPED_TOP10_TSV_PATH = DATA_PATH.resolve("labels.train.mapped.top10.tsv");
+  public static Path TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP10_TSV_PATH = DATA_PATH.resolve("suggests.train.mapped.identical.top10.tsv");
+  public static Path TRAIN_LABELS_MAPPED_IDENTICAL_TOP10_TSV_PATH = DATA_PATH.resolve("labels.train.mapped.identical.top10.tsv");
 }

@@ -90,10 +90,10 @@ public class ConvertSuggestionToTSV {
 
     System.out.println("Train mapped");
     writeSuggestToTSV(trainSuggests,
-        SuggestConstants.TRAIN_SUGGESTS_MAPPED_TSV_PATH);
+        SuggestConstants.TRAIN_SUGGESTS_MAPPED_TOP10_TSV_PATH);
     writeLabelToTSV(trainSuggests,
         SuggestConstants.TRAIN_CORRS_MAPPED_TSV_PATH,
-        SuggestConstants.TRAIN_LABELS_MAPPED_TSV_PATH);
+        SuggestConstants.TRAIN_LABELS_MAPPED_TOP10_TSV_PATH);
 
     System.out.println("Train mapped identical");
     List<Word> mappedIdentical =
@@ -101,9 +101,9 @@ public class ConvertSuggestionToTSV {
     List<Suggestion> suggestsIdentical =
         selectIdentical(trainSuggests, mappedIdentical);
     writeSuggestToTSV(suggestsIdentical,
-        SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TSV_PATH);
+        SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP10_TSV_PATH);
     writeLabelToTSV(suggestsIdentical,
         SuggestConstants.TRAIN_CORRS_MAPPED_IDENTICAL_TSV_PATH,
-        SuggestConstants.TRAIN_LABELS_MAPPED_IDENTICAL_TSV_PATH);
+        SuggestConstants.TRAIN_LABELS_MAPPED_IDENTICAL_TOP10_TSV_PATH);
   }
 }
