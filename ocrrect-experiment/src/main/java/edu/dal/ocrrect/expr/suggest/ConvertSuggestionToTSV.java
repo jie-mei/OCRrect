@@ -77,7 +77,7 @@ public class ConvertSuggestionToTSV {
     }
   }
 
-  private static List<Suggestion> selectIdentical(List<Suggestion> mapped, List<Word> identical) {
+  static List<Suggestion> selectIdentical(List<Suggestion> mapped, List<Word> identical) {
     HashSet<Integer> posSet = new HashSet<>();
     identical.forEach(w -> posSet.add(w.position()));
     return mapped.stream()

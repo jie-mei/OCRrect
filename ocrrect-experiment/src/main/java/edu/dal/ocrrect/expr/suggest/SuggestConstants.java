@@ -25,6 +25,11 @@ public class SuggestConstants {
   public static Path TRAIN_BINARY_TOP10_PATH = DATA_PATH.resolve("suggest.train.top10");
   public static Path TEST_BINARY_TOP10_PATH = DATA_PATH.resolve("suggest.test.top10");
 
+  // Text suggestion conversion.
+  public static Path TRAIN_SUGGESTS_MAPPED_TOP10_TEXT_PATH = DATA_PATH.resolve("suggests.train.mapped.top10.txt");
+  public static Path TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP10_TEXT_PATH = DATA_PATH.resolve("suggests.train.mapped.identical.top10.txt");
+  public static Path TEST_SUGGESTS_TOP10_TEXT_PATH = DATA_PATH.resolve("suggests.test.top10.txt");
+
   // TSV suggestion conversion.
   public static Path TRAIN_SUGGESTS_MAPPED_TOP10_TSV_PATH = DATA_PATH.resolve("suggests.train.mapped.top10.tsv");
   public static Path TRAIN_LABELS_MAPPED_TOP10_TSV_PATH = DATA_PATH.resolve("labels.train.mapped.top10.tsv");
