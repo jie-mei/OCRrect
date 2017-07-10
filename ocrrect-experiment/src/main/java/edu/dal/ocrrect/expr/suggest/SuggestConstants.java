@@ -20,6 +20,10 @@ public class SuggestConstants {
   // Train suggestion generation.
   public static Path TRAIN_BINARY_PATH = DATA_PATH.resolve("suggest.train.top" + SUGGEST_TOP_NUM);
   public static Path TEST_BINARY_PATH = DATA_PATH.resolve("suggest.test.top" + SUGGEST_TOP_NUM);
+  public static Path TRAIN_BINARY_TOP100_PATH = DATA_PATH.resolve("suggest.train.top100");
+  public static Path TEST_BINARY_TOP100_PATH = DATA_PATH.resolve("suggest.test.top100");
+  public static Path TRAIN_BINARY_TOP10_PATH = DATA_PATH.resolve("suggest.train.top10");
+  public static Path TEST_BINARY_TOP10_PATH = DATA_PATH.resolve("suggest.test.top10");
 
   // TSV suggestion conversion.
   public static Path TRAIN_SUGGESTS_MAPPED_TSV_PATH = DATA_PATH.resolve("suggests.train.mapped.tsv");

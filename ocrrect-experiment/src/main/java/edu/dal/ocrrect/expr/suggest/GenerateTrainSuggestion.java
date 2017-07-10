@@ -98,6 +98,13 @@ public class GenerateTrainSuggestion {
     }
   }
 
+  private static void rewriteTopIfNotExists(Path in, Path out, int top) throws IOException {
+    if (Files.notExists(out)) {
+      System.out.println("Rewrite to " + out.getFileName());
+      Suggestion.rewriteTop(in, out, top);
+    }
+  }
+
   public static void main(String arg[]) throws IOException {
     // Use mapped words for suggesting in batch mode (mappedIdentical is the subset of mapped).
     if (Files.notExists(SuggestConstants.TRAIN_BINARY_PATH)) {
@@ -113,11 +120,31 @@ public class GenerateTrainSuggestion {
           SuggestConstants.SUGGEST_TOP_NUM, false);
       Suggestion.write(suggests, SuggestConstants.TRAIN_BINARY_PATH, "suggest");
     }
+    rewriteTopIfNotExists(
+      SuggestConstants.TRAIN_BINARY_PATH,
+      SuggestConstants.TRAIN_BINARY_TOP100_PATH,
+      100
+    );
+    rewriteTopIfNotExists(
+      SuggestConstants.TRAIN_BINARY_PATH,
+      SuggestConstants.TRAIN_BINARY_TOP10_PATH,
+      10
+    );
     if (Files.notExists(SuggestConstants.TEST_BINARY_PATH)) {
       List<Word> testWords = new WordTSVFile(SuggestConstants.TEST_WORDS_MAPPED_TSV_PATH).read();
       List<Suggestion> suggests = Suggestion.suggest(testWords, features,
           SuggestConstants.SUGGEST_TOP_NUM, false);
       Suggestion.write(suggests, SuggestConstants.TEST_BINARY_PATH, "suggest");
     }
+    rewriteTopIfNotExists(
+      SuggestConstants.TEST_BINARY_PATH,
+      SuggestConstants.TEST_BINARY_TOP100_PATH,
+      100
+    );
+    rewriteTopIfNotExists(
+      SuggestConstants.TEST_BINARY_PATH,
+      SuggestConstants.TEST_BINARY_TOP10_PATH,
+      10
+    );
   }
 }

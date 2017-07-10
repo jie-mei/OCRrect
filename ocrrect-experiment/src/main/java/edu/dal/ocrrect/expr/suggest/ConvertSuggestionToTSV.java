@@ -86,7 +86,7 @@ public class ConvertSuggestionToTSV {
   }
 
   public static void main(String[] args) throws IOException {
-    List<Suggestion> trainSuggests = Suggestion.readList(SuggestConstants.TRAIN_BINARY_PATH);
+    List<Suggestion> trainSuggests = Suggestion.readList(SuggestConstants.TRAIN_BINARY_TOP10_PATH);
 
     System.out.println("Train mapped");
     writeSuggestToTSV(trainSuggests,
