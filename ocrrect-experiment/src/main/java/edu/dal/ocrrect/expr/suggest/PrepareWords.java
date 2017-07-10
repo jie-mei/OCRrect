@@ -28,7 +28,6 @@ import java.util.stream.IntStream;
  */
 public class PrepareWords {
 
-  private static Path ERROR_GT_PATH = ResourceUtils.getResource("mibio-ocr/error.gt.tsv");
   private static Path TRAIN_WORDS_SEGMENTED_PATH = Paths.get("tmp/detect/data/words.train.tsv");
   private static Path TEST_WORDS_SEGMENTED_PATH = Paths.get("tmp/detect/data/words.test.tsv");
   private static Path TEST_LABELS_DETECT_PATH = Paths.get("tmp/detect/label/labels.tsv");
@@ -54,7 +53,7 @@ public class PrepareWords {
   private static List<ErrorToken> extractGTErrorTokens() {
     // Read GT error tokens from file.
     List<ErrorToken> errors = new ArrayList<>();
-    try (BufferedReader br = Files.newBufferedReader(ERROR_GT_PATH)) {
+    try (BufferedReader br = Files.newBufferedReader(SuggestConstants.ERROR_GT_PATH)) {
       for (String line = br.readLine(); line != null; line = br.readLine()) {
         String[] splits = line.split("\t");
         if (splits[1].length() == 0) {

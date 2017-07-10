@@ -1,6 +1,7 @@
 package edu.dal.ocrrect.expr.suggest;
 
 import edu.dal.ocrrect.expr.ExprUtils;
+import edu.dal.ocrrect.util.ResourceUtils;
 
 import java.nio.file.Path;
 
@@ -8,6 +9,8 @@ public class SuggestConstants {
   public static int SUGGEST_TOP_NUM = 100;
   public static Path OUTPUT_PATH = ExprUtils.TEMP_DIR.resolve("suggest");
   public static Path DATA_PATH = OUTPUT_PATH.resolve("data");
+
+  public static Path ERROR_GT_PATH = ResourceUtils.getResource("mibio-ocr/error.gt.tsv");
 
   // TSV preparation.
   public static Path TRAIN_WORDS_MAPPED_TSV_PATH = DATA_PATH.resolve("words.train.mapped.tsv");
