@@ -37,7 +37,7 @@ public class GenerateTrainSuggestion {
   private static List<Feature> constructFeatures() {
     // Override the default resource paths.
     // TODO: fix jar resource error.
-    ResourceUtils.VOCAB = Paths.get("ocrrect-core/src/main/resources/search_vocab.txt");
+    ResourceUtils.VOCAB = Paths.get("ocrrect-core/src/main/resources/lexicon/wiki.txt");
     ResourceUtils.SPECIAL_LEXICON = Paths.get("ocrrect-core/src/main/resources/lexicon/special.txt");
     ResourceUtils.LEXI_LEXICON = Paths.get("ocrrect-core/src/main/resources/lexicon/lexicon.txt");
     ResourceUtils.WIKI_LEXICON = Paths.get("ocrrect-core/src/main/resources/lexicon/wiki.txt");
