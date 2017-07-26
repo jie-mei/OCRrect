@@ -1,4 +1,4 @@
-package edu.dal.ocrrect;
+package edu.dal.ocrrect.expr.segment;
 
 import edu.dal.ocrrect.io.TokenTSVFile;
 import edu.dal.ocrrect.text.*;
