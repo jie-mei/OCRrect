@@ -12,15 +12,20 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 
-# Download elephant source code if not exist.
-if [ ! -e "${TEMP_PATH}/elephant" ]; then
-  git clone "${REPO_URL}" "${TEMP_PATH}/elephant"
-fi
+txt=`cat "${1}"`
 
-# Perform tokenization using elephant.
-tokens=`cd "${TEMP_PATH}/elephant" && echo "${1}" | python2 elephant -m models/english`
+echo "${txt}"
 
-# Print tokens in separated lines.
-for tk in ${tokens}; do
-  echo ${tk}
-done
+# # Download elephant source code if not exist.
+# if [ ! -e "${TEMP_PATH}/elephant" ]; then
+#   git clone "${REPO_URL}" "${TEMP_PATH}/elephant"
+# fi
+# 
+# # Perform tokenization using elephant.
+# #tokens=`cd "${TEMP_PATH}/elephant" && echo "${1}" | python2 elephant -m models/english`
+# tokens=`cd "${TEMP_PATH}/elephant" && echo "${txt}" | python2 elephant -m models/english`
+# 
+# # Print tokens in separated lines.
+# for tk in ${tokens}; do
+#   echo ${tk}
+# done
