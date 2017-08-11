@@ -24,14 +24,29 @@ public class SuggestConstants {
   public static Path TRAIN_BINARY_PATH = DATA_PATH.resolve("suggest.train.top" + SUGGEST_TOP_NUM);
   public static Path TEST_BINARY_PATH = DATA_PATH.resolve("suggest.test.top" + SUGGEST_TOP_NUM);
   public static Path TRAIN_BINARY_TOP100_PATH = DATA_PATH.resolve("suggest.train.top100");
+  public static Path TRAIN_BINARY_TOP10_PATH  = DATA_PATH.resolve("suggest.train.top10");
+  public static Path TRAIN_BINARY_TOP5_PATH   = DATA_PATH.resolve("suggest.train.top5");
+  public static Path TRAIN_BINARY_TOP3_PATH   = DATA_PATH.resolve("suggest.train.top3");
+  public static Path TRAIN_BINARY_TOP1_PATH   = DATA_PATH.resolve("suggest.train.top1");
   public static Path TEST_BINARY_TOP100_PATH = DATA_PATH.resolve("suggest.test.top100");
-  public static Path TRAIN_BINARY_TOP10_PATH = DATA_PATH.resolve("suggest.train.top10");
-  public static Path TEST_BINARY_TOP10_PATH = DATA_PATH.resolve("suggest.test.top10");
+  public static Path TEST_BINARY_TOP10_PATH  = DATA_PATH.resolve("suggest.test.top10");
+  public static Path TEST_BINARY_TOP5_PATH   = DATA_PATH.resolve("suggest.test.top5");
+  public static Path TEST_BINARY_TOP3_PATH   = DATA_PATH.resolve("suggest.test.top3");
+  public static Path TEST_BINARY_TOP1_PATH   = DATA_PATH.resolve("suggest.test.top1");
 
   // Text suggestion conversion.
   public static Path TRAIN_SUGGESTS_MAPPED_TOP10_TEXT_PATH = DATA_PATH.resolve("suggests.train.mapped.top10.txt");
+  public static Path TRAIN_SUGGESTS_MAPPED_TOP5_TEXT_PATH  = DATA_PATH.resolve("suggests.train.mapped.top5.txt");
+  public static Path TRAIN_SUGGESTS_MAPPED_TOP3_TEXT_PATH  = DATA_PATH.resolve("suggests.train.mapped.top3.txt");
+  public static Path TRAIN_SUGGESTS_MAPPED_TOP1_TEXT_PATH  = DATA_PATH.resolve("suggests.train.mapped.top1.txt");
   public static Path TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP10_TEXT_PATH = DATA_PATH.resolve("suggests.train.mapped.identical.top10.txt");
+  public static Path TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP5_TEXT_PATH  = DATA_PATH.resolve("suggests.train.mapped.identical.top5.txt");
+  public static Path TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP3_TEXT_PATH  = DATA_PATH.resolve("suggests.train.mapped.identical.top3.txt");
+  public static Path TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP1_TEXT_PATH  = DATA_PATH.resolve("suggests.train.mapped.identical.top1.txt");
   public static Path TEST_SUGGESTS_TOP10_TEXT_PATH = DATA_PATH.resolve("suggests.test.top10.txt");
+  public static Path TEST_SUGGESTS_TOP5_TEXT_PATH  = DATA_PATH.resolve("suggests.test.top5.txt");
+  public static Path TEST_SUGGESTS_TOP3_TEXT_PATH  = DATA_PATH.resolve("suggests.test.top3.txt");
+  public static Path TEST_SUGGESTS_TOP1_TEXT_PATH  = DATA_PATH.resolve("suggests.test.top1.txt");
 
   // TSV suggestion conversion.
   public static Path TRAIN_SUGGESTS_MAPPED_TOP10_TSV_PATH = DATA_PATH.resolve("suggests.train.mapped.top10.tsv");

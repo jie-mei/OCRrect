@@ -130,6 +130,21 @@ public class GenerateTrainSuggestion {
       SuggestConstants.TRAIN_BINARY_TOP10_PATH,
       10
     );
+    rewriteTopIfNotExists(
+      SuggestConstants.TRAIN_BINARY_PATH,
+      SuggestConstants.TRAIN_BINARY_TOP5_PATH,
+      5
+    );
+    rewriteTopIfNotExists(
+      SuggestConstants.TRAIN_BINARY_PATH,
+      SuggestConstants.TRAIN_BINARY_TOP3_PATH,
+      3
+    );
+    rewriteTopIfNotExists(
+      SuggestConstants.TRAIN_BINARY_PATH,
+      SuggestConstants.TRAIN_BINARY_TOP1_PATH,
+      1
+    );
     if (Files.notExists(SuggestConstants.TEST_BINARY_PATH)) {
       List<Word> testWords = new WordTSVFile(SuggestConstants.TEST_WORDS_MAPPED_TSV_PATH).read();
       List<Suggestion> suggests = Suggestion.suggest(testWords, features,
@@ -145,6 +160,21 @@ public class GenerateTrainSuggestion {
       SuggestConstants.TEST_BINARY_PATH,
       SuggestConstants.TEST_BINARY_TOP10_PATH,
       10
+    );
+    rewriteTopIfNotExists(
+      SuggestConstants.TEST_BINARY_PATH,
+      SuggestConstants.TEST_BINARY_TOP5_PATH,
+      5
+    );
+    rewriteTopIfNotExists(
+      SuggestConstants.TEST_BINARY_PATH,
+      SuggestConstants.TEST_BINARY_TOP3_PATH,
+      3
+    );
+    rewriteTopIfNotExists(
+      SuggestConstants.TEST_BINARY_PATH,
+      SuggestConstants.TEST_BINARY_TOP1_PATH,
+      1
     );
   }
 }

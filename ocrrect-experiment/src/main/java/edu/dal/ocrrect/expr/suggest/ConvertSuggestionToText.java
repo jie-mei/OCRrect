@@ -20,30 +20,68 @@ import java.util.stream.Collectors;
 
 public class ConvertSuggestionToText {
 
+  private static void genTrainTexts(Path binPath,
+                                    Path mappedPath,
+                                    Path mappedIdenticalPath,
+                                    List<GroundTruthError> errors,
+                                    List<Word> words)
+      throws IOException
+  {
+    List<Suggestion> mapped = Suggestion.readList(binPath);
+    if (Files.notExists(mappedPath)) {
+      Suggestion.writeText(mapped, errors, mappedPath);
+    }
+    if (Files.notExists(mappedIdenticalPath)) {
+      List<Suggestion> mappedIdentical =
+        ConvertSuggestionToTSV.selectIdentical(mapped, words);
+      Suggestion.writeText(mappedIdentical, errors, mappedIdenticalPath);
+    }
+  }
+
+  private static void genTestText(Path binPath, Path textPath, List<GroundTruthError> errors)
+      throws IOException
+  {
+    List<Suggestion> test = Suggestion.readList(binPath);
+    if (Files.notExists(textPath)) {
+      Suggestion.writeText(test, errors, textPath);
+    }
+  }
+
   public static void main(String[] args) throws IOException {
     List<GroundTruthError> errors = GroundTruthError.read(SuggestConstants.ERROR_GT_PATH);
+    List<Word> wordMappedIdentical =
+        new WordTSVFile(SuggestConstants.TRAIN_WORDS_MAPPED_IDENTICAL_TSV_PATH).read();
 
     // Training suggestions.
-    {
-      List<Suggestion> mapped = Suggestion.readList(SuggestConstants.TRAIN_BINARY_TOP10_PATH);
-      if (Files.notExists(SuggestConstants.TRAIN_SUGGESTS_MAPPED_TOP10_TEXT_PATH)) {
-        Suggestion.writeText(mapped, errors, SuggestConstants.TRAIN_SUGGESTS_MAPPED_TOP10_TEXT_PATH);
-      }
-      if (Files.notExists(SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP10_TEXT_PATH)) {
-        List<Word> wordMappedIdentical =
-            new WordTSVFile(SuggestConstants.TRAIN_WORDS_MAPPED_IDENTICAL_TSV_PATH).read();
-        List<Suggestion> mappedIdentical =
-            ConvertSuggestionToTSV.selectIdentical(mapped, wordMappedIdentical);
-        Suggestion.writeText(mappedIdentical, errors,
-            SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP10_TEXT_PATH);
-      }
-    }
+    genTrainTexts(SuggestConstants.TRAIN_BINARY_TOP10_PATH,
+                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_TOP10_TEXT_PATH,
+                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP10_TEXT_PATH,
+                  errors, wordMappedIdentical);
+    genTrainTexts(SuggestConstants.TRAIN_BINARY_TOP5_PATH,
+                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_TOP5_TEXT_PATH,
+                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP5_TEXT_PATH,
+                  errors, wordMappedIdentical);
+    genTrainTexts(SuggestConstants.TRAIN_BINARY_TOP3_PATH,
+                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_TOP3_TEXT_PATH,
+                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP3_TEXT_PATH,
+                  errors, wordMappedIdentical);
+    genTrainTexts(SuggestConstants.TRAIN_BINARY_TOP1_PATH,
+                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_TOP1_TEXT_PATH,
+                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP1_TEXT_PATH,
+                  errors, wordMappedIdentical);
+
     // Testing suggestions.
-    {
-      List<Suggestion> test = Suggestion.readList(SuggestConstants.TEST_BINARY_TOP10_PATH);
-      if (Files.notExists(SuggestConstants.TEST_SUGGESTS_TOP10_TEXT_PATH)) {
-        Suggestion.writeText(test, errors, SuggestConstants.TEST_SUGGESTS_TOP10_TEXT_PATH);
-      }
-    }
+    genTestText(SuggestConstants.TEST_BINARY_TOP10_PATH,
+                SuggestConstants.TEST_SUGGESTS_TOP10_TEXT_PATH,
+                errors);
+    genTestText(SuggestConstants.TEST_BINARY_TOP5_PATH,
+                SuggestConstants.TEST_SUGGESTS_TOP5_TEXT_PATH,
+                errors);
+    genTestText(SuggestConstants.TEST_BINARY_TOP3_PATH,
+                SuggestConstants.TEST_SUGGESTS_TOP3_TEXT_PATH,
+                errors);
+    genTestText(SuggestConstants.TEST_BINARY_TOP1_PATH,
+                SuggestConstants.TEST_SUGGESTS_TOP1_TEXT_PATH,
+                errors);
   }
 }
