@@ -71,6 +71,7 @@ public class PrepareWords {
     return errors;
   }
 
+
   private static List<List<ErrorWord>> matchSegmentedWords(List<ErrorToken> errorTokens) {
     // Read segmented words generated from the segmentation step.
     List<Word> words;
@@ -99,6 +100,21 @@ public class PrepareWords {
       }
     }
     return Arrays.asList(mapped, mappedIdentical);
+  }
+  private static void writeErrorWords(List<Word> detected,
+                                      List<ErrorWord> errorWords,
+                                      Path wordTSV,
+                                      Path corrTSV)
+      throws IOException
+  {
+    TIntObjectHashMap<ErrorWord> errorMap = new TIntObjectHashMap<>();
+    for (ErrorWord ew: errorWords) {
+      errorMap.put(ew.error.position(), ew);
+    }
+    List<Word> words = new ArrayList<>();
+    List<String> corrs = new ArrayList<>();
+    new WordTSVFile(wordTSV).write(words);
+    new StringTSVFile(corrTSV).write(corrs);
   }
 
   private static void writeErrorWords(List<ErrorWord> errorWords, Path wordTSV, Path corrTSV)
