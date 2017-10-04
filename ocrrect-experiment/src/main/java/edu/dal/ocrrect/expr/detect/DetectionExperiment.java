@@ -137,13 +137,14 @@ public class DetectionExperiment {
   private static final List<Integer> FEATURED_CHARS = new ArrayList<>();
   static {
     FEATURED_CHARS.addAll(IntStream.range(32, 48).boxed().collect(Collectors.toList()));
-    FEATURED_CHARS.addAll(IntStream.range(59, 65).boxed().collect(Collectors.toList()));
+    FEATURED_CHARS.addAll(IntStream.range(58, 65).boxed().collect(Collectors.toList()));
     FEATURED_CHARS.addAll(IntStream.range(91, 97).boxed().collect(Collectors.toList()));
-    FEATURED_CHARS.addAll(IntStream.range(123, 128).boxed().collect(Collectors.toList()));
+    FEATURED_CHARS.addAll(IntStream.range(123, 127).boxed().collect(Collectors.toList()));
   }
 
   private static void detectAndWrite() throws IOException {
-    List<Word> words = segmentText(OCR_TEXT_PATH, VOCAB_PATH);
+    // List<Word> words = segmentText(OCR_TEXT_PATH, VOCAB_PATH);
+    List<Word> words = new WordTSVFile(OUTPUT_DIR.resolve("words.tsv")).read();
     for (Integer val: FEATURED_CHARS) {
       computeAndWriteFeatureValues(words, new CharacterExistenceFeature((char) val.intValue()));
     }
@@ -151,30 +152,34 @@ public class DetectionExperiment {
       Lexicon vocab = new GoogleUnigramLexicon();
       computeAndWriteFeatureValues(words, new WordValidityFeature(vocab));
     }
+    /*
     {
-      NgramBoundedReaderSearcher bigram = getNgramSearch("2gm.search", ResourceUtils.BIGRAM);
+      NgramBoundedReaderSearcher bigram = getNgramSearch("2gm.search.bin", ResourceUtils.BIGRAM);
       computeAndWriteFeatureValues(words, new ContextCoherenceFeature("bigram", bigram, 2));
       computeAndWriteFeatureValues(words, new ApproximateContextCoherenceFeature("bigram", bigram, 2));
     }
     {
-      NgramBoundedReaderSearcher trigram = getNgramSearch("3gm.search", ResourceUtils.TRIGRAM);
+      NgramBoundedReaderSearcher trigram = getNgramSearch("3gm.search.bin", ResourceUtils.TRIGRAM);
       computeAndWriteFeatureValues(words, new ContextCoherenceFeature("trigram", trigram, 3));
       computeAndWriteFeatureValues(words, new ApproximateContextCoherenceFeature("trigram", trigram, 3));
     }
     {
-      NgramBoundedReaderSearcher fourgram = getNgramSearch("4gm.search", ResourceUtils.FOURGRAM);
+      NgramBoundedReaderSearcher fourgram = getNgramSearch("4gm.search.bin", ResourceUtils.FOURGRAM);
       computeAndWriteFeatureValues(words, new ContextCoherenceFeature("fourgram", fourgram, 4));
       computeAndWriteFeatureValues(words, new ApproximateContextCoherenceFeature("fourgram", fourgram, 4));
     }
     {
-      NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search", ResourceUtils.FIVEGRAM);
+      NgramBoundedReaderSearcher fivegram = getNgramSearch("5gm.search.bin", ResourceUtils.FIVEGRAM);
       computeAndWriteFeatureValues(words, new ContextCoherenceFeature("fivegram", fivegram, 5));
       computeAndWriteFeatureValues(words, new ApproximateContextCoherenceFeature("fivegram", fivegram, 5));
     }
+    */
   }
 
   private static void splitAndWriteMeta() throws IOException {
-    List<Word> words = segmentText(OCR_TEXT_PATH, VOCAB_PATH);
+    // List<Word> words = segmentText(OCR_TEXT_PATH, VOCAB_PATH);
+    List<Word> words = new WordTSVFile(OUTPUT_DIR.resolve("words.tsv")).read();
+
     List<Integer> labels = labelWords(words, GT_ERRORS_PATH)
         .stream().map(b -> b ? 1 : 0).collect(Collectors.toList());
 
@@ -197,6 +202,6 @@ public class DetectionExperiment {
 
   public static void main(String[] args) throws IOException {
     detectAndWrite();
-    splitAndWriteMeta();
+    //splitAndWriteMeta();
   }
 }

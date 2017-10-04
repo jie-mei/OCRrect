@@ -30,6 +30,9 @@ public class WordTSVFile extends TSVFile<Word> {
           String[] splits = l.split("\t");
           int pos = Integer.parseInt(splits[splits.length - 1]);
           String[] ctxt = Arrays.copyOfRange(splits, 0, splits.length - 1);
+          if (ctxt.length != 8) {
+            new RuntimeException("Incorrect word line: " + l);
+          }
           return new Word(pos, ctxt);
         })
         .collect(Collectors.toList());

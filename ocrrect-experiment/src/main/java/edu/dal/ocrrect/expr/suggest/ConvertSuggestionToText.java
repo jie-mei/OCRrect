@@ -20,68 +20,46 @@ import java.util.stream.Collectors;
 
 public class ConvertSuggestionToText {
 
-  private static void genTrainTexts(Path binPath,
-                                    Path mappedPath,
-                                    Path mappedIdenticalPath,
-                                    List<GroundTruthError> errors,
-                                    List<Word> words)
-      throws IOException
-  {
-    List<Suggestion> mapped = Suggestion.readList(binPath);
-    if (Files.notExists(mappedPath)) {
-      Suggestion.writeText(mapped, errors, mappedPath);
-    }
-    if (Files.notExists(mappedIdenticalPath)) {
-      List<Suggestion> mappedIdentical =
-        ConvertSuggestionToTSV.selectIdentical(mapped, words);
-      Suggestion.writeText(mappedIdentical, errors, mappedIdenticalPath);
-    }
-  }
-
-  private static void genTestText(Path binPath, Path textPath, List<GroundTruthError> errors)
-      throws IOException
-  {
+  /**
+   * Generate text given binary folder path.
+   */
+  private static void genText(Path binPath, Path textPath, List<GroundTruthError> errors)
+      throws IOException {
     List<Suggestion> test = Suggestion.readList(binPath);
     if (Files.notExists(textPath)) {
       Suggestion.writeText(test, errors, textPath);
     }
   }
 
+  /**
+   * Generate text given binary part prefix. This method calls {@code #genText(Path, Path, List)}.
+   */
+  private static void genText(String binPartPrefix,
+                              String txtPartPrefix,
+                              int numParts,
+                              List<GroundTruthError> errors)
+      throws IOException {
+    for (int i = 1; i <= numParts; i++) {
+      String binFilename = String.format(binPartPrefix + ".part%02d", i);
+      String txtFilename = String.format(txtPartPrefix + ".part%02d.txt", i);
+      Path binPath = SuggestConstants.DATA_PATH.resolve(binFilename);
+      Path txtPath = SuggestConstants.DATA_PATH.resolve(txtFilename);
+      System.out.println("bin path: " + binPath);
+      System.out.println("txt path: " + txtPath);
+      genText(binPath, txtPath, errors);
+    }
+  }
+
   public static void main(String[] args) throws IOException {
     List<GroundTruthError> errors = GroundTruthError.read(SuggestConstants.ERROR_GT_PATH);
-    List<Word> wordMappedIdentical =
-        new WordTSVFile(SuggestConstants.TRAIN_WORDS_MAPPED_IDENTICAL_TSV_PATH).read();
 
-    // Training suggestions.
-    genTrainTexts(SuggestConstants.TRAIN_BINARY_TOP10_PATH,
-                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_TOP10_TEXT_PATH,
-                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP10_TEXT_PATH,
-                  errors, wordMappedIdentical);
-    genTrainTexts(SuggestConstants.TRAIN_BINARY_TOP5_PATH,
-                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_TOP5_TEXT_PATH,
-                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP5_TEXT_PATH,
-                  errors, wordMappedIdentical);
-    genTrainTexts(SuggestConstants.TRAIN_BINARY_TOP3_PATH,
-                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_TOP3_TEXT_PATH,
-                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP3_TEXT_PATH,
-                  errors, wordMappedIdentical);
-    genTrainTexts(SuggestConstants.TRAIN_BINARY_TOP1_PATH,
-                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_TOP1_TEXT_PATH,
-                  SuggestConstants.TRAIN_SUGGESTS_MAPPED_IDENTICAL_TOP1_TEXT_PATH,
-                  errors, wordMappedIdentical);
-
-    // Testing suggestions.
-    genTestText(SuggestConstants.TEST_BINARY_TOP10_PATH,
-                SuggestConstants.TEST_SUGGESTS_TOP10_TEXT_PATH,
-                errors);
-    genTestText(SuggestConstants.TEST_BINARY_TOP5_PATH,
-                SuggestConstants.TEST_SUGGESTS_TOP5_TEXT_PATH,
-                errors);
-    genTestText(SuggestConstants.TEST_BINARY_TOP3_PATH,
-                SuggestConstants.TEST_SUGGESTS_TOP3_TEXT_PATH,
-                errors);
-    genTestText(SuggestConstants.TEST_BINARY_TOP1_PATH,
-                SuggestConstants.TEST_SUGGESTS_TOP1_TEXT_PATH,
-                errors);
+    int[] tops = {1, 3, 5, 10, 100};
+    for (int top: tops) {
+      String prefix;
+      prefix = String.format("suggest.train.top%d", top);
+      genText(prefix, prefix, 13, errors);
+      prefix = String.format("suggest.test.top%d", top);
+      genText(prefix, prefix, 4, errors);
+    }
   }
 }

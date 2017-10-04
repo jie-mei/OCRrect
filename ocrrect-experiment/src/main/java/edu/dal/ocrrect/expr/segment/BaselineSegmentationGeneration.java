@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class BaselineSegmentationGeneration {
-  public static void main(String args) throws IOException {
+  public static void main(String[] args) throws IOException {
     Text text = new Text(IOUtils
       .read(ResourceUtils.getResourceInDir("*.txt", "mibio-ocr/ocr")));
 

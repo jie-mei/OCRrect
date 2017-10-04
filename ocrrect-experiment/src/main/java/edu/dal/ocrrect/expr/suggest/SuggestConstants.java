@@ -3,6 +3,8 @@ package edu.dal.ocrrect.expr.suggest;
 import edu.dal.ocrrect.expr.ExprUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.nio.file.Path;
 
 public class SuggestConstants {
@@ -11,6 +13,23 @@ public class SuggestConstants {
   public static Path DATA_PATH = OUTPUT_PATH.resolve("data");
 
   public static Path ERROR_GT_PATH = ResourceUtils.getResource("mibio-ocr/error.gt.tsv");
+
+  // Detection output
+  public static Path DETECT_OUT_PATH = ExprUtils.TEMP_DIR.resolve("detect").resolve("label");
+  public static Path DETECT_TRAIN_WORDS = DETECT_OUT_PATH.resolve("words.train.tsv");
+  public static Path DETECT_TEST_WORDS = DETECT_OUT_PATH.resolve("words.test.tsv");
+  public static List<Path> DETECT_TRAIN_WORDS_PARTS = new ArrayList<>();
+  static {
+    for (int i = 1; i <= 13; i++) {
+      DETECT_TRAIN_WORDS_PARTS.add(DETECT_OUT_PATH.resolve(String.format("words.train.tsv.part%02d", i)));
+    }
+  }
+  public static List<Path> DETECT_TEST_WORDS_PARTS = new ArrayList<>();
+  static {
+    for (int i = 1; i <= 4; i++) {
+      DETECT_TEST_WORDS_PARTS.add(DETECT_OUT_PATH.resolve(String.format("words.test.tsv.part%02d", i)));
+    }
+  }
 
   // TSV preparation.
   public static Path TRAIN_WORDS_MAPPED_TSV_PATH = DATA_PATH.resolve("words.train.mapped.tsv");
@@ -22,7 +41,7 @@ public class SuggestConstants {
 
   // Train suggestion generation.
   public static Path TRAIN_BINARY_PATH = DATA_PATH.resolve("suggest.train.top" + SUGGEST_TOP_NUM);
-  public static Path TEST_BINARY_PATH = DATA_PATH.resolve("suggest.test.top" + SUGGEST_TOP_NUM);
+  public static Path TEST_BINARY_PATH  = DATA_PATH.resolve("suggest.test.top" + SUGGEST_TOP_NUM);
   public static Path TRAIN_BINARY_TOP100_PATH = DATA_PATH.resolve("suggest.train.top100");
   public static Path TRAIN_BINARY_TOP10_PATH  = DATA_PATH.resolve("suggest.train.top10");
   public static Path TRAIN_BINARY_TOP5_PATH   = DATA_PATH.resolve("suggest.train.top5");
@@ -35,6 +54,7 @@ public class SuggestConstants {
   public static Path TEST_BINARY_TOP1_PATH   = DATA_PATH.resolve("suggest.test.top1");
 
   // Text suggestion conversion.
+  // Deprecated
   public static Path TRAIN_SUGGESTS_MAPPED_TOP10_TEXT_PATH = DATA_PATH.resolve("suggests.train.mapped.top10.txt");
   public static Path TRAIN_SUGGESTS_MAPPED_TOP5_TEXT_PATH  = DATA_PATH.resolve("suggests.train.mapped.top5.txt");
   public static Path TRAIN_SUGGESTS_MAPPED_TOP3_TEXT_PATH  = DATA_PATH.resolve("suggests.train.mapped.top3.txt");

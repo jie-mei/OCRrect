@@ -222,8 +222,8 @@ class Error(WeightingMixin, object):
             raise ConfidenceUnsetError
         if sum(self.labels) == 0:
             return Error.CORRECTION_NONEXIST
-        conf = max([c.confidence if c.label else 0 for c in self.candidates])
-        pos = sum([1 if c.confidence > conf else 0 for c in self.candidates])
+        conf = max([c.confidence for c in self.candidates if c.label])
+        pos = sum([1 for c in self.candidates if c.confidence > conf])
         #sort = sorted(self.candidates, key=lambda c: c.confidence, reverse=True)
         #if len(sort) >=3:
         #  print('{}({}): {}({}), {}({}), {}({})'

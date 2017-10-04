@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
  *       character in the error word.
  * </ul>
  *
- * @since 2017.04.21
+ * @since 2017.08.22
  */
 public class Word extends LocatedTextualUnit implements Serializable {
   private static final long serialVersionUID = 1201174127991744048L;
@@ -39,7 +39,7 @@ public class Word extends LocatedTextualUnit implements Serializable {
 
   private static String checkAndGetPivot(String[] context) {
     if (context.length != 8) {
-      System.out.print(context.length);
+      System.out.print(Arrays.toString(context) + " length: " + context.length);
       throw new IllegalArgumentException("Incorrect context is given.");
     }
     return context[4];

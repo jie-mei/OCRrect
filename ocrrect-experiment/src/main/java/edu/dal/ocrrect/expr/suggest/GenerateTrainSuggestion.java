@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -105,76 +106,87 @@ public class GenerateTrainSuggestion {
     }
   }
 
+  private static Path getPart(Path path, int idx) {
+    String order = String.format("%02d", idx);
+    return path.getParent().resolve(path.getFileName().toString() + order);
+  }
+
+
+  private static List<Path> toParts(Path path, int numParts) {
+    List<Path> parts = new ArrayList<>();
+    for (int i = 1; i <= numParts; i++) {
+      String order = String.format("%02d", i);
+      String filename = path.getFileName() + ".part" + order;
+      parts.add(path.getParent().resolve(filename));
+    }
+    return parts;
+  }
+
+  private static void genCandidates(Path inputWordPath,
+                                    Path outputBinaryPath,
+                                    Path outputTop100Path,
+                                    Path outputTop10Path,
+                                    Path outputTop5Path,
+                                    Path outputTop3Path,
+                                    Path outputTop1Path,
+                                    int numParts,
+                                    List<Feature> features)
+      throws IOException {
+    List<Path> wordParts   = toParts(inputWordPath, numParts);
+    List<Path> binParts    = toParts(outputBinaryPath, numParts);
+    List<Path> top100Parts = toParts(outputTop100Path, numParts);
+    List<Path> top10Parts  = toParts(outputTop10Path, numParts);
+    List<Path> top5Parts   = toParts(outputTop5Path, numParts);
+    List<Path> top3Parts   = toParts(outputTop3Path, numParts);
+    List<Path> top1Parts   = toParts(outputTop1Path, numParts);
+
+    for (int i = 0; i < binParts.size(); i++) {
+      Path binPath    = binParts.get(i);
+      Path wordPath   = wordParts.get(i);
+      Path top100Path = top100Parts.get(i);
+      Path top10Path  = top10Parts.get(i);
+      Path top5Path   = top5Parts.get(i);
+      Path top3Path   = top3Parts.get(i);
+      Path top1Path   = top1Parts.get(i);
+
+      if (Files.notExists(binPath)) {
+        System.out.println("Generate train suggestions: " + binPath.getFileName());
+        List<Word> words = new WordTSVFile(wordParts.get(i)).read();
+        List<Suggestion> suggests = Suggestion.suggest(words, features,
+            SuggestConstants.SUGGEST_TOP_NUM, false);
+        Suggestion.write(suggests, binPath, "suggest");
+      }
+      rewriteTopIfNotExists(binPath, top100Path, 100);
+      rewriteTopIfNotExists(binPath, top10Path,  10);
+      rewriteTopIfNotExists(binPath, top5Path,   5);
+      rewriteTopIfNotExists(binPath, top3Path,   3);
+      rewriteTopIfNotExists(binPath, top1Path,   1);
+    }
+  }
+
   public static void main(String arg[]) throws IOException {
-    // Use mapped words for suggesting in batch mode (mappedIdentical is the subset of mapped).
-    if (Files.notExists(SuggestConstants.TRAIN_BINARY_PATH)) {
-      System.out.println("Generate train suggestions");
-    }
-    if (Files.notExists(SuggestConstants.TEST_BINARY_PATH)) {
-      System.out.println("Generate test suggestions");
-    }
     List<Feature> features = constructFeatures();
-    if (Files.notExists(SuggestConstants.TRAIN_BINARY_PATH)) {
-      List<Word> mapped = new WordTSVFile(SuggestConstants.TRAIN_WORDS_MAPPED_TSV_PATH).read();
-      List<Suggestion> suggests = Suggestion.suggest(mapped, features,
-          SuggestConstants.SUGGEST_TOP_NUM, false);
-      Suggestion.write(suggests, SuggestConstants.TRAIN_BINARY_PATH, "suggest");
-    }
-    rewriteTopIfNotExists(
-      SuggestConstants.TRAIN_BINARY_PATH,
-      SuggestConstants.TRAIN_BINARY_TOP100_PATH,
-      100
-    );
-    rewriteTopIfNotExists(
-      SuggestConstants.TRAIN_BINARY_PATH,
-      SuggestConstants.TRAIN_BINARY_TOP10_PATH,
-      10
-    );
-    rewriteTopIfNotExists(
-      SuggestConstants.TRAIN_BINARY_PATH,
-      SuggestConstants.TRAIN_BINARY_TOP5_PATH,
-      5
-    );
-    rewriteTopIfNotExists(
-      SuggestConstants.TRAIN_BINARY_PATH,
-      SuggestConstants.TRAIN_BINARY_TOP3_PATH,
-      3
-    );
-    rewriteTopIfNotExists(
-      SuggestConstants.TRAIN_BINARY_PATH,
-      SuggestConstants.TRAIN_BINARY_TOP1_PATH,
-      1
-    );
-    if (Files.notExists(SuggestConstants.TEST_BINARY_PATH)) {
-      List<Word> testWords = new WordTSVFile(SuggestConstants.TEST_WORDS_MAPPED_TSV_PATH).read();
-      List<Suggestion> suggests = Suggestion.suggest(testWords, features,
-          SuggestConstants.SUGGEST_TOP_NUM, false);
-      Suggestion.write(suggests, SuggestConstants.TEST_BINARY_PATH, "suggest");
-    }
-    rewriteTopIfNotExists(
-      SuggestConstants.TEST_BINARY_PATH,
-      SuggestConstants.TEST_BINARY_TOP100_PATH,
-      100
-    );
-    rewriteTopIfNotExists(
-      SuggestConstants.TEST_BINARY_PATH,
-      SuggestConstants.TEST_BINARY_TOP10_PATH,
-      10
-    );
-    rewriteTopIfNotExists(
-      SuggestConstants.TEST_BINARY_PATH,
-      SuggestConstants.TEST_BINARY_TOP5_PATH,
-      5
-    );
-    rewriteTopIfNotExists(
-      SuggestConstants.TEST_BINARY_PATH,
-      SuggestConstants.TEST_BINARY_TOP3_PATH,
-      3
-    );
-    rewriteTopIfNotExists(
-      SuggestConstants.TEST_BINARY_PATH,
-      SuggestConstants.TEST_BINARY_TOP1_PATH,
-      1
-    );
+    /*
+    genCandidates(SuggestConstants.DETECT_TRAIN_WORDS,
+                  SuggestConstants.TRAIN_BINARY_PATH,
+                  SuggestConstants.TRAIN_BINARY_TOP100_PATH,
+                  SuggestConstants.TRAIN_BINARY_TOP10_PATH,
+                  SuggestConstants.TRAIN_BINARY_TOP5_PATH,
+                  SuggestConstants.TRAIN_BINARY_TOP3_PATH,
+                  SuggestConstants.TRAIN_BINARY_TOP1_PATH,
+                  13,
+                  features
+        );
+        */
+    genCandidates(SuggestConstants.DETECT_TEST_WORDS,
+                  SuggestConstants.TEST_BINARY_PATH,
+                  SuggestConstants.TEST_BINARY_TOP100_PATH,
+                  SuggestConstants.TEST_BINARY_TOP10_PATH,
+                  SuggestConstants.TEST_BINARY_TOP5_PATH,
+                  SuggestConstants.TEST_BINARY_TOP3_PATH,
+                  SuggestConstants.TEST_BINARY_TOP1_PATH,
+                  4,
+                  features
+        );
   }
 }

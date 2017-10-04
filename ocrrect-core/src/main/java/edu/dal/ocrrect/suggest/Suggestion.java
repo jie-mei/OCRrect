@@ -354,14 +354,16 @@ public class Suggestion extends LocatedTextualUnit implements Serializable {
         bw.write(suggest.text() + "\t" + pos + "\n");
 
         // Write candidates.
-        float[][] scores = suggest.score(types);
-        for (int i = 0; i < suggest.candidates().length; i++) {
+        for (Candidate candidate: suggest.candidates()) {
+          // TODO change to candidate.scores(types)
           StringBuilder candScores = new StringBuilder();
-          for (float s : scores[i]) {
-            candScores.append(s).append('\t');
+          float[] scores = candidate.scores();
+          for (int i = 0; i < scores.length; i++) {
+            candScores.append(scores[i]);
+            if (i  < scores.length - 1) {
+              candScores.append("\t");
+            }
           }
-          candScores.deleteCharAt(candScores.length() - 1);
-          Candidate candidate = suggest.candidates()[i];
 
           boolean match = false;
           if (err == null) {
@@ -378,8 +380,8 @@ public class Suggestion extends LocatedTextualUnit implements Serializable {
             // boolean match = suggest.text().toLowerCase()
             // .equals(candidate.text().toLowerCase());
           }
-          bw.write(String.format("%s\t%s\t%s\n",
-                candidate.text(), candScores.toString(), match ? "1" : "0"));
+          bw.write(String.format("%s\t%s\t%s\n", candidate.text(), candScores.toString(),
+                match ? "1" : "0"));
         }
         bw.write("\n");
       }
