@@ -2,7 +2,6 @@ package edu.dal.ocrrect.util;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,10 +20,11 @@ import java.util.stream.IntStream;
  *
  * @since 2017.08.22
  */
-public class Word extends LocatedTextualUnit implements Serializable {
-  private static final long serialVersionUID = 1201174127991744048L;
+public class Word extends LocatedTextualUnit {
 
   private String[] context;
+  private Text text;
+  private int index;
 
   /**
    * Construct a word with the position and four neighboring words before and three after.

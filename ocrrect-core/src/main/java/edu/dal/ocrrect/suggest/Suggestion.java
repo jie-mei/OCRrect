@@ -1,7 +1,7 @@
 package edu.dal.ocrrect.suggest;
 
 import edu.dal.ocrrect.eval.GroundTruthError;
-import edu.dal.ocrrect.metric.NGram;
+import edu.dal.ocrrect.feature.metric.NGram;
 import edu.dal.ocrrect.suggest.feature.ContextSensitiveFeature;
 import edu.dal.ocrrect.suggest.feature.DuplicateFeatureException;
 import edu.dal.ocrrect.suggest.feature.Feature;

@@ -16,6 +16,6 @@ public class WordValidityFeature extends DetectionFeature {
 
   @Override
   public float detect(Word word) {
-    return vocab.contains(word.text()) ? 1 : 0;
+    return vocab.contains(word.getText()) ? 1 : 0;
   }
 }

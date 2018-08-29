@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 import edu.dal.ocrrect.suggest.NgramBoundedReaderSearcher;
 import edu.dal.ocrrect.text.GoogleGramSegmenter;
 import edu.dal.ocrrect.text.TextLineConcatProcessor;
-import edu.dal.ocrrect.text.Text;
 import edu.dal.ocrrect.util.*;
 import edu.dal.ocrrect.util.lexicon.GoogleUnigramLexicon;
 import edu.dal.ocrrect.util.lexicon.Lexicon;

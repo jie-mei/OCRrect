@@ -110,7 +110,7 @@ public class DetectionExperiment {
    * Segment text
    */
   private static List<Word> segmentText(List<Path> ocrText, Path vocabulary) throws IOException {
-    Text text = new Text(IOUtils.read(ocrText));
+    edu.dal.ocrrect.Text text = new edu.dal.ocrrect.Text(IOUtils.read(ocrText));
     Lexicon vocab = Lexicons.toLexicon(vocabulary);
     return text.process(new TextLineConcatProcessor(vocab, false))
         .segment(new GoogleGramSegmenter(vocab))

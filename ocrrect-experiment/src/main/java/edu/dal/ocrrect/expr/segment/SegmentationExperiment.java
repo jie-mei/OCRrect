@@ -5,7 +5,6 @@ import edu.dal.ocrrect.text.*;
 import edu.dal.ocrrect.util.IOUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
 import edu.dal.ocrrect.util.Token;
-import edu.dal.ocrrect.util.lexicon.GoogleUnigramLexicon;
 import edu.dal.ocrrect.util.lexicon.Lexicon;
 import edu.dal.ocrrect.util.lexicon.Lexicons;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -136,7 +135,7 @@ public class SegmentationExperiment {
   public static void main(String[] args) throws Exception {
     List<Segment> gtSeg = readGTOCRSegments(GT_OCR_SEGMENT_PATH);
 
-    Text text = new Text(IOUtils
+    edu.dal.ocrrect.Text text = new edu.dal.ocrrect.Text(IOUtils
         .read(ResourceUtils.getResourceInDir("*.txt", "mibio-ocr/ocr")));
 
     Lexicon vocab = Lexicons.includeNumericWords(

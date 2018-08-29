@@ -1,4 +1,4 @@
-package edu.dal.ocrrect.metric;
+package edu.dal.ocrrect.feature.metric;
 
 /**
  * Modified longest common subsequence method for computing pairwise string similarity.

@@ -2,7 +2,7 @@ package edu.dal.ocrrect.expr.detect;
 
 import edu.dal.ocrrect.expr.ExprUtils;
 import edu.dal.ocrrect.io.WordTSVFile;
-import edu.dal.ocrrect.text.Text;
+import edu.dal.ocrrect.Text;
 import edu.dal.ocrrect.util.IOUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
 import edu.dal.ocrrect.util.Word;

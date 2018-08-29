@@ -1,5 +1,6 @@
 package edu.dal.ocrrect.text;
 
+import edu.dal.ocrrect.Text;
 import edu.dal.ocrrect.util.lexicon.Lexicon;
 
 import java.io.BufferedReader;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
 
 import static org.apache.commons.lang.StringUtils.repeat;
 
-public class TextLineConcatProcessor implements Processor<edu.dal.ocrrect.Text>, StringProcessMixin {
+public class TextLineConcatProcessor implements Processor<Text>, StringProcessMixin {
 
   private static final Pattern BROKEN_WORD = Pattern.compile("([a-zA-Z]+)(-\\s*)$");
   private static final Pattern FIRST_WORD = Pattern.compile("^(([a-zA-Z]*)\\S*)(.*)$");

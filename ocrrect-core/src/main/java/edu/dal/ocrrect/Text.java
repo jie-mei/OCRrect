@@ -1,13 +1,17 @@
-package edu.dal.ocrrect.text;
+package edu.dal.ocrrect;
 
+import edu.dal.ocrrect.text.Processor;
+import edu.dal.ocrrect.text.WordSegmenter;
+import edu.dal.ocrrect.text.TextSegments;
 import edu.dal.ocrrect.util.TextualUnit;
 
 public class Text extends TextualUnit {
+
   public Text(String text) {
     super(text);
   }
 
-  public edu.dal.ocrrect.Text process(Processor<edu.dal.ocrrect.Text> processor) {
+  public Text process(Processor<Text> processor) {
     return processor.process(this);
   }
 

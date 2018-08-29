@@ -1,8 +1,8 @@
 package edu.dal.ocrrect.util.filter;
 
 import edu.dal.ocrrect.text.PennTreebankSegmenter;
-import edu.dal.ocrrect.text.Text;
-import edu.dal.ocrrect.text.TextSegmenter;
+import edu.dal.ocrrect.Text;
+import edu.dal.ocrrect.text.WordSegmenter;
 import edu.dal.ocrrect.util.IOUtils;
 import edu.dal.ocrrect.util.ResourceUtils;
 import edu.dal.ocrrect.util.Token;
@@ -19,7 +19,7 @@ public class CommonWordFilter implements WordFilter {
   private TObjectByteHashMap<String> dict;
 
   public CommonWordFilter() {
-    TextSegmenter segmenter = new PennTreebankSegmenter();
+    WordSegmenter segmenter = new PennTreebankSegmenter();
 
     dict = new TObjectByteHashMap<>();
     try (BufferedReader br = IOUtils.newBufferedReader(ResourceUtils.WEBSTER_DICTIONARY)){

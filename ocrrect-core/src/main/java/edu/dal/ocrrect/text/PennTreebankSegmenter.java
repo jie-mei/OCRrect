@@ -1,5 +1,6 @@
 package edu.dal.ocrrect.text;
 
+import edu.dal.ocrrect.Text;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.process.CoreLabelTokenFactory;
 import edu.stanford.nlp.process.PTBTokenizer;
@@ -15,7 +16,7 @@ public class PennTreebankSegmenter implements WordSegmenter {
       + "strictTreebank3=true";
 
   @Override
-  public TextSegments segment(edu.dal.ocrrect.Text text) {
+  public TextSegments segment(Text text) {
     PTBTokenizer<CoreLabel> ptb = new PTBTokenizer<>(
         new StringReader(text.text()), new CoreLabelTokenFactory(), OPTIONS);
     return new TextSegments(ptb.tokenize()

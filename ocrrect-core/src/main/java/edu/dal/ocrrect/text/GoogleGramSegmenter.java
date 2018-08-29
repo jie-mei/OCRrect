@@ -1,5 +1,6 @@
 package edu.dal.ocrrect.text;
 
+import edu.dal.ocrrect.Text;
 import edu.dal.ocrrect.util.Token;
 import edu.dal.ocrrect.util.lexicon.Lexicon;
 
@@ -19,7 +20,7 @@ public class GoogleGramSegmenter extends PennTreebankSegmenter {
   }
 
   @Override
-  public TextSegments segment(edu.dal.ocrrect.Text text) {
+  public TextSegments segment(Text text) {
     List<Segment> segments = new ArrayList<>();
     for (Token tk : super.segment(text)) {
       Matcher m = SPLIT_PATTERN.matcher(tk.text());

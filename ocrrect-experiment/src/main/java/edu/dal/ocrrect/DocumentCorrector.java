@@ -4,10 +4,8 @@ import edu.dal.ocrrect.suggest.Suggestion;
 import edu.dal.ocrrect.suggest.feature.Feature;
 import edu.dal.ocrrect.text.GoogleGramSegmenter;
 import edu.dal.ocrrect.text.TextLineConcatProcessor;
-import edu.dal.ocrrect.text.Text;
 import edu.dal.ocrrect.util.ResourceUtils;
 import edu.dal.ocrrect.util.Timer;
-import edu.dal.ocrrect.util.Words;
 import edu.dal.ocrrect.util.Word;
 
 import java.io.IOException;

@@ -8,7 +8,7 @@ class TextSpec extends Specification {
       def txt = "Hello, world!"
 
     expect:
-      new Text(txt).text() == txt
+      new edu.dal.ocrrect.Text(txt).text() == txt
   }
 
   def "test process"() {

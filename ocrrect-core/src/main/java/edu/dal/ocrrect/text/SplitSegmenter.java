@@ -1,5 +1,7 @@
 package edu.dal.ocrrect.text;
 
+import edu.dal.ocrrect.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -25,7 +27,7 @@ public class SplitSegmenter extends PennTreebankSegmenter {
   }
 
   @Override
-  public TextSegments segment(edu.dal.ocrrect.Text text) {
+  public TextSegments segment(Text text) {
     List<Segment> segments = new ArrayList<>();
     CharType prev = CharType.SOF;
     String cache = "";

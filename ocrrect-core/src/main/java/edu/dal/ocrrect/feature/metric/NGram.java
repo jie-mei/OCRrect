@@ -1,4 +1,4 @@
-package edu.dal.ocrrect.metric;
+package edu.dal.ocrrect.feature.metric;
 
 import java.util.ArrayList;
 import java.util.Arrays;

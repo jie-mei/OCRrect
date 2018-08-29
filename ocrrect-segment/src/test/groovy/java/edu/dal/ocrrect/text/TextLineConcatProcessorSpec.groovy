@@ -1,8 +1,6 @@
 package edu.dal.ocrrect.text
 
-import edu.dal.ocrrect.util.lexicon.Lexicon
 import edu.dal.ocrrect.util.lexicon.Lexicons
-import gnu.trove.set.hash.THashSet
 import spock.lang.Specification
 
 class TextLineConcatProcessorSpec extends Specification {
@@ -11,7 +9,7 @@ class TextLineConcatProcessorSpec extends Specification {
       def proc = new TextLineConcatProcessor(Lexicons.toLexicon(vocab))
 
     expect:
-      proc.process(new Text(before)).text() == new Text(after).text()
+      proc.process(new edu.dal.ocrrect.Text(before)).text() == new edu.dal.ocrrect.Text(after).text()
       proc.process(before) == after
 
     where:
